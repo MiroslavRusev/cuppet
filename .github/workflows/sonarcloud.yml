@@ -10,8 +10,9 @@ name: SonarCloud code check
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
@@ -21,12 +22,11 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.qualitygate.wait=true \
-            -Dsonar.organization=${{ env.SONAR_ORG }} \
-            -Dsonar.projectKey="Polaris-QA" \
-            -Dsonar.branch.name="${{ env.BRANCH }}" \
-            -Dsonar.sources=./ \
-            -Dsonar.host.url=https://sonarcloud.io/ \
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.organization=${{ vars.SONAR_ORG }}
+            -Dsonar.projectKey=Polaris-QA
+            -Dsonar.branch.name="${{ env.BRANCH }}
+            -Dsonar.sources=./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
