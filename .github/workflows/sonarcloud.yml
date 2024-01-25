@@ -24,9 +24,9 @@ jobs:
           args: >
             -Dsonar.qualitygate.wait=true
             -Dsonar.organization=${{ env.SONAR_ORG }}
-            -Dsonar.projectKey="Polaris-QA" \
+            -Dsonar.projectKey="Polaris-QA"
             -Dsonar.branch.name="${{ env.BRANCH }}"
-            -Dsonar.sources=./ \
+            -Dsonar.sources=./
             -Dsonar.host.url="https://sonarcloud.io/"
             -Dsonar.login="${{ env.SONAR_TOKEN }}
         env:
