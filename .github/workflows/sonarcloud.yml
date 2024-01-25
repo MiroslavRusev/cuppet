@@ -24,8 +24,8 @@ jobs:
           args: >
             -Dsonar.qualitygate.wait=true
             -Dsonar.organization=${{ vars.SONAR_ORG }}
-            -Dsonar.projectKey="Polaris-QA"
-            -Dsonar.branch.name="${{ env.BRANCH }}"
+            -Dsonar.projectKey=Polaris-QA
+            -Dsonar.branch.name="${{ env.BRANCH }}
             -Dsonar.sources=./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
