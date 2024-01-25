@@ -23,7 +23,7 @@ jobs:
         with:
           args: >
             -Dsonar.qualitygate.wait=true
-            -Dsonar.organization=${{ env.SONAR_ORG }}
+            -Dsonar.organization=${{ vars.SONAR_ORG }}
             -Dsonar.projectKey="Polaris-QA"
             -Dsonar.branch.name="${{ env.BRANCH }}"
             -Dsonar.sources=./
