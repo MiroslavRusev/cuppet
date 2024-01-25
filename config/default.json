@@ -1,0 +1,33 @@
+{
+  "jsonFilePath": "jsonFiles/example.json",
+  "args": [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--proxy-server='direct://'",
+    "--proxy-bypass-list=*",
+    "--headless"
+  ],
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "filePath": "files/",
+  "screenshotsPath": "screenshots/",
+  "language": "en",
+  "regionMap": {
+    "ExampleRegion": ".valid-css-selector"
+  },
+  "basicAuth": {
+    "authUser": "user",
+    "authPass": "pass"
+  },
+  "blockingCookie":".selector-of-cookie-consent-yes-button",
+  "pa11yConfig": {
+    "hideElements": ".elementSelector",
+    "standard": "WCAG2AA",
+    "runners": [
+      "axe",
+      "htmlcs"
+    ]
+  }
+}

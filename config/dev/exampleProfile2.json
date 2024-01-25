@@ -1,0 +1,11 @@
+{
+  "credentials": {
+    "baseUrl": "https://www.example2-dev.com"
+  },
+  "api" : {
+    "baseApiUrl": "https://www.example2-dev.com/api",
+    "x-api-key": "aaa1113333"
+  },
+  "jsonFilePath": "jsonFiles/example2-dev.json",
+  "tags": "@example2-dev"
+}
