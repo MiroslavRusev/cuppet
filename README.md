@@ -43,4 +43,6 @@
 #### {env} is the folder name in the config dir
     yarn test {profile} {env} - all tests
     yarn test {profile} {env} features/tests/<test> - specific test
-    Example - yarn test exampleProfile dev - will run all tests using the exampleProfile from the dev folder
+    
+#### Example - will run all tests using the exampleProfile from the dev folder
+    yarn test exampleProfile dev
