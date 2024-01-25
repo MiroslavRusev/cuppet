@@ -27,7 +27,7 @@ jobs:
             -Dsonar.projectKey="Polaris-QA" \
             -Dsonar.branch.name="${{ env.BRANCH }}"
             -Dsonar.sources=./ \
-            -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.host.url="https://sonarcloud.io/"
             -Dsonar.login="${{ env.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
