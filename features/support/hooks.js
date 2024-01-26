@@ -60,14 +60,14 @@ Before(async function(testCase) {
     }
     // Set the dimensions of the viewport.
     await page.setViewport({
-        width: config.get('viewport.width'),
-        height: config.get('viewport.height'),
+        width: Number(config.get('viewport.width')),
+        height: Number(config.get('viewport.height')),
     });
     // Set basic auth if configured
     if (config.has('basicAuth')) {
         const credentials = {
-        username: config.get('basicAuth.authUser'),
-        password: config.get('basicAuth.authPass')
+        username: config.get('basicAuth.authUser').toString(),
+        password: config.get('basicAuth.authPass').toString()
     }
         await page.authenticate(credentials);
     }
