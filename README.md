@@ -6,11 +6,18 @@
     npm install --global yarn
 
 ### Simple installation
-    git clone
+#### Fork the repository
     yarn install
     mkdir -p jsonFiles - create folder for test data storage
     mkdir -p reports - create folder for test post-run reports
     mkdir -p screenshots - create folder for screenshots taken on test failure
+
+#### Folders and files which you need to configure and localize
+    /config - your configuration folder, you can create as many profiles for as many envs as needed
+    /projectSpecific - folder for both definitions and methods which are project unique
+    /tests - your main wrapper for feature folders and files
+    multilingualStrings.js - string translations
+
 
 ### Minimum node and yarn versions needed
     Node - v18 (Recommended v20)
