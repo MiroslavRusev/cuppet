@@ -42,6 +42,10 @@ Then ("I should see the element with selector {string}", async function (cssSele
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.seeElement(this.page, selector);
 });
+Then ("I should see the element with selector {string} in the DOM", async function (cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.seeElement(this.page, selector, false);
+});
 Then ("I should not see the element with selector {string}", async function (cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.notSeeElement(this.page, selector);
@@ -50,7 +54,7 @@ Then (
     "I wait for element with {string} selector to appear within {string} seconds",
     async function (cssSelector, time) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
-    await utils.seeElement(this.page, selector, time * 1000);
+    await utils.seeElement(this.page, selector, true, time * 1000);
 });
 Then ("I should not see {string}", async function (text) {
     await utils.notSeeText(this.page, text);
@@ -68,6 +72,10 @@ Then ("I upload the {string} in {string} field", async function (fileName, cssSe
 Then ("I fill in {string} with {string}", async function (cssSelector, text) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.fillField(this.page, selector, text);
+});
+Then ("I fill in CodeMirror field {string} with {string}", async function (cssSelector, value) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.setValueInCodeMirrorField(this.page, selector, value);
 });
 Then ("I type in {string} with {string}", async function (cssSelector, text) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
@@ -147,4 +155,20 @@ Given("I scroll element with {string} to the top", async function(cssSelector) {
 Given("I scroll element with xpath {string} to the top", async function(xpath) {
     const selector = 'xpath/' + `${xpath}`;
     await utils.scrollElementToTop(this.page, selector);
+})
+Given("I check if options from dropdown {string} are in alphabetical order", async function(cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.iCheckIfDropdownOptionsAreInAlphabeticalOrder(this.page, selector, true);
+})
+Given("I check if options from dropdown {string} are not in alphabetical order", async function(cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.iCheckIfDropdownOptionsAreInAlphabeticalOrder(this.page, selector, false);
+})
+Given("I check if checkbox options with locator {string} are in alphabetical order", async function(cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.iCheckIfCheckboxOptionsAreInAlphabeticalOrder(this.page, selector, true);
+})
+Given("I check if checkbox options with locator {string} are not in alphabetical order", async function(cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.iCheckIfCheckboxOptionsAreInAlphabeticalOrder(this.page, selector, false);
 })

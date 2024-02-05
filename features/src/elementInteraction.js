@@ -189,13 +189,14 @@ module.exports = {
      * Mind that hidden elements will not show (DOM existence is not enough for that step)
      * @param page
      * @param selector
-     * @param time
+     * @param {boolean} isVisible - set to false for validating dom existence only
+     * @param  {int} time
      * @returns {Promise<void>}
      */
-    seeElement: async function (page, selector, time = 3000) {
+    seeElement: async function (page, selector, isVisible = true, time = 3000) {
         const options = {
-            visible: true, // Wait for the element to be visible (default: false)
-            timeout: time, // Maximum time to wait in milliseconds (default: 30000)
+            visible: isVisible, // Wait for the element to be visible
+            timeout: time, // Maximum time to wait in milliseconds
         };
         try {
             await page.waitForSelector(selector, options);
@@ -313,13 +314,13 @@ module.exports = {
      * @param time
      * @returns {Promise<void>}
      */
-    seeTextByXpath: async function (page, text, time = 3000) {
+    seeTextByXpath: async function (page, text, time = 4000) {
         let result = await helper.getMultilingualString(text);
         const options = {
             visible: true, // Wait for the element to be visible (default: false)
             timeout: time, // Maximum time to wait in milliseconds (default: 30000)
         };
-        if (time > 3000 && !page["_name"]) {
+        if (time > 4000 && !page["_name"]) {
             await new Promise(function(resolve) {
                 setTimeout(resolve, 500)
             });
@@ -732,6 +733,59 @@ module.exports = {
     },
 
     /**
+     * Method to verify if a dropdown text values are in alphabetical order
+     *
+     * @param {Object} page
+     * @param {string} selector
+     * @param {boolean} flag
+     * @returns {Promise<void>}
+     */
+    iCheckIfDropdownOptionsAreInAlphabeticalOrder: async function (page, selector, flag) {
+        await page.waitForSelector(selector);
+        const options = await page.$eval(selector, select => {
+            return Array.from(select.options).map(option => ({
+                value: option.value,
+                text: option.text
+            }));
+        });
+
+        // Remove fist element if it's none (can be extended for other placeholders)
+        if (options[0].value === "_none") {
+            options.shift();
+        }
+
+        const isArraySorted = helper.isArraySorted(options, 'text');
+
+        if ( Boolean(isArraySorted) !== flag ) {
+            throw new Error(`Dropdown options are not sorted as expected`);
+        }
+    },
+
+    /**
+     * Method to verify if the checkbox text values are in alphabetical order
+     *
+     * @param {Object} page
+     * @param {string} selector
+     * @param {boolean} flag
+     * @returns {Promise<void>}
+     */
+    iCheckIfCheckboxOptionsAreInAlphabeticalOrder: async function (page, selector, flag){
+        await page.waitForSelector(selector);
+        const elements = await page.$$(selector);
+
+        const texts = await Promise.all(elements.map(async element => {
+            const propertyHandle = await element.getProperty('textContent');
+            return await propertyHandle.jsonValue();
+        }));
+
+        const isArraySorted = helper.isArraySorted(texts, 0);
+
+        if ( Boolean(isArraySorted) !== flag ) {
+            throw new Error(`The checkboxes are not sorted as expected`);
+        }
+    },
+
+    /**
      * Sets date in a https://flatpickr.js.org/ based field.
      * @param page
      * @param selector
@@ -758,6 +812,31 @@ module.exports = {
         try {
             const el = await page.$(cssSelector);
             await page.evaluate(el => el.scrollIntoView(true), el);
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    },
+
+    /**
+     * Sets value into codemirror field
+     * @param page
+     * @param cssSelector
+     * @param value
+     * @returns {Promise<void>}
+     */
+    setValueInCodeMirrorField: async function (page, cssSelector, value) {
+        let result = await helper.getMultilingualString(value);
+        await page.waitForSelector(cssSelector)
+        try {
+            const jsCode = `
+            (function () {
+                const textArea = document.querySelector('${cssSelector}');
+                let editor = CodeMirror.fromTextArea(textArea);
+                editor.getDoc().setValue("${result}");
+            })();
+            `;
+            await page.evaluate(jsCode);
         }
         catch (error) {
             throw new Error(error);
