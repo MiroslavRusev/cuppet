@@ -132,8 +132,9 @@ module.exports = {
      */
     openOriginalTab: async function(browser) {
         const pages = await browser.pages();
-        // Switch to the original tab - [1] is used because 0 is always empty tab
-        return pages[1];
+        // Switch to the original/initial tab - [0]
+        // For complex handling of more than 2 tabs use JSON storage and directly switch between their numbers
+        return pages[0];
     },
 
 }

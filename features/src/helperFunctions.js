@@ -42,7 +42,7 @@ module.exports = {
      */
     getMultilingualString: async function (text) {
         const lang = config.has('language') ? config.get('language') : null;
-        let result = '';
+        let result;
         if (lang) {
             let string = strings.multilingualStrings(lang, text);
             result = string ?? text;
@@ -65,6 +65,20 @@ module.exports = {
         const regionMap = config.get('regionMap');
         const el = await page.waitForSelector(regionMap[region]);
         return  await (await el.getProperty('className')).jsonValue();
+    },
+
+    /**
+     * Assert that array is in alphabetical order
+     *
+     * @param  {Array} arr
+     * @param  {string|number} propKey - json property when element items are objects or array key for simple arrays
+     * @returns {boolean}
+     */
+    isArraySorted: function (arr, propKey) {
+        let sortedArr = arr;
+        sortedArr.sort((a, b) => a[propKey].localeCompare(b[propKey]));
+
+        return (JSON.stringify(arr) === JSON.stringify(sortedArr))
     }
 
 }
