@@ -9,17 +9,33 @@ module.exports = {
      * @returns {Promise<string>}
      */
     prepareUrl: async function(path) {
+        if (path.startsWith('http')) {
+            return path;
+        }
         let baseUrl = config.get('credentials.baseUrl').toString();
         if (baseUrl.endsWith('/')) {
            baseUrl = baseUrl.slice(0,-1);
         }
         if (path === '/' || path === 'homepage' || path === 'home') {
-            path = baseUrl;
-        }
-        if (path.startsWith('http')) {
-             return path;
+            return baseUrl;
         }
         return baseUrl + path;
+    },
+
+    /**
+     * Return current page URL - absolute or relative
+     * @param page
+     * @param {boolean} absolute - set to true if you want to extract the full path (with domain)
+     * @returns {string}
+     */
+    extractPath: function(page, absolute = false) {
+        const url = new URL(page.url());
+        const href = url.href;
+        const origin = url.origin;
+        if(absolute) {
+            return href;
+        }
+        return href.replace(origin,"");
     },
 
     /**
@@ -75,18 +91,52 @@ module.exports = {
     },
 
     /**
+     * Reload the current page and add get params
+     * @param page
+     * @param params
+     * @returns {Promise<void>}
+     */
+    reloadPageWithParams: async function(page, params) {
+        const currentUrl = this.extractPath(page);
+        if (!params.startsWith("?")) {
+            throw new Error("Invalid get param provided. Use '?' as first character.")
+        }
+        const newPath = currentUrl + params;
+        await this.visitPath(page, newPath);
+
+    },
+
+    /**
      * Validate whether the current page is the one you should be on
      * @param page
      * @param path
      * @returns {Promise<void>}
      */
     validatePath: async function(page, path) {
-        const url = new URL(page.url());
-        const href = url.href;
-        const origin = url.origin;
-        const pathAlias = href.replace(origin,"")
+        const pathAlias = this.extractPath(page);
         if (pathAlias !== path) {
             throw new Error(`The current path ${pathAlias} does not match the expected: ${path}!`);
+        }
+    },
+
+    /**
+     * Validate the last path in an alias
+     * @param page
+     * @param path
+     * @returns {Promise<void>}
+     */
+    validatePathEnding: async function(page, path) {
+        let pathAlias = this.extractPath(page);
+        if (pathAlias.endsWith('/')) {
+            pathAlias = pathAlias.slice(0,-1);
+        }
+        const splitAlias = pathAlias.split("/");
+        let lastElement;
+        if (Array.isArray(splitAlias)) {
+            lastElement = splitAlias[splitAlias.length - 1];
+        }
+        if (lastElement !== path) {
+            throw new Error(`The last path alias of ${pathAlias} does not match the expected: ${path}!`);
         }
     },
 
@@ -137,4 +187,62 @@ module.exports = {
         return pages[0];
     },
 
+    /**
+     * Validate current page response headers.
+     * @param page
+     * @param header
+     * @param value
+     * @returns {Promise<void>}
+     */
+    validatePageResponseHeaders: async function(page, header, value) {
+        const refreshPage = await page.reload({ waitUntil: 'domcontentloaded' });
+        const responseHeaders = refreshPage.headers();
+        if(responseHeaders[header.toLowerCase()] !== value) {
+            throw new Error("Response headers do not match the requirement!")
+        }
+    },
+
+    /**
+     * Verify cookie existence by name
+     * @param {object} page
+     * @param {string} cookieName
+     * @param {boolean} presence
+     * @returns {Promise<void>}
+     */
+    verifyCookiePresence: async function (page, cookieName, presence) {
+        let result;
+        const jsCode = `(function (name) {
+                var dc = document.cookie;
+                var prefix = name + '=';
+                var begin = dc.indexOf('; ' + prefix);
+                if (begin == -1) {
+                    begin = dc.indexOf(prefix);
+                    if (begin != 0) return null;
+                }
+                else
+                    {
+                        begin += 2;
+                        var end = document.cookie.indexOf(';', begin);
+                        if (end == -1) {
+                            end = dc.length;
+                        }
+                }
+                return decodeURI(dc.substring(begin + prefix.length, end));
+            })('${cookieName}');`
+        try {
+            result = await page.evaluate(jsCode);
+        } catch(error) {
+            throw new Error(`There was an error when evaluating the code. ${error}`)
+        }
+
+        if (result) {
+            if(!presence) {
+                throw new Error(`The cookie ${cookieName} is present, but it shouldn't!`)
+            }
+        } else if(!result) {
+            if(presence) {
+                throw new Error(`The cookie ${cookieName} is not present, but it should!`)
+            }
+        }
+    }
 }

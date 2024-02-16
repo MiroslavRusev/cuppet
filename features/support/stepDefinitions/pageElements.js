@@ -22,6 +22,10 @@ When('I click on the element with xpath {string}', async function (xPath) {
     const selector = 'xpath/' + `${xPath}`;
     await utils.click(this.page, selector);
 });
+When('I click on all the elements with selector {string}', async function (cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.clickAllElements(this.page, selector);
+});
 When('I click on the text {string}', async function (text) {
     await utils.clickByText(this.page, text);
 });
@@ -50,6 +54,10 @@ Then ("I should not see the element with selector {string}", async function (css
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.notSeeElement(this.page, selector);
 });
+Then("I wait for element {string} to disappear within {string} seconds", async function(cssSelector, time){
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.notSeeElement(this.page, selector, time*1000)
+})
 Then (
     "I wait for element with {string} selector to appear within {string} seconds",
     async function (cssSelector, time) {
@@ -171,4 +179,11 @@ Given("I check if checkbox options with locator {string} are in alphabetical ord
 Given("I check if checkbox options with locator {string} are not in alphabetical order", async function(cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.iCheckIfCheckboxOptionsAreInAlphabeticalOrder(this.page, selector, false);
+})
+When('I click on the text {string} and follow the new tab', async function (text) {
+    this.page = await utils.clickLinkOpenNewTab(this.browser, this.page, text);
+})
+When('I click on the element {string} and follow the popup window', async function (cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    this.page = await utils.clickElementOpenPopup(this.page, selector);
 })

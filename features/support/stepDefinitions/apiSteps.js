@@ -4,6 +4,7 @@ const {
     Then
 } = require('@cucumber/cucumber');
 const apiSteps = require('../../src/apiFunctions');
+const main = require('../../src/mainFunctions');
 const storage = require("../../src/dataStorage");
 
 Given("that I send a {string} request to {string}", async function (method, path) {
@@ -35,4 +36,17 @@ When("I store {string} to {string} variable", async function (property, variable
 Given("that I have request body", async function (docString) {
     const body = JSON.stringify(docString);
     await apiSteps.prepareRequestBody(body)
+})
+Given("I put {string} to {string} property of {string} element in the body",
+    async function (value, property, parentObj) {
+    await apiSteps.iPutValuesInRequestBody(value, property, parentObj)
+})
+
+Given("I create json object from {string} file", async function (filePath) {
+    const checkedPath = await storage.checkForSavedVariable(filePath);
+    await apiSteps.createRequestBodyFromFile(checkedPath);
+})
+Given("I validate that the page is a valid XML", async function () {
+    const currentPath = main.extractPath(this.page, true);
+    await apiSteps.validateXMLEndpoint(currentPath);
 })

@@ -6,6 +6,7 @@ const {
 const helper = require("../../src/helperFunctions");
 const dataStorage = require("../../src/dataStorage");
 const config = require('config');
+const storage = require("../../src/dataStorage");
 
 When("I wait for {string} seconds", async function (seconds) {
     seconds = seconds * 1000;
@@ -53,3 +54,21 @@ Given("I lowercase all saved variables", async function() {
 When("I trim {string} variable on first special char occurrence", async function(variable) {
     await dataStorage.trimVariableOnFirstSpecialChar(variable);
 })
+When("I generate date in {string} format for today and store it in {string}",
+    async function(format, variable) {
+    await dataStorage.generateAndSaveDateWithCustomFormat(format, variable);
+})
+When("I generate date in {string} format for {string} days from now and store it in {string}",
+    async function(format, days, variable) {
+    await dataStorage.generateAndSaveDateWithCustomFormat(format, variable, days);
+})
+When("I generate time in {string} format for now and store it in {string}",
+    async function(format, variable) {
+        await dataStorage.generateAndSaveDateWithCustomFormat(format, variable);
+})
+When("I create json object from {string} file and store it in {string} variable",
+    async function(filePath, variable) {
+        const checkedPath = await storage.checkForSavedVariable(filePath);
+        const getFileData = storage.getJsonFile(checkedPath);
+        await storage.iStoreVariableWithValueToTheJsonFile(getFileData, variable)
+    })

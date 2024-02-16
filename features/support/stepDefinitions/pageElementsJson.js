@@ -23,6 +23,11 @@ Then ("I fill in {string} with {string} variable from JSON", async function (css
     const value = await dataStorage.getVariable(variable);
     await utils.fillField(this.page, selector, value);
 });
+Then ("I fill in {string} with {string} variable using JSON stringify", async function (cssSelector, variable) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const value = await dataStorage.getVariable(variable, true);
+    await utils.fillField(this.page, selector, value);
+});
 Then ("I type in {string} with {string} variable from JSON", async function (cssSelector, variable) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     const value = await dataStorage.getVariable(variable);

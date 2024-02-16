@@ -29,7 +29,7 @@ Given("I visit the saved path {string}", async function (path) {
     await main.visitPath(this.page, savedPath);
 })
 Given("I visit saved path page", async function () {
-    const path = await dataStorage.getVariable('path')
+    const path = await dataStorage.getVariable('path');
     await main.visitPath(this.page, path);
 })
 Given("I log in", async function() {
@@ -57,6 +57,9 @@ Given("I follow {string}", async function (text) {
 Given("I reload the page", async function () {
     await main.reloadPage(this.page);
 })
+Given("I reload the current page with GET parameters {string}", async function (params) {
+    await main.reloadPageWithParams(this.page, params);
+})
 Given(
     "I receive the following status code {string} when requesting the {string} path of the {string} page",
     async function (code, path, page) {
@@ -77,4 +80,16 @@ When("I should be on the {string} path of {string} page", async function(path, p
     const configPage = await config.get(page);
     await main.validatePath(this.page, configPage + path);
 })
-
+When("I should be on a page with alias ending in {string}", async function(path) {
+    await main.validatePathEnding(this.page, path);
+})
+Then("I should see the header {string} with value {string}", async function(header, value) {
+    await main.validatePageResponseHeaders(this.page, header, value);
+})
+Then("I verify that {string} cookie {string} present", async function(cookieName, presence) {
+    const stringToBool = {
+        "is": true,
+        "is not": false
+    };
+    await main.verifyCookiePresence(this.page, cookieName, stringToBool[presence]);
+})
