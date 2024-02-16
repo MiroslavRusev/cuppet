@@ -2,6 +2,7 @@ const config = require('config');
 const fs = require("fs");
 const helper = require("./helperFunctions");
 const drupalFields = require("../support/components/drupalFields");
+const moment = require("moment")
 const jsonFilePath = config.get('jsonFilePath').toString();
 
 module.exports = {
@@ -71,12 +72,16 @@ module.exports = {
     /**
      * Get specific variable and throw error if missing
      * @param variable
+     * @param {boolean} stringify - flag to be used when getting values which are object themselves
      * @returns {*}
      */
-    getVariable: function (variable) {
+    getVariable: function (variable, stringify = false) {
         const tempJson = this.getJsonFile();
         if (!tempJson[variable]) {
             throw new Error (`Variable with name ${variable} not found in the json file!`)
+        }
+        if (stringify) {
+            return JSON.stringify(tempJson[variable])
         }
         return tempJson[variable];
     },
@@ -270,5 +275,21 @@ module.exports = {
         let randomStr = helper.generateRandomString(number);
         const value = splitVar[0] + '+' + randomStr + '@' + splitVar[1];
         await this.iStoreVariableWithValueToTheJsonFile(value, varName)
-    }
+    },
+
+    /**
+     *
+     * @param format
+     * @param variable
+     * @param days
+     * @returns {Promise<void>}
+     */
+    generateAndSaveDateWithCustomFormat: async function (format, variable, days = 0) {
+        let date = moment()
+            .add(days >= 0 ? days : -days, "days")
+            .format(format);
+
+        await this.iStoreVariableWithValueToTheJsonFile(date, variable);
+
+    },
 }

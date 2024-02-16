@@ -9,11 +9,11 @@ const {
 const puppeteer = require('puppeteer')
 const config = require("config");
 const args = config.get('args');
-const dataStore = require("../src/dataStorage");
+const dataStore = require("../src/dataStorage")
 
 let browser = null;
 let page = null;
-let screenshotPath = config.get('screenshotsPath') ?? 'screenshots/';
+let screenshotPath = config.get('screenshotsPath') ?? 'screenshots/'
 
 // ==== BeforeAll and AfterAll do not have access to test scope 'this'
 // ==== Before and After do

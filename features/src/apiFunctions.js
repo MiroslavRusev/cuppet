@@ -1,6 +1,7 @@
 const axios = require("axios");
 const config = require("config");
 const storage = require("./dataStorage");
+const xml2js = require('xml2js');
 const assert = require("chai").assert;
 const expect = require('chai').expect;
 
@@ -95,20 +96,19 @@ module.exports = {
     ) {
         const apiUrl = await this.prepareUrl(url);
         const requestHeaders = await this.setHeaders(headers);
-        const basicAuth = await this.setBasicAuth();
+        const auth = await this.setBasicAuth();
         if (this.request) {
             data = this.request;
         }
         try {
             this.response = await axios.request({
                 url: apiUrl,
-                method: method,
-                auth: basicAuth,
+                method: method.toLowerCase(),
+                ...(Object.keys(auth).length && {auth}),
                 // The data is conditionally added to the request, because it's not used with GET requests and creates conflict.
                 // The following checks if data object is not empty, returns data object if not empty or skip if empty.
                 ...(Object.keys(data).length && {data}),
                 headers: requestHeaders,
-
             })
             return this.response;
         } catch (error) {
@@ -126,6 +126,27 @@ module.exports = {
     prepareRequestBody: async function (body) {
         const preparedBody = await storage.checkForMultipleVariables(body);
         this.request = JSON.parse(preparedBody);
+        return this.request;
+    },
+
+    /**
+     * Put values in request 1 by 1
+     * Example object: {
+     *     property: value
+     * }
+     * @async
+     * @function prepareRequestBody
+     * @param value - the value of the new property
+     * @param property - the name of the property
+     * @param object - parent object name
+     * @returns {Promise<Object>} - returns the request body object
+     */
+    iPutValuesInRequestBody: async function (value, property, object) {
+        const preparedValue = await storage.checkForVariable(value);
+        if (!this.request) {
+              this.request = {}
+        }
+        this.request[object][property] = preparedValue;
         return this.request;
     },
 
@@ -203,6 +224,41 @@ module.exports = {
             throw new Error(`Value with property: ${property} is not found!`)
         }
         return value;
+    },
+
+    /**
+     * Load custom json file and make a request body from it
+     * @param path
+     * @returns {Promise<Object>}
+     */
+    createRequestBodyFromFile: async function (path) {
+        this.request = storage.getJsonFile(path);
+        return this.request;
+    },
+
+    /**
+     * Send request to an endpoint and validate whether the response is valid xml.
+     * @param url
+     * @returns {Promise<void>}
+     */
+    validateXMLEndpoint: async function(url) {
+        const xmlUrl = await this.prepareUrl(url);
+        let response;
+        try {
+            const auth = await this.setBasicAuth();
+            response = await axios.request({
+                url: xmlUrl,
+                method: 'get',
+                ...(Object.keys(auth).length && {auth}),
+            })
+        } catch (error) {
+            throw new Error(`Request failed with: ${error}`)
+        }
+
+        const isValid =  await xml2js.parseStringPromise(response.data);
+        if(!isValid) {
+            throw new Error("XML is not valid!")
+        }
     }
 
 }

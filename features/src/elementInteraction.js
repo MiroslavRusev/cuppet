@@ -43,6 +43,20 @@ module.exports = {
     },
 
     /**
+     * Click on multiple elements 1 by 1
+     * @param page
+     * @param selector
+     * @returns {Promise<void>}
+     */
+    clickAllElements: async function (page, selector) {
+        await page.waitForSelector(selector);
+        const elements = await page.$$(selector);
+        for (let element of elements) {
+            await element.click({ delay: 300 });
+        }
+    },
+
+    /**
      * Press a single key
      * @param page
      * @param key
@@ -98,7 +112,7 @@ module.exports = {
     validateTextNotInSchemaOrg: async function (page, text) {
         await page.waitForSelector('script[type="application/ld+json"]');
         const isTextInSchema = await page.$(
-           'xpath/' + `//script[contains(text(),'${text}')]`
+           'xpath/' + `//script[@type="application/ld+json"][contains(text(),'${text}')]`
         );
         if (isTextInSchema) {
            throw new Error(`${text} can be found in the schema org.`)
@@ -116,9 +130,7 @@ module.exports = {
                 'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
         );
         try {
-            await objectToClick.click(
-                'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
-            );
+            await objectToClick.click();
         } catch (error) {
             throw new Error(`Could not click on element with text ${text}`)
         }
@@ -148,16 +160,14 @@ module.exports = {
      * @param browser
      * @param page
      * @param text
-     * @returns {Promise<*>}
+     * @returns {Promise<Object>}
      */
     clickLinkOpenNewTab: async function (browser, page, text) {
         const objectToClick = await page.waitForSelector(
             'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
         );
         try {
-            await objectToClick.click(
-                'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
-            );
+            await objectToClick.click();
         } catch (error) {
             throw new Error(`Could not click on element with text ${text}`)
         }
@@ -165,6 +175,29 @@ module.exports = {
         // Switch to the new tab
         page =  pages[pages.length - 1];
         return page;
+    },
+
+    /**
+     * Click on element by css selector and follow the popup window
+     * @param page
+     * @param selector
+     * @returns {Promise<Object>}
+     */
+    clickElementOpenPopup: async function (page, selector) {
+        const objectToClick = await page.waitForSelector(selector);
+        try {
+            await objectToClick.click();
+        } catch (error) {
+            throw new Error(`Could not click on element with selector ${selector}`)
+        }
+        // Set up a listener for the 'popup' event
+        const newPagePromise = new Promise(resolve => {
+            page.once('popup', async popup => {
+                // Return the popup as a new page object
+                resolve(popup);
+            });
+        });
+        return await newPagePromise;
     },
     
     /**
@@ -281,10 +314,20 @@ module.exports = {
      * Element should not exist in the page DOM.
      * @param page
      * @param selector
+     * @param time
      * @returns {Promise<void>}
      */
-    notSeeElement: async function (page, selector) {
-        const isElementInPage = await page.$(selector);
+    notSeeElement: async function (page, selector, time = 5000) {
+        const options = {
+            hidden: true,
+            timeout: time, // Maximum time to wait in milliseconds (default: 30000)
+        };
+        let isElementInPage = false;
+        try {
+             isElementInPage = await page.waitForSelector(selector, options);
+        } catch (error) {
+            console.log(`Element disappeared.`);
+        }
         if (isElementInPage) {
             throw new Error(`${selector} can be found in the page source.`)
         }
@@ -365,7 +408,8 @@ module.exports = {
         const result = await helper.getMultilingualString(text);
         try {
             await page.waitForSelector(
-               'xpath/' + `//*[@class='${regionClass}']//*[contains(text(),"${result}")]`
+               'xpath/' + `//*[contains(@class,'${regionClass}') and .//text()[contains(.,"${result}")]]`
+
            );
        } catch (error) {
             throw new Error(`Cannot find ${result} in ${regionClass}!`)
@@ -383,7 +427,10 @@ module.exports = {
         const isTextInDom = await page.$(
             'xpath/' + `//*[text()[contains(.,'${result}')]]`
         );
-        if (isTextInDom) {
+        // isVisible() is used for the cases where the text is in the DOM, but not visible
+        // If you need to NOT have it in the DOM - use notSeeElement() or extend this step with flag
+        const visibility = await isTextInDom?.isVisible();
+        if (visibility) {
             throw new Error(`${text} can be found in the page source.`)
         }
     },
