@@ -5,7 +5,7 @@ const {
 } = require('@cucumber/cucumber');
 const utils = require('../../src/elementInteraction');
 const main = require('../../src/mainFunctions');
-const drupalFields = require('../../support/components/drupalFields');
+const drupalFields = require('../components/drupalFields');
 const dataStorage = require("../../src/dataStorage");
 const config = require("config");
 
@@ -22,7 +22,8 @@ Given("I go to current page plus {string}", async function (path) {
 })
 Given("I go to {string} path of {string} page", async function (path, page) {
     const configPage = await config.get(page);
-    await main.visitPath(this.page, configPage + path);
+    const checkedPath = await dataStorage.checkForVariable(path);
+    await main.visitPath(this.page, configPage + checkedPath);
 })
 Given("I visit the saved path {string}", async function (path) {
     const savedPath = dataStorage.getVariable(path);
@@ -37,19 +38,16 @@ Given("I log in", async function() {
     const password = config.get('credentials.password');
     await utils.fillField(this.page, drupalFields['Name'], userName);
     await utils.fillField(this.page,  drupalFields['Pass'], password);
+    const navigationPromise = this.page.waitForNavigation();
     await utils.click(this.page, drupalFields['Submit']);
-    await new Promise(function(resolve) {
-        setTimeout(resolve, 500)
-    });
-
+    await navigationPromise;
 })
 Given("I log in as {string} {string}", async function(username, password) {
     await utils.fillField(this.page, drupalFields['Name'], username);
     await utils.fillField(this.page,  drupalFields['Pass'], password);
+    const navigationPromise = this.page.waitForNavigation();
     await utils.click(this.page, drupalFields['Submit']);
-    await new Promise(function(resolve) {
-        setTimeout(resolve, 500)
-    });
+    await navigationPromise;
 })
 Given("I follow {string}", async function (text) {
     await utils.followLink(this.page, text);
@@ -69,19 +67,16 @@ Given(
 Given("I open new tab with {string} url", async function (url) {
     this.page = await main.openNewTab(this.browser, url);
 })
-Given("I switch back to original window", async function () {
-    this.page = await main.openOriginalTab(this.browser);
-})
 When("I should be on {string} page", async function(page) {
     const configPage = await config.get(page);
-    await main.validatePath(this.page, configPage);
+    main.validatePath(this.page, configPage);
 })
 When("I should be on the {string} path of {string} page", async function(path, page) {
     const configPage = await config.get(page);
-    await main.validatePath(this.page, configPage + path);
+    main.validatePath(this.page, configPage + path);
 })
 When("I should be on a page with alias ending in {string}", async function(path) {
-    await main.validatePathEnding(this.page, path);
+    main.validatePathEnding(this.page, path);
 })
 Then("I should see the header {string} with value {string}", async function(header, value) {
     await main.validatePageResponseHeaders(this.page, header, value);

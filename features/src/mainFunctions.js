@@ -48,7 +48,7 @@ module.exports = {
     visitPath: async function(page, path) {
        const url = await this.prepareUrl(path);
        try {
-        await page.goto(url);
+        await page.goto(url, {waitUntil: 'domcontentloaded'});
        } catch (error) {
            throw new Error(`The requested page cannot be opened!: ${error}`);
        }
@@ -78,7 +78,7 @@ module.exports = {
         if (path.endsWith('/')) {
             path = path.slice(0,-1);
         }
-        await page.goto(path + plus);
+        await page.goto(path + plus, {waitUntil: 'domcontentloaded'});
     },
 
     /**
@@ -110,9 +110,9 @@ module.exports = {
      * Validate whether the current page is the one you should be on
      * @param page
      * @param path
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    validatePath: async function(page, path) {
+    validatePath: function(page, path) {
         const pathAlias = this.extractPath(page);
         if (pathAlias !== path) {
             throw new Error(`The current path ${pathAlias} does not match the expected: ${path}!`);
@@ -123,9 +123,9 @@ module.exports = {
      * Validate the last path in an alias
      * @param page
      * @param path
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    validatePathEnding: async function(page, path) {
+    validatePathEnding: function(page, path) {
         let pathAlias = this.extractPath(page);
         if (pathAlias.endsWith('/')) {
             pathAlias = pathAlias.slice(0,-1);
@@ -160,7 +160,7 @@ module.exports = {
     },
 
     /**
-     * Open new tab and switch to it (follow tab)
+     * Open new tab and switch to it (manually open tab and load a page)
      * @param browser
      * @param url
      * @returns {Promise<Object>}
@@ -172,19 +172,6 @@ module.exports = {
         const pages = await browser.pages();
         // Switch to the new tab
         return pages[pages.length - 1];
-    },
-
-    /**
-     * Go back to original page (first tab)
-     * To be used when you have more than one tabs open, and you want to go back to the first.
-     * @param browser
-     * @returns {Promise<Object>}
-     */
-    openOriginalTab: async function(browser) {
-        const pages = await browser.pages();
-        // Switch to the original/initial tab - [0]
-        // For complex handling of more than 2 tabs use JSON storage and directly switch between their numbers
-        return pages[0];
     },
 
     /**

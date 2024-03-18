@@ -1,7 +1,7 @@
 const config = require('config');
 const fs = require("fs");
 const helper = require("./helperFunctions");
-const drupalFields = require("../support/components/drupalFields");
+const drupalFields = require("../app/components/drupalFields");
 const moment = require("moment")
 const jsonFilePath = config.get('jsonFilePath').toString();
 
@@ -9,9 +9,9 @@ module.exports = {
 
     /**
      * Create the JSON file in which test data will be stored
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    createFile: async function () {
+    createFile: function () {
         if (jsonFilePath && !fs.existsSync(jsonFilePath)) {
             fs.writeFile(jsonFilePath, '', {flag: 'w+'}, () => {
                 console.log('File Created');
@@ -21,9 +21,9 @@ module.exports = {
 
     /**
      * Clear the JSON file
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    clearJsonFile: async function () {
+    clearJsonFile: function () {
         if (jsonFilePath) {
             fs.truncate(jsonFilePath, 0, () => {console.log('JSON File Cleared successfully!')});
         }
@@ -104,7 +104,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     checkForSavedVariable: async function (data) {
-        return await data.replace(/%([a-zA-Z_-]+)%/g, (match, p1) => {
+        return data.replace(/%([a-zA-Z_-]+)%/g, (match, p1) => {
             return this.checkForVariable(p1);
         });
     },
@@ -166,7 +166,7 @@ module.exports = {
      */
     prepareCssSelector: async function (cssSelector) {
         const drupalSelector = drupalFields[cssSelector] ?? cssSelector;
-        return await this.checkForSavedVariable(drupalSelector);
+        return this.checkForSavedVariable(drupalSelector);
     },
 
     /**

@@ -2,8 +2,6 @@ const config = require("config");
 const storage = require("./dataStorage");
 const pa11y = require("pa11y");
 const htmlReporter = require('pa11y-reporter-html');
-const { pa11yConfig } = config.get('pa11yConfig');
-
 
 module.exports = {
     /**
@@ -29,19 +27,17 @@ module.exports = {
      * @returns {Promise<void>}
      */
     validatePageAccessibility: async function (browser, page, scenarioName, path) {
-        const additionalConfig = {
-            browser: browser,
-            page: page,
-        }
-        const config = {
-            ...additionalConfig,
+        const pa11yConfig = config.get('pa11yConfig');
+        const configOptions = {
             ...pa11yConfig,
+            browser:browser,
+            page:page,
         }
         if (!path.startsWith("http")) {
             throw new Error("Only absolute paths are allowed!")
         }
 
-        const results = await pa11y(path, {config});
+        const results = await pa11y(path, configOptions);
         const fileName = await this.prepareFileNameFromUrl(path)
         // make the URL ready for filepath usage
         if (results.issues) {
