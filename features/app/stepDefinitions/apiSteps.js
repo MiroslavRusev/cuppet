@@ -5,15 +5,15 @@ const {
 } = require('@cucumber/cucumber');
 const apiSteps = require('../../src/apiFunctions');
 const main = require('../../src/mainFunctions');
-const storage = require("../../src/dataStorage");
+const dataStorage = require("../../src/dataStorage");
 
 Given("that I send a {string} request to {string}", async function (method, path) {
     await apiSteps.sendRequest(method,path);
 })
 When("I send a {string} request to {string} with http header {string} and value {string}",
     async function (method, path, headerName, headerValue) {
-        const name = await storage.checkForSavedVariable(headerName);
-        const value = await storage.checkForSavedVariable(headerValue);
+        const name = await dataStorage.checkForSavedVariable(headerName);
+        const value = await dataStorage.checkForSavedVariable(headerValue);
         const headers = {};
         headers[name] = value;
         await apiSteps.sendRequest(method,path, headers);
@@ -43,7 +43,7 @@ Given("I put {string} to {string} property of {string} element in the body",
 })
 
 Given("I create json object from {string} file", async function (filePath) {
-    const checkedPath = await storage.checkForSavedVariable(filePath);
+    const checkedPath = await dataStorage.checkForSavedVariable(filePath);
     await apiSteps.createRequestBodyFromFile(checkedPath);
 })
 Given("I validate that the page is a valid XML", async function () {

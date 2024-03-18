@@ -29,9 +29,19 @@ When('I type in {string} in {string} field in iframe with selector {string}', as
 });
 When('I click on the text {string} in iframe with selector {string} and follow the new tab', async function (text, frameSelector) {
     let frame = await utils.getFrameBySelector(this.page, frameSelector);
-    this.page = await utils.clickLinkOpenNewTab(this.browser, frame, text);
+    this.page = await utils.clickLinkOpenNewTab(this.browser, frame, text, true);
+});
+When('I click on the element {string} in iframe with selector {string} and follow the new tab', async function (cssSelector, frameSelector) {
+    let frame = await utils.getFrameBySelector(this.page, frameSelector);
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    this.page = await utils.clickLinkOpenNewTab(this.browser, frame, selector, false);
 });
 When('I store the string matching the {string} pattern from the {string} text in iframe {string}', async function (pattern, text, frameSelector) {
     let frame = await utils.getFrameBySelector(this.page, frameSelector);
     await dataStorage.storeTextFromPattern(frame, pattern, text);
+});
+Then ("I {string} the checkbox {string} in iframe with selector {string}", async function (action, cssSelector, frameSelector) {
+    let frame = await utils.getFrameBySelector(this.page, frameSelector);
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    await utils.useCheckbox(frame, selector, action);
 });
