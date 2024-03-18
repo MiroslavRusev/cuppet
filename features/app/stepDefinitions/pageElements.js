@@ -181,9 +181,16 @@ Given("I check if checkbox options with locator {string} are not in alphabetical
     await utils.iCheckIfCheckboxOptionsAreInAlphabeticalOrder(this.page, selector, false);
 })
 When('I click on the text {string} and follow the new tab', async function (text) {
-    this.page = await utils.clickLinkOpenNewTab(this.browser, this.page, text);
+    this.page = await utils.clickLinkOpenNewTab(this.browser, this.page, text, true);
+});
+When('I click on the element {string} and follow the new tab', async function (cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    this.page = await utils.clickLinkOpenNewTab(this.browser, this.page, selector, true);
 })
 When('I click on the element {string} and follow the popup window', async function (cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     this.page = await utils.clickElementOpenPopup(this.page, selector);
+})
+When("I press key {string}", async function(key) {
+    await utils.pressKey(this.page, key);
 })

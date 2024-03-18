@@ -42,3 +42,8 @@ Then ("I set stored date {string} in flatpickr with selector {string}", async fu
     const result = await dataStorage.checkForVariable(date);
     await utils.setDateFlatpickr(this.page, selector, result);
 });
+Then ("I select {string} from json in {string} dropdown", async function (variable, cssSelector) {
+    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    let data = await dataStorage.getVariable(variable);
+    await utils.selectOptionByValue(this.page, selector, data);
+});

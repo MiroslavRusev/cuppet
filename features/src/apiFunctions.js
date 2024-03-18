@@ -30,27 +30,32 @@ module.exports = {
      * @async
      * @function setHeaders
      * @param headers
-     * @returns {Promise<Object>} - Returns an object with the headers
+     * @param {boolean} defaultHeadersFlag
+      * @returns {Promise<Object>} - Returns an object with the headers
      */
-    setHeaders: async function (headers = {}) {
+    setHeaders: async function (headers = {}, defaultHeadersFlag = false) {
 
-        let dynamicObject = {
+        if(!defaultHeadersFlag) {
+            return headers;
+        }
+
+        let defaultHeaders = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
         if (config.has('api.x-api-key')) {
-            dynamicObject['X-Api-Key'] = config.get('api.x-api-key');
+            defaultHeaders['X-Api-Key'] = config.get('api.x-api-key');
         }
         if (config.has('api.Authorization')) {
-            dynamicObject['X-Api-Key'] = config.get('api.Authorization');
+            defaultHeaders['X-Api-Key'] = config.get('api.Authorization');
         }
-        if (headers) {
-            dynamicObject = {
-                ...dynamicObject,
+        if (headers && defaultHeaders) {
+            defaultHeaders = {
+                ...defaultHeaders,
                 ...headers
             }
         }
-        return dynamicObject;
+        return defaultHeaders;
     },
 
     /**
@@ -95,7 +100,7 @@ module.exports = {
         data = {}
     ) {
         const apiUrl = await this.prepareUrl(url);
-        const requestHeaders = await this.setHeaders(headers);
+        const requestHeaders = await this.setHeaders(headers, true);
         const auth = await this.setBasicAuth();
         if (this.request) {
             data = this.request;
@@ -258,6 +263,42 @@ module.exports = {
         const isValid =  await xml2js.parseStringPromise(response.data);
         if(!isValid) {
             throw new Error("XML is not valid!")
+        }
+    },
+
+    /**
+     *
+     * @param {string} method - method - GET,POST, PUT etc.
+     * @param {string} currentUrl - url of the page/endpoint
+     * @param {object} reqHeaders - request headers
+     * @param {string} resHeaders - response headers
+     * @param {boolean} flag - direction of presence (true/false)
+     * @returns {Promise<void>}
+     */
+    validateResponseHeader: async function(
+        method,
+        currentUrl,
+        reqHeaders,
+        resHeaders,
+        flag
+    ) {
+        const prepareUrl = await this.prepareUrl(currentUrl);
+        const requestHeaders = await this.setHeaders(reqHeaders);
+        const auth = await this.setBasicAuth();
+        let response;
+        try {
+            response = await axios.request({
+                url: prepareUrl,
+                method: method,
+                ...(Object.keys(auth).length && {auth}),
+                headers: requestHeaders,
+            })
+        } catch (error) {
+            throw new Error(`Request failed with: ${error}`)
+        }
+        const hasProperty = response.headers.hasOwnProperty(resHeaders.toLowerCase());
+        if (hasProperty !== flag) {
+            throw new Error("The response headers are different than expected!")
         }
     }
 
