@@ -16,7 +16,7 @@ module.exports = {
      */
     customWaitForSkippableElement: async function (page, selector, skipFlag) {
         try {
-            await page.waitForSelector(selector)
+            await page.waitForSelector(selector, { visible: true })
         } catch (error) {
             if (skipFlag) {
                 // Exit from the function as the step was marked for skipping
@@ -34,12 +34,15 @@ module.exports = {
      * @returns {Promise<void>}
      */
     click: async function (page, selector) {
-        const objectToCLick = await page.waitForSelector(selector);
+        const objectToCLick = await page.waitForSelector(selector, { visible: true });
+        const afterClickPromise = helper.afterClick(page);
         try {
-            await objectToCLick.click(selector, { delay: 150 });
+            await objectToCLick.click({ delay: 150 });
         } catch (error) {
             throw new Error(`Could not click on element: ${selector}. Error: ${error}`);
         }
+        // Resolve afterClick method
+        await afterClickPromise;
     },
 
     /**
@@ -52,6 +55,9 @@ module.exports = {
         await page.waitForSelector(selector);
         const elements = await page.$$(selector);
         for (let element of elements) {
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 200)
+            });
             await element.click({ delay: 300 });
         }
     },
@@ -59,7 +65,7 @@ module.exports = {
     /**
      * Press a single key
      * @param page
-     * @param key
+     * @param key - Name of key to press, such as ArrowLeft. See KeyInput for a list of all key names.
      * @returns {Promise<void>}
      */
     pressKey: async function (page, key) {
@@ -129,11 +135,14 @@ module.exports = {
         const objectToClick = await page.waitForSelector(
                 'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
         );
+        const afterClickPromise = helper.afterClick(page);
         try {
             await objectToClick.click();
         } catch (error) {
             throw new Error(`Could not click on element with text ${text}`)
         }
+        // Resolve afterClick method
+        await afterClickPromise;
 
     },
 
@@ -147,9 +156,10 @@ module.exports = {
         const objectToClick = await page.waitForSelector(
             'xpath/' + `//a[contains(text(), '${text}')]`
         );
+        const navigationPromise = page.waitForNavigation();
         try {
             await objectToClick.click();
-            await page.waitForNavigation();
+            await navigationPromise;
         } catch (error) {
             throw new Error(`Could not click on the element with text: ${text}`);
         }
@@ -159,22 +169,29 @@ module.exports = {
      * Click on the text of a link and expect it to open in a new tab. target="_blank"
      * @param browser
      * @param page
-     * @param text
+     * @param value - either text or css selector
+     * @param xpath - flag, whether to use xpath or not
      * @returns {Promise<Object>}
      */
-    clickLinkOpenNewTab: async function (browser, page, text) {
-        const objectToClick = await page.waitForSelector(
-            'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
-        );
+    clickLinkOpenNewTab: async function (browser, page, value, xpath = true) {
+        let objectToClick;
+        if (xpath) {
+            const result = await helper.getMultilingualString(value);
+            objectToClick = await page.waitForSelector(
+                'xpath/' + `//body//*[text()[contains(.,'${result}')]]`
+            );
+        } else {
+            objectToClick = await page.waitForSelector(value);
+        }
+
         try {
             await objectToClick.click();
         } catch (error) {
-            throw new Error(`Could not click on element with text ${text}`)
+            throw new Error(`Could not click on the element. Reason: ${error}`)
         }
-        const pages = await browser.pages();
-        // Switch to the new tab
-        page =  pages[pages.length - 1];
-        return page;
+        // This is made for the standard case of clicking on a link of the first tab and opening second.
+        // If you are working on more than two tabs, please use switchToTab() method.
+       return await helper.switchToTab(browser, 2);
     },
 
     /**
@@ -184,20 +201,16 @@ module.exports = {
      * @returns {Promise<Object>}
      */
     clickElementOpenPopup: async function (page, selector) {
-        const objectToClick = await page.waitForSelector(selector);
+        const objectToClick = await page.waitForSelector(selector, {visible: true});
+        // Set up a listener for the 'popup' event
+        const popupPromise = new Promise(resolve => page.once('popup', resolve));
         try {
             await objectToClick.click();
         } catch (error) {
             throw new Error(`Could not click on element with selector ${selector}`)
         }
-        // Set up a listener for the 'popup' event
-        const newPagePromise = new Promise(resolve => {
-            page.once('popup', async popup => {
-                // Return the popup as a new page object
-                resolve(popup);
-            });
-        });
-        return await newPagePromise;
+        // Return the popup as a new page object
+        return popupPromise;
     },
     
     /**
@@ -343,7 +356,7 @@ module.exports = {
         try {
             await page.waitForSelector(selector);
             const frameHandle = await page.$(selector);
-            return await frameHandle.contentFrame();
+            return frameHandle.contentFrame();
 
         } catch (error) {
             throw new Error(`iFrame with css selector: ${selector} cannot be found!`)
@@ -357,13 +370,13 @@ module.exports = {
      * @param time
      * @returns {Promise<void>}
      */
-    seeTextByXpath: async function (page, text, time = 4000) {
+    seeTextByXpath: async function (page, text, time = 6000) {
         let result = await helper.getMultilingualString(text);
         const options = {
             visible: true, // Wait for the element to be visible (default: false)
             timeout: time, // Maximum time to wait in milliseconds (default: 30000)
         };
-        if (time > 4000 && !page["_name"]) {
+        if (time > 6000 && !page["_name"]) {
             await new Promise(function(resolve) {
                 setTimeout(resolve, 500)
             });
@@ -449,7 +462,7 @@ module.exports = {
         try {
           const el = await page.$(selector);
           const elementType = await page.evaluate(el => el.tagName, el);
-          if (elementType.toLowerCase() === "input") {
+          if (elementType.toLowerCase() === "input" || elementType.toLowerCase() === "textarea") {
               value = await (await page.evaluateHandle(el => el.value, el)).jsonValue();
           } else {
               value = await (await page.evaluateHandle(el => el.innerText, el)).jsonValue();
@@ -536,7 +549,9 @@ module.exports = {
             throw new Error("Element not found!")
         }
 
+        const afterClickPromise = helper.afterClick(page);
         await elements[0].click();
+        await afterClickPromise;
     },
 
     /**
@@ -551,6 +566,9 @@ module.exports = {
         const element = await page.$(selector);
         const filePath = config.has('filePath') ? config.get('filePath') : 'files/';
         await element.uploadFile(filePath + fileName);
+        // Additional wait as the promise for file upload not always resolve on time when no slowMo is added.
+        await new Promise(resolve =>
+            setTimeout(resolve, 500));
     },
 
     /**
@@ -621,11 +639,18 @@ module.exports = {
         if (skipped) {
             return true;
         }
-        try {
+        const el = await page.$(selector);
+        const elementType = await page.evaluate(el => el.tagName, el);
+        if (elementType.toLowerCase() === "input" || elementType.toLowerCase() === "textarea") {
             await page.$eval(selector, (input) => (input.value = ''));
-            await page.type(selector, result, { delay: 50 });
-        } catch (error) {
-            throw new Error(`Cannot type into field due to ${error}`);
+            await new Promise(function (resolve) {
+                setTimeout(resolve, 150)
+            });
+            try {
+                await page.type(selector, result, { delay: 150 });
+            } catch (error) {
+                throw new Error(`Cannot type into field due to ${error}`);
+            }
         }
     },
 
@@ -643,9 +668,11 @@ module.exports = {
             return true;
         }
         const element = await page.$(selector);
+        await new Promise(resolve =>
+            setTimeout(resolve, 200));
         const checked = await (await element.getProperty("checked")).jsonValue();
         if (!checked && action === "select" || checked && action === "deselect" ) {
-            element.click();
+            await element.click();
         } else if (checked && action === "select" || !checked && action === "deselect") {
             // Exit successfully when the requested action matches the current state
             return true;
@@ -682,7 +709,7 @@ module.exports = {
                 textEditor.model.insertContent(docFrag);
             })();
             `;
-            return await page.evaluate(jsCode);
+            return page.evaluate(jsCode);
         }
         catch (error) {
             throw new Error(`Cannot write into CkEditor5 field due to: ${error}!`);
@@ -740,7 +767,7 @@ module.exports = {
      */
     selectOptionFirstAutocomplete: async function (page, text, selector) {
         await page.waitForSelector(selector);
-        await page.type(selector, text, { delay: 50 });
+        await page.type(selector, text, { delay: 150 });
         await new Promise(function(resolve) {
             setTimeout(resolve, 1000)
         });
@@ -820,10 +847,11 @@ module.exports = {
         await page.waitForSelector(selector);
         const elements = await page.$$(selector);
 
-        const texts = await Promise.all(elements.map(async element => {
-            const propertyHandle = await element.getProperty('textContent');
-            return await propertyHandle.jsonValue();
-        }));
+        const texts = await Promise.all(
+            elements.map(element =>
+                element.getProperty('textContent').then(propertyHandle => propertyHandle.jsonValue())
+            )
+        );
 
         const isArraySorted = helper.isArraySorted(texts, 0);
 
