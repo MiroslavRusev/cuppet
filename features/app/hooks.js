@@ -22,9 +22,8 @@ let screenshotPath = config.get('screenshotsPath').toString() ?? 'screenshots/'
 
 // executed once before any test
 BeforeAll(async function() {
-    dataStore.createFile();
-    const date = new Date();
-    console.log(`Tests started at: ${date.toString()}`);
+    await dataStore.createFile();
+    console.log(`Tests started at: ${new Date()}`);
 })
 
 AfterStep(async function(testCase){

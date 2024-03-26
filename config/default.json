@@ -15,7 +15,8 @@
   "screenshotsPath": "screenshots/",
   "language": "en",
   "regionMap": {
-    "ExampleRegion": ".valid-css-selector"
+    "ExampleRegion": ".valid-css-selector",
+    "Cards": ".category-cards"
   },
   "basicAuth": {
     "authUser": "user",
