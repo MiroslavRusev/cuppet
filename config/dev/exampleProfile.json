@@ -1,6 +1,6 @@
 {
   "credentials": {
-    "baseUrl": "https://www.example-dev.com"
+    "baseUrl": "https://demoqa.com/"
   },
   "api" : {
     "baseApiUrl": "https://www.example-dev.com/api",

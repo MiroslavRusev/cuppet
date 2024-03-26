@@ -9,12 +9,16 @@ module.exports = {
 
     /**
      * Create the JSON file in which test data will be stored
-     * @returns {void}
+     * @returns {Promise<void>}
      */
-    createFile: function () {
+    createFile: async function () {
         if (jsonFilePath && !fs.existsSync(jsonFilePath)) {
-            fs.writeFile(jsonFilePath, '', {flag: 'w+'}, () => {
-                console.log('File Created');
+            fs.writeFile(jsonFilePath, '', {flag: 'w+'}, (err) => {
+                if (err) {
+                    console.error('File is not created, please check if the folder exists!')
+                } else {
+                    console.log('File Created');
+                }
             })
         }
     },
