@@ -10,8 +10,7 @@ module.exports = {
          * @returns {Promise<void>}
          */
         validatePageSpeed: async function (page, path, scenarioName) {
-                const lighthouse = (await import('lighthouse')).default;
-                const report = (await import('lighthouse')).generateReport;
+                const { default: lighthouse, generateReport: report } = await import('lighthouse');
                 const {lhr} = await lighthouse(path, undefined, undefined, page);
                 const reportHtml = report(lhr, "html");
                 const fileName = await helper.prepareFileNameFromUrl(path)
