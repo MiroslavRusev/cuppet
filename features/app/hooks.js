@@ -69,7 +69,7 @@ Before(async function(testCase) {
 
     // // Set the dimensions of the viewport.
     if (Array.isArray(args)) {
-        const isHeadless = args.includes('--headless')
+        const isHeadless = args.includes('--headless=new')
         if (isHeadless) {
             await page.setViewport({
                 width: Number(config.get('viewport.width')),
