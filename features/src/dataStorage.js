@@ -34,16 +34,16 @@ module.exports = {
     },
 
     /**
-     * Generate pa11y html report on error (successful runs do not produce reports)
+     * Generate pa11y,lighthouse etc. html reports
      * @param fileName - string with the name of the file
      * @param data - HtmlReporter formatted result
      * @returns {Promise<void>}
      */
-    createPa11yReport: async function (fileName, data) {
+    createHtmlReport: async function (fileName, data) {
         const profile = process.env.NODE_CONFIG_ENV;
         fs.writeFile(`reports/${profile}/${fileName}.html`, data, (err) => {
             if (err) throw err;
-            console.log(`Custom file saved to ${fileName}.html`);
+            console.log(`Html report: ${fileName}.html is generated!`);
         });
     },
 

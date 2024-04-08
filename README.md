@@ -26,8 +26,8 @@
 ### Project structure
     config - configuration profiles, separated on folders by environment
     features - Has 3 folders
-        lib - Main function definitions
-        support - Step defitions, hooks and components
+        src - Main function definitions
+        app - Step defitions, hooks and components
         tests - Gherkin feature suits 
     files - Files used for form uploads
     jsonFiles - Storage of test data
@@ -48,6 +48,7 @@
 ### Test execution (env is the config folder, profile is the name of the json file)
 #### {profile} is the name of the json in the config dir
 #### {env} is the folder name in the config dir
+#### When you test locally and in headed mode open hooks.js and uncomment the slowMo
     yarn test {profile} {env} - all tests
     yarn test {profile} {env} features/tests/<test> - specific test
     

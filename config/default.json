@@ -5,7 +5,7 @@
     "--disable-setuid-sandbox",
     "--proxy-server='direct://'",
     "--proxy-bypass-list=*",
-    "--headless"
+    "--headless=new"
   ],
   "viewport": {
     "width": 1920,

@@ -1,19 +1,10 @@
 const config = require("config");
 const storage = require("./dataStorage");
+const helper = require("./helperFunctions");
 const pa11y = require("pa11y");
 const htmlReporter = require('pa11y-reporter-html');
 
 module.exports = {
-    /**
-     * Replace the incompatible chars from a URL with _ so that the string can be used in a filename.
-     * @param path
-     * @returns {Promise<string>}
-     */
-    prepareFileNameFromUrl: async function (path) {
-        const newUrl = new URL(path);
-        let pathName = newUrl.pathname;
-        return pathName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    },
 
     /**
      * Method to validate if certain path meets the criteria from the config.
@@ -38,11 +29,12 @@ module.exports = {
         }
 
         const results = await pa11y(path, configOptions);
-        const fileName = await this.prepareFileNameFromUrl(path)
+        const fileName = await helper.prepareFileNameFromUrl(path)
         // make the URL ready for filepath usage
         if (results.issues) {
             const html = await htmlReporter.results(results);
-            await storage.createPa11yReport(scenarioName.slice(0,-1) + fileName , html);
+            await storage.createHtmlReport(
+                "Pa11y-" + scenarioName.slice(0,-1) + fileName , html);
             throw new Error (`${path} page has accessibility issues. HTML report has been generated!`)
         }
     }

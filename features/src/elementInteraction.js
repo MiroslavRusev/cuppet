@@ -314,10 +314,9 @@ module.exports = {
      */
     validateValueOfElementAttributeByText: async function (page, text, attribute, value) {
         const result = await helper.getMultilingualString(text);
-        const attrValue = await page.$eval(
-            'xpath/' + `//body//*[text()[contains(.,'${result}')]]`, (el, attribute) =>
-                el.getAttribute(attribute), attribute
-        );
+        const selector = 'xpath/' + `//body//*[text()[contains(.,'${result}')]]`;
+        await page.waitForSelector(selector)
+        const attrValue = await page.$eval(selector, (el, attribute) => el.getAttribute(attribute), attribute);
         if (value !== attrValue) {
             throw new Error(`The provided text "${result}" doesn't match element which attribute has value: ${value}.`);
         }
@@ -647,7 +646,7 @@ module.exports = {
                 setTimeout(resolve, 150)
             });
             try {
-                await page.type(selector, result, { delay: 150 });
+                await page.type(selector, result, { delay: 250 });
             } catch (error) {
                 throw new Error(`Cannot type into field due to ${error}`);
             }
