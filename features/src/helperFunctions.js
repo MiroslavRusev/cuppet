@@ -165,5 +165,15 @@ module.exports = {
         await pages[num].bringToFront();
         return pages[num];
     },
+    /**
+     * Replace the incompatible chars from a URL with _ so that the string can be used in a filename.
+     * @param path
+     * @returns {Promise<string>}
+     */
+    prepareFileNameFromUrl: async function (path) {
+        const newUrl = new URL(path);
+        let pathName = newUrl.pathname;
+        return pathName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    },
 
 }
