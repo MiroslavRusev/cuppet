@@ -338,10 +338,10 @@ module.exports = {
         try {
              isElementInPage = await page.waitForSelector(selector, options);
         } catch (error) {
-            console.log(`Element disappeared.`);
+            throw new Error("Element is visible!");
         }
         if (isElementInPage) {
-            throw new Error(`${selector} can be found in the page source.`)
+            throw new Error(`${selector} is hidden but can be found in the page source!`);
         }
     },
 
