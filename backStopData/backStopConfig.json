@@ -1,0 +1,32 @@
+{
+  "id": "test",
+  "viewports": [
+    {
+      "label": "desktop",
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "scenarios": [
+    {
+      "label": "Single Test",
+      "url": "https://example.com"
+    }
+  ],
+  "paths": {
+    "bitmaps_reference": "backStopData/bitmaps_reference",
+    "bitmaps_test": "backStopData/bitmaps_test",
+    "engine_scripts": "backStopData/engine_scripts",
+    "html_report": "backStopData/html_report",
+    "ci_report": "backStopData/ci_report"
+  },
+  "report": ["browser"],
+  "engine": "puppeteer",
+  "engineOptions": {
+    "args": ["--headless=new"]
+  },
+  "asyncCaptureLimit": 5,
+  "asyncCompareLimit": 50,
+  "debug": false,
+  "debugWindow": false
+}

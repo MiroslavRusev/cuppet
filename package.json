@@ -17,6 +17,7 @@
   "dependencies": {
     "@supercharge/strings": "^2.0.0",
     "axios": "^1.6.0",
+    "backstopjs": "^6.3.23",
     "chai": "^4.3.7",
     "config": "^3.3.9",
     "lighthouse": "^11.7.0",
