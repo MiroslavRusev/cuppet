@@ -23,8 +23,8 @@ jobs:
         with:
           args: >
             -Dsonar.qualitygate.wait=true
-            -Dsonar.organization=${{ vars.SONAR_ORG }}
-            -Dsonar.projectKey=${{ vars.SONAR_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
             -Dsonar.branch.name=${{ env.BRANCH }}
             -Dsonar.sources=./
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
