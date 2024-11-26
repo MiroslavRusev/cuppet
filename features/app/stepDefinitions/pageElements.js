@@ -70,7 +70,7 @@ Then ("I should not see {string}", async function (text) {
 Then ("I wait for the text {string} to appear within {string} seconds", async function (text, time) {
     await utils.seeTextByXpath(this.page, text, time * 1000);
 });
-Then ("I wait for the text {string} to disappear with max time {string} seconds", async function (text, time) {
+Then ("I wait for the text {string} to disappear within {string} seconds", async function (text, time) {
     await utils.disappearText(this.page, text, time * 1000);
 });
 Then ("I upload the {string} in {string} field", async function (fileName, cssSelector) {
