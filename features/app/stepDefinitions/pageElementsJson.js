@@ -14,6 +14,10 @@ Then ("I should see stored text {string} in {string} region", async function (te
     const result = await dataStorage.checkForMultipleVariables(text);
     await utils.seeTextInRegion(this.page, result, region);
 });
+Then ("I hover on text {string} in {string} region", async function (text, region) {
+    const result = await dataStorage.checkForMultipleVariables(text);
+    await utils.hoverTextInRegion(this.page, result, region);
+});
 When('I should see variable {string} in {string} region', async function (variable, region) {
     const value = dataStorage.getVariable(variable);
     await utils.seeTextInRegion(this.page, value, region);
@@ -28,7 +32,7 @@ Then ("I fill in {string} with {string} variable using JSON stringify", async fu
     const value = await dataStorage.getVariable(variable, true);
     await utils.fillField(this.page, selector, value);
 });
-Then ("I type in {string} with {string} variable from JSON", async function (cssSelector, variable) {
+Then ("I type {string} in {string} using variable from JSON", async function (variable, cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     const value = await dataStorage.getVariable(variable);
     await utils.typeInField(this.page, selector, value);

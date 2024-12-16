@@ -85,7 +85,7 @@ Then ("I fill in CodeMirror field {string} with {string}", async function (cssSe
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.setValueInCodeMirrorField(this.page, selector, value);
 });
-Then ("I type in {string} with {string}", async function (cssSelector, text) {
+Then ("I type {string} in {string}", async function (text, cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.typeInField(this.page, selector, text);
 });

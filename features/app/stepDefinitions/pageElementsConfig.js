@@ -20,7 +20,7 @@ Then ("I fill in {string} with {string} variable from config", async function (c
     const value = await config.get(variable);
     await utils.fillField(this.page, selector, value);
 });
-Then ("I type in {string} with {string} variable from config", async function (cssSelector, variable) {
+Then ("I type {string} in {string} using variable from config", async function (variable, cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     const value = await config.get(variable);
     await utils.typeInField(this.page, selector, value);
