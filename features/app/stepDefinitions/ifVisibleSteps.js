@@ -12,7 +12,7 @@ Then ("I should see {string} if visible", async function (text) {
     }
     await utils.seeTextByXpath(this.page, text);
 });
-Then ("I type in {string} with {string} if visible", async function (cssSelector, text) {
+Then ("I type {string} in {string} if visible", async function (text, cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.typeInField(this.page, selector, text, true);
 });

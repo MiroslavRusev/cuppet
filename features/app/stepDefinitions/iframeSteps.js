@@ -23,7 +23,7 @@ When('I click on the text {string} in iframe with selector {string}', async func
     let frame = await utils.getFrameBySelector(this.page, frameSelector);
     await utils.clickByText(frame, text);
 });
-When('I type in {string} in {string} field in iframe with selector {string}', async function (text, selector, frameSelector) {
+When('I type {string} in {string} field in iframe with selector {string}', async function (text, selector, frameSelector) {
     let frame = await utils.getFrameBySelector(this.page, frameSelector);
     await utils.typeInField(frame, selector, text);
 });

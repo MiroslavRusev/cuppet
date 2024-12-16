@@ -429,6 +429,26 @@ module.exports = {
     },
 
     /**
+     * Hover element based on text content (useful for text inside spans, paragraphs etc. like menu links)
+     * @param page
+     * @param text
+     * @param region
+     * @returns {Promise<void>}
+     */
+    hoverTextInRegion: async function (page, text, region) {
+        const regionClass = await helper.getRegion(page, region);
+        const result = await helper.getMultilingualString(text);
+        const selector = 'xpath/' + `//*[@class='${regionClass}']//*[text()='${result}']`
+        try {
+            const element = await page.waitForSelector(selector);
+            const parentElementHandle = await page.evaluateHandle(el => el.parentElement, element);
+            await parentElementHandle.hover();
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    /**
      * Validate that the text is not rendered on the page.
      * @param page
      * @param text
