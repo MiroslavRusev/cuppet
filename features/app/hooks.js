@@ -27,8 +27,12 @@ BeforeAll(async function() {
 })
 
 AfterStep(async function(testCase){
-
-    if(testCase.result.status !== Status.PASSED) {
+    /**
+     * If the test is not passed or the test is not tagged with @api, take a screenshot
+     */
+    const arrayTags = testCase.pickle.tags;
+    const found = arrayTags.find(item => item.name === '@api');
+    if((testCase.result.status !== Status.PASSED) && found === undefined) {
         let stepName = testCase.pickle.uri;
         const name = stepName.replace(/[/\\.]/g, '_');
         const baseScreenshotPath = `${screenshotPath}${profile}`;
@@ -36,9 +40,15 @@ AfterStep(async function(testCase){
             fs.mkdirSync(baseScreenshotPath, { recursive: true });
         }
         let path = `${baseScreenshotPath}/screenshot_${name}.png`;
-        let screenshot = await this.page.screenshot({path: path,fullPage: true});
+        let screenshot = await this.page.screenshot({path: path, fullPage: true,});
         console.log(`Screenshot taken: ${name}`);
-        this.attach(screenshot, 'image/png');
+        // Convert Uint8Array to Buffer because Cucumber cannot work directly with Uint8Arrays
+        const buffer = Buffer.from(
+            screenshot.buffer,
+            screenshot.byteOffset,
+            screenshot.byteLength
+        );
+        this.attach(buffer, 'image/png');
     }
 })
 
