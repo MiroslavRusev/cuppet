@@ -231,5 +231,23 @@ module.exports = {
                 throw new Error(`The cookie ${cookieName} is not present, but it should!`)
             }
         }
+    },
+    /**
+     * Sets the viewport of the given page to match the specified device's dimensions.
+     *
+     * @param {Object} page - The page object where the viewport should be set.
+     * @param {string} device - The name of the device whose viewport dimensions should be applied.
+     * @throws {Error} Throws an error if the specified device is not defined in the configuration.
+     */
+    setViewport: async function(page, device) {
+        const viewport = config.get('viewport');
+
+        if (!viewport[device]) {
+            throw new Error(`Viewport for device "${device}" is not defined in config.\nAvailable devices are: ${Object.keys(viewport).join(', ')}`);
+        }
+        await page.setViewport({
+            width: viewport[device]['width'],
+            height: viewport[device]['height']
+        });
     }
 }
