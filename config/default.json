@@ -8,8 +8,11 @@
     "--headless=new"
   ],
   "viewport": {
-    "width": 1920,
-    "height": 1080
+    "default": { "width": 1920, "height": 1080 },
+    "MacBook": { "width": 1440, "height": 900 },
+    "laptop": { "width": 1280, "height": 720 },
+    "tablet": { "width": 768, "height": 1024 },
+    "mobile": { "width": 320, "height": 667 }
   },
   "filePath": "files/",
   "screenshotsPath": "screenshots/",

@@ -88,3 +88,6 @@ Then("I verify that {string} cookie {string} present", async function(cookieName
     };
     await main.verifyCookiePresence(this.page, cookieName, stringToBool[presence]);
 })
+Given('I set viewport size to {string}', async function (resolution) {
+    await main.setViewport(this.page, resolution)
+});

@@ -82,8 +82,8 @@ Before(async function(testCase) {
         const isHeadless = args.includes('--headless=new')
         if (isHeadless) {
             await page.setViewport({
-                width: Number(config.get('viewport.width')),
-                height: Number(config.get('viewport.height')),
+                width: Number(config.get('viewport.default.width')),
+                height: Number(config.get('viewport.default.height')),
             })
         }
     }
