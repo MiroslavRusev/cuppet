@@ -1,7 +1,7 @@
 const config = require('config');
 const fs = require("fs");
 const helper = require("./helperFunctions");
-const drupalFields = require("../app/components/drupalFields");
+const commonFields = require("../app/components/commonFields");
 const moment = require("moment")
 const jsonFilePath = config.get('jsonFilePath').toString();
 
@@ -169,7 +169,7 @@ module.exports = {
      * @returns {Promise<*>}
      */
     prepareCssSelector: async function (cssSelector) {
-        const drupalSelector = drupalFields[cssSelector] ?? cssSelector;
+        const drupalSelector = commonFields[cssSelector] ?? cssSelector;
         return this.checkForSavedVariable(drupalSelector);
     },
 

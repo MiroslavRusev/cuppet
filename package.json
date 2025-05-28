@@ -12,8 +12,14 @@
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
+    "@cucumber/messages": "*",
     "@cucumber/pretty-formatter": "^1.0.0",
-    "@cucumber/messages": "*"
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.27.0",
+    "appium": "^2.18.0",
+    "appium-uiautomator2-driver": "^4.2.3",
+    "globals": "^16.2.0",
+    "webdriverio": "9.12.7"
   },
   "dependencies": {
     "@supercharge/strings": "^2.0.0",
@@ -21,6 +27,7 @@
     "backstopjs": "^6.3.23",
     "chai": "^4.3.7",
     "config": "^3.3.9",
+    "eslint": "^9.27.0",
     "lighthouse": "^12.1.0",
     "mime": "^3.0.0",
     "moment": "^2.30.1",

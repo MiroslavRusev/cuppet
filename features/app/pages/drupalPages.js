@@ -1,4 +1,4 @@
-const drupalPages = {
+const commonPaths = {
     'Content': '/admin/content',
     'CreateUser': '/admin/people/create',
     'User': '/user',
@@ -15,4 +15,4 @@ const drupalPages = {
 
 };
 
-module.exports = drupalPages;
+module.exports = commonPaths;

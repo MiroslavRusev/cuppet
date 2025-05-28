@@ -1,18 +1,27 @@
 {
   "jsonFilePath": "jsonFiles/example.json",
-  "args": [
-    "--no-sandbox",
-    "--disable-setuid-sandbox",
-    "--proxy-server='direct://'",
-    "--proxy-bypass-list=*",
-    "--headless=new"
-  ],
-  "viewport": {
-    "default": { "width": 1920, "height": 1080 },
-    "MacBook": { "width": 1440, "height": 900 },
-    "laptop": { "width": 1280, "height": 720 },
-    "tablet": { "width": 768, "height": 1024 },
-    "mobile": { "width": 320, "height": 667 }
+  "browserOptions" :{ 
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--proxy-server='direct://'",
+      "--proxy-bypass-list=*",
+      "--headless=new"
+    ],
+    "viewport": {
+      "default": { "width": 1920, "height": 1080 },
+      "MacBook": { "width": 1440, "height": 900 },
+      "laptop": { "width": 1280, "height": 720 },
+      "tablet": { "width": 768, "height": 1024 },
+      "mobile": { "width": 320, "height": 667 }
+    }
+  },
+  "appiumCapabilities": {
+      "platformName": "Android",
+      "appium:automationName": "UiAutomator2",
+      "appium:deviceName": "Android",
+      "appium:appPackage": "com.android.settings",
+      "appium:appActivity": ".Settings"
   },
   "filePath": "files/",
   "screenshotsPath": "screenshots/",
