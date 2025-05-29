@@ -1,4 +1,4 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,7 +13,13 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default defineConfig([{
+export default defineConfig([
+    globalIgnores([
+    "**yarn.lock",
+    "**/node_modules/",
+    ".git/"
+]),
+{
     extends: compat.extends("eslint:recommended"),
 
     languageOptions: {
@@ -22,7 +28,7 @@ export default defineConfig([{
             ...globals.commonjs,
         },
 
-        ecmaVersion: 12,
+        ecmaVersion: "latest",
         sourceType: "module",
     },
 
@@ -30,4 +36,5 @@ export default defineConfig([{
         "no-unused-vars": "warn",
         "no-console": "off",
     },
-}]);
+}
+]);

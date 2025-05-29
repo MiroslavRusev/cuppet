@@ -1,7 +1,7 @@
 /**
  * Wdio session
  *
- * @type {*}
+ * @type {import('webdriverio')}
  */
 const {remote} = require('webdriverio');
 
