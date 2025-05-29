@@ -1,4 +1,4 @@
-const drupalFields = {
+const commonFields = {
     'Submit': '[id^="edit-submit"]',
     'Delete': '#edit-delete',
     'Run': '#edit-run',
@@ -15,4 +15,4 @@ const drupalFields = {
 
 };
 
-module.exports = drupalFields;
+module.exports = commonFields;

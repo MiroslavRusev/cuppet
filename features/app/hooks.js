@@ -3,18 +3,16 @@ const {
     AfterAll,
     Before,
     After,
-    AfterStep
+    AfterStep,
+    Status
 } = require('@cucumber/cucumber');
-const { Status } = require('@cucumber/cucumber');
+const BrowserManager = require('./browserManager');
+const AppiumManager = require('./appiumManager');
 const fs = require("fs");
-const puppeteer = require('puppeteer');
 const config = require("config");
-const args = config.get('args');
 const dataStore = require("../src/dataStorage");
 const profile = process.env.NODE_CONFIG_ENV;
 
-let browser = null;
-let page = null;
 let screenshotPath = config.get('screenshotsPath').toString() ?? 'screenshots/'
 
 // ==== BeforeAll and AfterAll do not have access to test scope 'this'
@@ -61,45 +59,41 @@ AfterAll(async function() {
 
 // executed before every test
 Before(async function(testCase) {
-    browser = await puppeteer.launch({
-        headless: false,
-        args: args,
-        defaultViewport: null,
-        // slowMo: 50, // When you test locally in headed mode use 50-150 to see what happens
-        w3c: false,
-    })
-    const pages = await browser.pages();
-    if (pages.length > 0) {
-        // Use the first existing page
-        page = pages[0];
-    } else {
-        // If no pages exist, create a new one
-        page = await browser.newPage();
-    }
-
-    // // Set the dimensions of the viewport.
-    if (Array.isArray(args)) {
-        const isHeadless = args.includes('--headless=new')
-        if (isHeadless) {
-            await page.setViewport({
-                width: Number(config.get('viewport.default.width')),
-                height: Number(config.get('viewport.default.height')),
-            })
-        }
-    }
-    // Set basic auth if configured
+    // Get Browser config arguments array
+    const browserArgs = config.get('browserOptions.args');
+    // Get default browser viewport
+    const browserViewport = config.get('browserOptions.viewport.default');
+    // Check for basic auth credentials in config
+    let credentials;
     if (config.has('basicAuth')) {
-        const credentials = {
-        username: config.get('basicAuth.authUser').toString(),
-        password: config.get('basicAuth.authPass').toString()
+        credentials = {
+            username: config.get('basicAuth.authUser').toString(),
+            password: config.get('basicAuth.authPass').toString(),
+        };
     }
-        await page.authenticate(credentials);
+    // Get Appium capabilities from config
+    const appiumCapabilities = config.get('appiumCapabilities');
+
+    // Check if the test is tagged with @appium to either use Appium or Chromium
+    const arrayTags = testCase.pickle.tags;
+    const found = arrayTags.find(item => item.name === '@appium');
+    if (!found) {
+        const browserManager = new BrowserManager(browserViewport, browserArgs, credentials);
+        await browserManager.initialize();
+    
+        // Assign created browser, page, and scenario name to global variables
+        this.browserManager = browserManager;
+        this.browser = browserManager.browser;
+        this.page = browserManager.page;
+        this.scenarioName = testCase.pickle.name;
+    } else {
+        const appiumManager = new AppiumManager(appiumCapabilities);
+        await appiumManager.initialize();
+        this.appiumManager = appiumManager;
+        this.appiumDriver = appiumManager.appiumDriver;
     }
-    // assign created browser, page and scenario name to global variables
-    this.browser = browser;
-    this.page = page;
-    this.scenarioName = testCase.pickle.name;
-})
+    
+});
 
 // executed after every test
 After(async function(testCase) {
@@ -107,7 +101,9 @@ After(async function(testCase) {
     if(testCase.result.status === Status.FAILED){
         console.log(`Scenario: '${testCase.pickle.name}' - has failed...\r\n`)
     }
-    if (browser) {
-        await browser.close()
+    if (this.browser) {
+        await this.browserManager.stop()
+    } else if (this.appiumDriver) {
+        await this.appiumManager.stop();
     }
 })

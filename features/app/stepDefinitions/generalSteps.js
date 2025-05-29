@@ -5,7 +5,7 @@ const {
 } = require('@cucumber/cucumber');
 const utils = require('../../src/elementInteraction');
 const main = require('../../src/mainFunctions');
-const drupalFields = require('../components/drupalFields');
+const commonFields = require('../components/commonFields');
 const dataStorage = require("../../src/dataStorage");
 const config = require("config");
 
@@ -36,17 +36,17 @@ Given("I visit saved path page", async function () {
 Given("I log in", async function() {
     const userName = config.get('credentials.username');
     const password = config.get('credentials.password');
-    await utils.fillField(this.page, drupalFields['Name'], userName);
-    await utils.fillField(this.page,  drupalFields['Pass'], password);
+    await utils.fillField(this.page, commonFields['Name'], userName);
+    await utils.fillField(this.page,  commonFields['Pass'], password);
     const navigationPromise = this.page.waitForNavigation();
-    await utils.click(this.page, drupalFields['Submit']);
+    await utils.click(this.page, commonFields['Submit']);
     await navigationPromise;
 })
 Given("I log in as {string} {string}", async function(username, password) {
-    await utils.fillField(this.page, drupalFields['Name'], username);
-    await utils.fillField(this.page,  drupalFields['Pass'], password);
+    await utils.fillField(this.page, commonFields['Name'], username);
+    await utils.fillField(this.page,  commonFields['Pass'], password);
     const navigationPromise = this.page.waitForNavigation();
-    await utils.click(this.page, drupalFields['Submit']);
+    await utils.click(this.page, commonFields['Submit']);
     await navigationPromise;
 })
 Given("I follow {string}", async function (text) {

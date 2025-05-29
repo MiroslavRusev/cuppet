@@ -7,5 +7,5 @@
     "x-api-key": "aaa1113333"
   },
   "jsonFilePath": "jsonFiles/example-dev.json",
-  "tags": "@example-dev"
+  "tags": "@example-dev or @appium"
 }
