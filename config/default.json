@@ -20,6 +20,7 @@
       "platformName": "Android",
       "appium:automationName": "UiAutomator2",
       "appium:deviceName": "Android",
+      "appium:disableIdLocatorAutocompletion": true,
       "appium:appPackage": "com.android.settings",
       "appium:appActivity": ".Settings"
   },

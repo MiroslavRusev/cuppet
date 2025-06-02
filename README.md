@@ -49,8 +49,8 @@
 ## Local setup
 1. Setup Android Studio, Emulator and JAVA from this guide - https://appium.io/docs/en/latest/quickstart/uiauto2-driver/
 2. Do not install appium or drivers from the guide, because they are locally handled in the project
-3. All commands from the guide which start with appium should be prefixed with `npx` and executed from the project root ex. `npx appium driver doctor uiautomator2`
-4. When running tests you need to start appium in a separate terminal with `npx appium`. Execute the command from project root to use the one from package.json.       
+    - All commands from the guide which start with appium should be prefixed with `npx` and executed from the project root ex. `npx appium driver doctor uiautomator2`. Because appium is locally installed and not added to the %PATH
+    - When running tests you need to start appium in a separate terminal with `npx appium` executed from project root folder.    
 
 # Test execution
 ## Test exec parameters

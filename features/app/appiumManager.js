@@ -32,11 +32,10 @@ class AppiumManager {
      * @throws {Error} If the Appium service fails to start. 
      */
     async initialize() {
-
         const wdOpts = {
             hostname: process.env.APPIUM_HOST || 'localhost',
             port: parseInt(process.env.APPIUM_PORT, 10) || 4723,
-            logLevel: 'info',
+            logLevel: 'silent', // Can be: 'trace', 'debug', 'info', 'warn', 'error', or 'silent'
             capabilities: this.capabilities,
         };
         this.appiumDriver = await remote(wdOpts);

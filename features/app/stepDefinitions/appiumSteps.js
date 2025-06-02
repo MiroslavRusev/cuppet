@@ -10,7 +10,9 @@ Given("I go to {string} app package and {string} activity", async function (andr
 })
 
 Then("I click on the element {string} on mobile", async function (selector) {
-    await appiumTesting.clickElement(this.appiumDriver, selector);
+    const elSelector = appiumTesting.prepareSelector(selector);
+    console.log(`Clicking on element with selector: ${elSelector}`);
+    await appiumTesting.clickElement(this.appiumDriver, elSelector);
 })
 
 When("I scroll to the element {string} on mobile", async function (selector) {
