@@ -41,7 +41,7 @@ class BrowserManager {
             await this.page.authenticate(this.credentials);
         }
     }
-    
+
     async stop() {
         if (this.browser) {
             await this.browser.close();

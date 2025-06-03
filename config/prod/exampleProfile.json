@@ -1,11 +1,11 @@
 {
-  "credentials": {
-    "baseUrl": "https://www.example.com"
-  },
-  "api" : {
-    "baseApiUrl": "https://www.example.com/api",
-    "x-api-key": "aaa1113333"
-  },
-  "jsonFilePath": "jsonFiles/example-prod.json",
-  "tags": "@example-prod"
+    "credentials": {
+        "baseUrl": "https://www.example.com"
+    },
+    "api": {
+        "baseApiUrl": "https://www.example.com/api",
+        "x-api-key": "aaa1113333"
+    },
+    "jsonFilePath": "jsonFiles/example-prod.json",
+    "tags": "@example-prod"
 }

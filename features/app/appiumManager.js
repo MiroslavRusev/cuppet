@@ -3,7 +3,7 @@
  *
  * @type {import('webdriverio')}
  */
-const {remote} = require('webdriverio');
+const { remote } = require('webdriverio');
 
 /**
  * Appium instance manager for handling Appium sessions and capabilities.
@@ -16,20 +16,20 @@ class AppiumManager {
      * Creates an instance of AppiumManager.
      *
      * @constructor
-     * @param {*} capabilities 
+     * @param {*} capabilities
      */
     constructor(capabilities) {
         this.capabilities = capabilities;
         this.appiumDriver = null;
         this.appiumService = null;
     }
-    
+
     /**
      * Description placeholder
      *
      * @async
      * @returns {Promise<void>}
-     * @throws {Error} If the Appium service fails to start. 
+     * @throws {Error} If the Appium service fails to start.
      */
     async initialize() {
         const wdOpts = {
@@ -45,14 +45,14 @@ class AppiumManager {
      * Description placeholder
      *
      * @async
-     * @returns {Promise<void>} 
+     * @returns {Promise<void>}
      */
     async stop() {
         if (this.appiumDriver) {
             await this.appiumDriver.deleteSession();
             this.appiumDriver = null;
         }
-    }   
+    }
 }
 
 module.exports = AppiumManager;

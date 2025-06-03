@@ -1,16 +1,15 @@
-const axios = require("axios");
-const config = require("config");
-const storage = require("./dataStorage");
+const axios = require('axios');
+const config = require('config');
+const storage = require('./dataStorage');
 const xml2js = require('xml2js');
-const assert = require("chai").assert;
+const assert = require('chai').assert;
 const expect = require('chai').expect;
 
 module.exports = {
-
     /** @type {object} */
     response: null,
     /** @type {object} */
-    request:null,
+    request: null,
 
     /**
      * Prepare path for API test usage
@@ -19,8 +18,8 @@ module.exports = {
      */
     prepareUrl: async function (url) {
         const path = await storage.checkForMultipleVariables(url);
-        if (!path.startsWith('http') && config.has("api.baseApiUrl")) {
-            return config.get("api.baseApiUrl") + path;
+        if (!path.startsWith('http') && config.has('api.baseApiUrl')) {
+            return config.get('api.baseApiUrl') + path;
         }
         return path;
     },
@@ -31,18 +30,17 @@ module.exports = {
      * @function setHeaders
      * @param headers
      * @param {boolean} defaultHeadersFlag
-      * @returns {Promise<Object>} - Returns an object with the headers
+     * @returns {Promise<Object>} - Returns an object with the headers
      */
     setHeaders: async function (headers = {}, defaultHeadersFlag = false) {
-
-        if(!defaultHeadersFlag) {
+        if (!defaultHeadersFlag) {
             return headers;
         }
 
         let defaultHeaders = {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
+            Accept: 'application/json',
+        };
         if (config.has('api.x-api-key')) {
             defaultHeaders['X-Api-Key'] = config.get('api.x-api-key');
         }
@@ -52,8 +50,8 @@ module.exports = {
         if (headers && defaultHeaders) {
             defaultHeaders = {
                 ...defaultHeaders,
-                ...headers
-            }
+                ...headers,
+            };
         }
         return defaultHeaders;
     },
@@ -70,13 +68,13 @@ module.exports = {
         if (config.has('api.authUser')) {
             basicAuth = {
                 username: config.get('api.authUser'),
-                password: config.get('api.authPass')
-            }
+                password: config.get('api.authPass'),
+            };
         } else if (config.has('basicAuth.authUser')) {
             basicAuth = {
                 username: config.get('basicAuth.authUser'),
-                password: config.get('basicAuth.authPass')
-            }
+                password: config.get('basicAuth.authPass'),
+            };
         }
         return basicAuth;
     },
@@ -93,12 +91,7 @@ module.exports = {
      * @returns {Promise<Object>} Returns a Promise that resolves to the response from the server.
      * @throws {Error} Throws an error if the request fails.
      */
-    sendRequest: async function (
-        method,
-        url = "/",
-        headers = {},
-        data = {}
-    ) {
+    sendRequest: async function (method, url = '/', headers = {}, data = {}) {
         const apiUrl = await this.prepareUrl(url);
         const requestHeaders = await this.setHeaders(headers, true);
         const auth = await this.setBasicAuth();
@@ -109,15 +102,15 @@ module.exports = {
             this.response = await axios.request({
                 url: apiUrl,
                 method: method.toLowerCase(),
-                ...(Object.keys(auth).length && {auth}),
+                ...(Object.keys(auth).length && { auth }),
                 // The data is conditionally added to the request, because it's not used with GET requests and creates conflict.
                 // The following checks if data object is not empty, returns data object if not empty or skip if empty.
-                ...(Object.keys(data).length && {data}),
+                ...(Object.keys(data).length && { data }),
                 headers: requestHeaders,
-            })
+            });
             return this.response;
         } catch (error) {
-            throw new Error(`Request failed with: ${error}`)
+            throw new Error(`Request failed with: ${error}`);
         }
     },
 
@@ -149,7 +142,7 @@ module.exports = {
     iPutValuesInRequestBody: async function (value, property, object) {
         const preparedValue = await storage.checkForVariable(value);
         if (!this.request) {
-              this.request = {}
+            this.request = {};
         }
         this.request[object][property] = preparedValue;
         return this.request;
@@ -162,7 +155,7 @@ module.exports = {
      */
     validateResponseCode: async function (code) {
         if (this.response.status !== Number(code)) {
-            throw new Error(`Response code is different than expected, code: ${this.response.status}`)
+            throw new Error(`Response code is different than expected, code: ${this.response.status}`);
         }
     },
 
@@ -198,7 +191,7 @@ module.exports = {
     propertyHasValue: async function (property, expectedValue) {
         const actualValue = await this.getPropertyValue(property);
         assert.strictEqual(actualValue, expectedValue, `Property "${property}" does not have the expected value`);
-    },    
+    },
 
     /**
      * @async
@@ -210,7 +203,7 @@ module.exports = {
      */
     iRememberVariable: async function (property, variable) {
         const propValue = await this.getPropertyValue(property);
-        await storage.iStoreVariableWithValueToTheJsonFile(propValue, variable)
+        await storage.iStoreVariableWithValueToTheJsonFile(propValue, variable);
     },
 
     /**
@@ -220,13 +213,13 @@ module.exports = {
      */
     getPropertyValue: async function (property) {
         const response = this.response.data;
-        const keys = property.split(".");
+        const keys = property.split('.');
         let value = response;
         for (let key of keys) {
             value = value[key];
         }
         if (!value) {
-            throw new Error(`Value with property: ${property} is not found!`)
+            throw new Error(`Value with property: ${property} is not found!`);
         }
         return value;
     },
@@ -246,7 +239,7 @@ module.exports = {
      * @param url
      * @returns {Promise<void>}
      */
-    validateXMLEndpoint: async function(url) {
+    validateXMLEndpoint: async function (url) {
         const xmlUrl = await this.prepareUrl(url);
         let response;
         try {
@@ -254,15 +247,15 @@ module.exports = {
             response = await axios.request({
                 url: xmlUrl,
                 method: 'get',
-                ...(Object.keys(auth).length && {auth}),
-            })
+                ...(Object.keys(auth).length && { auth }),
+            });
         } catch (error) {
-            throw new Error(`Request failed with: ${error}`)
+            throw new Error(`Request failed with: ${error}`);
         }
 
-        const isValid =  await xml2js.parseStringPromise(response.data);
-        if(!isValid) {
-            throw new Error("XML is not valid!")
+        const isValid = await xml2js.parseStringPromise(response.data);
+        if (!isValid) {
+            throw new Error('XML is not valid!');
         }
     },
 
@@ -275,13 +268,7 @@ module.exports = {
      * @param {boolean} flag - direction of presence (true/false)
      * @returns {Promise<void>}
      */
-    validateResponseHeader: async function(
-        method,
-        currentUrl,
-        reqHeaders,
-        resHeaders,
-        flag
-    ) {
+    validateResponseHeader: async function (method, currentUrl, reqHeaders, resHeaders, flag) {
         const prepareUrl = await this.prepareUrl(currentUrl);
         const requestHeaders = await this.setHeaders(reqHeaders);
         const auth = await this.setBasicAuth();
@@ -290,16 +277,15 @@ module.exports = {
             response = await axios.request({
                 url: prepareUrl,
                 method: method,
-                ...(Object.keys(auth).length && {auth}),
+                ...(Object.keys(auth).length && { auth }),
                 headers: requestHeaders,
-            })
+            });
         } catch (error) {
-            throw new Error(`Request failed with: ${error}`)
+            throw new Error(`Request failed with: ${error}`);
         }
         const hasProperty = Object.prototype.hasOwnProperty.call(response.headers, resHeaders.toLowerCase());
         if (hasProperty !== flag) {
-            throw new Error("The response headers are different than expected!")
+            throw new Error('The response headers are different than expected!');
         }
-    }
-
-}
+    },
+};

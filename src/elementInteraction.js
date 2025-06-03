@@ -1,10 +1,9 @@
-const config = require("config");
+const config = require('config');
 const mime = require('mime');
-const fs = require("fs");
-const helper = require("./helperFunctions");
+const fs = require('fs');
+const helper = require('./helperFunctions');
 
 module.exports = {
-
     /**
      * Special handling in cases where you want a positive result if an element is missing.
      * To be used in cases where element randomly shows/hides or the step is shared between profiles which have mixed
@@ -16,7 +15,7 @@ module.exports = {
      */
     customWaitForSkippableElement: async function (page, selector, skipFlag) {
         try {
-            await page.waitForSelector(selector, { visible: true })
+            await page.waitForSelector(selector, { visible: true });
         } catch {
             if (skipFlag) {
                 // Exit from the function as the step was marked for skipping
@@ -55,8 +54,8 @@ module.exports = {
         await page.waitForSelector(selector);
         const elements = await page.$$(selector);
         for (let element of elements) {
-            await new Promise(function(resolve) {
-                setTimeout(resolve, 200)
+            await new Promise(function (resolve) {
+                setTimeout(resolve, 200);
             });
             await element.click({ delay: 300 });
         }
@@ -84,9 +83,7 @@ module.exports = {
      */
     validateTextInScript: async function (page, text) {
         try {
-            await page.waitForSelector(
-                'xpath/' + `//script[contains(text(),'${text}')]`
-            );
+            await page.waitForSelector('xpath/' + `//script[contains(text(),'${text}')]`);
         } catch {
             throw new Error(`Could not find: ${text} in page scripts.`);
         }
@@ -101,9 +98,7 @@ module.exports = {
     validateTextInSchemaOrg: async function (page, text) {
         try {
             await page.waitForSelector('script[type="application/ld+json"]');
-            await page.waitForSelector(
-                'xpath/' + `//script[contains(text(),'${text}')]`
-            );
+            await page.waitForSelector('xpath/' + `//script[contains(text(),'${text}')]`);
         } catch {
             throw new Error(`Could not find: ${text} in schema org.`);
         }
@@ -118,11 +113,11 @@ module.exports = {
     validateTextNotInSchemaOrg: async function (page, text) {
         await page.waitForSelector('script[type="application/ld+json"]');
         const isTextInSchema = await page.$(
-           'xpath/' + `//script[@type="application/ld+json"][contains(text(),'${text}')]`
+            'xpath/' + `//script[@type="application/ld+json"][contains(text(),'${text}')]`
         );
         if (isTextInSchema) {
-           throw new Error(`${text} can be found in the schema org.`)
-       }
+            throw new Error(`${text} can be found in the schema org.`);
+        }
     },
 
     /**
@@ -132,18 +127,15 @@ module.exports = {
      * @returns {Promise<void>}
      */
     clickByText: async function (page, text) {
-        const objectToClick = await page.waitForSelector(
-                'xpath/' + `//body//*[text()[contains(.,'${text}')]]`
-        );
+        const objectToClick = await page.waitForSelector('xpath/' + `//body//*[text()[contains(.,'${text}')]]`);
         const afterClickPromise = helper.afterClick(page);
         try {
             await objectToClick.click();
         } catch {
-            throw new Error(`Could not click on element with text ${text}`)
+            throw new Error(`Could not click on element with text ${text}`);
         }
         // Resolve afterClick method
         await afterClickPromise;
-
     },
 
     /**
@@ -153,9 +145,7 @@ module.exports = {
      * @returns {Promise<void>}
      */
     followLink: async function (page, text) {
-        const objectToClick = await page.waitForSelector(
-            'xpath/' + `//a[contains(text(), '${text}')]`
-        );
+        const objectToClick = await page.waitForSelector('xpath/' + `//a[contains(text(), '${text}')]`);
         const navigationPromise = page.waitForNavigation();
         try {
             await objectToClick.click();
@@ -177,9 +167,7 @@ module.exports = {
         let objectToClick;
         if (xpath) {
             const result = await helper.getMultilingualString(value);
-            objectToClick = await page.waitForSelector(
-                'xpath/' + `//body//*[text()[contains(.,'${result}')]]`
-            );
+            objectToClick = await page.waitForSelector('xpath/' + `//body//*[text()[contains(.,'${result}')]]`);
         } else {
             objectToClick = await page.waitForSelector(value);
         }
@@ -187,11 +175,11 @@ module.exports = {
         try {
             await objectToClick.click();
         } catch (error) {
-            throw new Error(`Could not click on the element. Reason: ${error}`)
+            throw new Error(`Could not click on the element. Reason: ${error}`);
         }
         // This is made for the standard case of clicking on a link of the first tab and opening second.
         // If you are working on more than two tabs, please use switchToTab() method.
-       return await helper.switchToTab(browser, 2);
+        return await helper.switchToTab(browser, 2);
     },
 
     /**
@@ -201,18 +189,18 @@ module.exports = {
      * @returns {Promise<Object>}
      */
     clickElementOpenPopup: async function (page, selector) {
-        const objectToClick = await page.waitForSelector(selector, {visible: true});
+        const objectToClick = await page.waitForSelector(selector, { visible: true });
         // Set up a listener for the 'popup' event
-        const popupPromise = new Promise(resolve => page.once('popup', resolve));
+        const popupPromise = new Promise((resolve) => page.once('popup', resolve));
         try {
             await objectToClick.click();
         } catch {
-            throw new Error(`Could not click on element with selector ${selector}`)
+            throw new Error(`Could not click on element with selector ${selector}`);
         }
         // Return the popup as a new page object
         return popupPromise;
     },
-    
+
     /**
      * Find link by text and validate it's href value
      * @param page
@@ -221,15 +209,13 @@ module.exports = {
      * @returns {Promise<void>}
      */
     validateHrefByText: async function (page, text, href) {
-        const objectToSelect = await page.waitForSelector(
-            'xpath/' + `//a[contains(text(), '${text}')]`
-        );
-       const hrefElement =  await (await objectToSelect.getProperty('href')).jsonValue();
-       if (hrefElement !== href) {
-           throw new Error(`The href of the link is ${hrefElement} and it is different from the expected ${href}!`)
-       }
+        const objectToSelect = await page.waitForSelector('xpath/' + `//a[contains(text(), '${text}')]`);
+        const hrefElement = await (await objectToSelect.getProperty('href')).jsonValue();
+        if (hrefElement !== href) {
+            throw new Error(`The href of the link is ${hrefElement} and it is different from the expected ${href}!`);
+        }
     },
-    
+
     /**
      * Validate that element is rendered and visible by its css selector.
      * Mind that hidden elements will not show (DOM existence is not enough for that step)
@@ -262,16 +248,16 @@ module.exports = {
      */
     validateValueOfLinkAttributeByHref: async function (page, href, attribute, value, skip = false) {
         const attrValue = await page.$eval(
-            `a[href="${href}"]`, (el, attribute) => el.getAttribute(attribute), attribute
+            `a[href="${href}"]`,
+            (el, attribute) => el.getAttribute(attribute),
+            attribute
         );
         if (!attrValue && skip === true) {
             // Exit successfully if there is no value and the step is marked to be skipped
             return true;
         }
         if (value !== attrValue) {
-            throw new Error(
-                `The provided link "${href}" does not have an attribute with value: ${value}.`
-            );
+            throw new Error(`The provided link "${href}" does not have an attribute with value: ${value}.`);
         }
     },
 
@@ -284,22 +270,16 @@ module.exports = {
      * @param skip
      * @returns {Promise<boolean>}
      */
-    validateElementWithSelectorHasAttributeWithValue: async function (
-        page,
-        selector,
-        attribute,
-        value,
-        skip = false
-    ) {
+    validateElementWithSelectorHasAttributeWithValue: async function (page, selector, attribute, value, skip = false) {
         const skipped = await this.customWaitForSkippableElement(page, selector, skip);
         if (skipped) {
             return true;
         }
-        const attrValue = await page.$eval(
-            selector, (el, attribute) => el.getAttribute(attribute), attribute
-        );
+        const attrValue = await page.$eval(selector, (el, attribute) => el.getAttribute(attribute), attribute);
         if (value !== attrValue) {
-            throw new Error(`The provided element with selector "${selector}" does not have an attribute with value: ${value}.`);
+            throw new Error(
+                `The provided element with selector "${selector}" does not have an attribute with value: ${value}.`
+            );
         }
     },
 
@@ -315,7 +295,7 @@ module.exports = {
     validateValueOfElementAttributeByText: async function (page, text, attribute, value) {
         const result = await helper.getMultilingualString(text);
         const selector = 'xpath/' + `//body//*[text()[contains(.,'${result}')]]`;
-        await page.waitForSelector(selector)
+        await page.waitForSelector(selector);
         const attrValue = await page.$eval(selector, (el, attribute) => el.getAttribute(attribute), attribute);
         if (value !== attrValue) {
             throw new Error(`The provided text "${result}" doesn't match element which attribute has value: ${value}.`);
@@ -336,9 +316,9 @@ module.exports = {
         };
         let isElementInPage = false;
         try {
-             isElementInPage = await page.waitForSelector(selector, options);
+            isElementInPage = await page.waitForSelector(selector, options);
         } catch (error) {
-            throw new Error("Element is visible!");
+            throw new Error('Element is visible!');
         }
         if (isElementInPage) {
             throw new Error(`${selector} is hidden but can be found in the page source!`);
@@ -351,14 +331,13 @@ module.exports = {
      * @param selector
      * @returns {Promise<Frame>}
      */
-    getFrameBySelector: async function(page, selector) {
+    getFrameBySelector: async function (page, selector) {
         try {
             await page.waitForSelector(selector);
             const frameHandle = await page.$(selector);
             return frameHandle.contentFrame();
-
         } catch {
-            throw new Error(`iFrame with css selector: ${selector} cannot be found!`)
+            throw new Error(`iFrame with css selector: ${selector} cannot be found!`);
         }
     },
 
@@ -375,9 +354,9 @@ module.exports = {
             visible: true, // Wait for the element to be visible (default: false)
             timeout: time, // Maximum time to wait in milliseconds (default: 30000)
         };
-        if (time > 6000 && !page["_name"]) {
-            await new Promise(function(resolve) {
-                setTimeout(resolve, 500)
+        if (time > 6000 && !page['_name']) {
+            await new Promise(function (resolve) {
+                setTimeout(resolve, 500);
             });
         }
         try {
@@ -403,7 +382,7 @@ module.exports = {
             textContent = await page.$eval(selector, (element) => element.value.trim());
         }
         if (textContent !== result) {
-            throw new Error(`Expected ${result} text, but found ${textContent} instead.`)
+            throw new Error(`Expected ${result} text, but found ${textContent} instead.`);
         }
     },
 
@@ -420,12 +399,11 @@ module.exports = {
         const result = await helper.getMultilingualString(text);
         try {
             await page.waitForSelector(
-               'xpath/' + `//*[contains(@class,'${regionClass}') and .//text()[contains(.,"${result}")]]`
-
-           );
-       } catch {
-            throw new Error(`Cannot find ${result} in ${regionClass}!`)
-       }
+                'xpath/' + `//*[contains(@class,'${regionClass}') and .//text()[contains(.,"${result}")]]`
+            );
+        } catch {
+            throw new Error(`Cannot find ${result} in ${regionClass}!`);
+        }
     },
 
     /**
@@ -438,13 +416,13 @@ module.exports = {
     hoverTextInRegion: async function (page, text, region) {
         const regionClass = await helper.getRegion(page, region);
         const result = await helper.getMultilingualString(text);
-        const selector = 'xpath/' + `//*[@class='${regionClass}']//*[text()='${result}']`
+        const selector = 'xpath/' + `//*[@class='${regionClass}']//*[text()='${result}']`;
         try {
             const element = await page.waitForSelector(selector);
-            const parentElementHandle = await page.evaluateHandle(el => el.parentElement, element);
+            const parentElementHandle = await page.evaluateHandle((el) => el.parentElement, element);
             await parentElementHandle.hover();
         } catch (error) {
-            throw new Error(error)
+            throw new Error(error);
         }
     },
 
@@ -456,14 +434,12 @@ module.exports = {
      */
     notSeeText: async function (page, text) {
         let result = await helper.getMultilingualString(text);
-        const isTextInDom = await page.$(
-            'xpath/' + `//*[text()[contains(.,'${result}')]]`
-        );
+        const isTextInDom = await page.$('xpath/' + `//*[text()[contains(.,'${result}')]]`);
         // isVisible() is used for the cases where the text is in the DOM, but not visible
         // If you need to NOT have it in the DOM - use notSeeElement() or extend this step with flag
         const visibility = await isTextInDom?.isVisible();
         if (visibility) {
-            throw new Error(`${text} can be found in the page source.`)
+            throw new Error(`${text} can be found in the page source.`);
         }
     },
 
@@ -479,18 +455,18 @@ module.exports = {
         let value = '';
         await page.waitForSelector(selector);
         try {
-          const el = await page.$(selector);
-          const elementType = await page.evaluate(el => el.tagName, el);
-          if (elementType.toLowerCase() === "input" || elementType.toLowerCase() === "textarea") {
-              value = await (await page.evaluateHandle(el => el.value, el)).jsonValue();
-          } else {
-              value = await (await page.evaluateHandle(el => el.innerText, el)).jsonValue();
-          }
+            const el = await page.$(selector);
+            const elementType = await page.evaluate((el) => el.tagName, el);
+            if (elementType.toLowerCase() === 'input' || elementType.toLowerCase() === 'textarea') {
+                value = await (await page.evaluateHandle((el) => el.value, el)).jsonValue();
+            } else {
+                value = await (await page.evaluateHandle((el) => el.innerText, el)).jsonValue();
+            }
         } catch (error) {
             throw new Error(error);
         }
         if (value !== result) {
-            throw new Error(`Value of element ${value} does not match the text ${result}`)
+            throw new Error(`Value of element ${value} does not match the text ${result}`);
         }
     },
 
@@ -506,13 +482,12 @@ module.exports = {
         let result = await helper.getMultilingualString(text);
         const el = await page.$(cssSelector);
         if (el) {
-            const isShown = await (await page.evaluateHandle(el => el.clientHeight, el)).jsonValue();
+            const isShown = await (await page.evaluateHandle((el) => el.clientHeight, el)).jsonValue();
             if (Boolean(isShown) !== isVisible) {
-                throw new Error('Element visibility does not match the requirement!')
+                throw new Error('Element visibility does not match the requirement!');
             }
             if (isShown) {
-                const textValue = await (await page.evaluateHandle(el =>
-                    el.textContent.trim(), el)).jsonValue();
+                const textValue = await (await page.evaluateHandle((el) => el.textContent.trim(), el)).jsonValue();
                 if (isVisible && textValue !== result) {
                     throw new Error(`Element text: ${textValue} does not match the expected: ${result}!`);
                 } else if (!isVisible && textValue === result) {
@@ -520,7 +495,7 @@ module.exports = {
                 }
             }
         } else if (isVisible) {
-                throw new Error(`The element with ${cssSelector} is missing from the DOM tree.`);
+            throw new Error(`The element with ${cssSelector} is missing from the DOM tree.`);
         }
     },
 
@@ -538,15 +513,14 @@ module.exports = {
             visible: true, // Wait for the element to be visible (default: false)
             timeout: 250, // 250ms and for that reason time is multiplied by 4 to add up to a full second.
         };
-        for (let i = 0; i < time*4; i++) {
+        for (let i = 0; i < time * 4; i++) {
             try {
                 await page.waitForSelector('xpath/' + `//*[text()[contains(.,'${result}')]]`, options);
             } catch {
-                console.log(`Element disappeared in ${time*4}.`);
+                console.log(`Element disappeared in ${time * 4}.`);
                 break;
             }
         }
-
     },
 
     /**
@@ -561,11 +535,12 @@ module.exports = {
         const regionClass = await helper.getRegion(page, region);
         const result = await helper.getMultilingualString(text);
         await page.waitForSelector('xpath/' + `//*[@class='${regionClass}']`);
-        const elements = await page.$$('xpath/' + `//*[@class='${regionClass}']//*[text()='${result}']`)
-            || await page.$$('xpath/' + `//*[@class='${regionClass}']//*[contains(text(),'${result}')]`);
+        const elements =
+            (await page.$$('xpath/' + `//*[@class='${regionClass}']//*[text()='${result}']`)) ||
+            (await page.$$('xpath/' + `//*[@class='${regionClass}']//*[contains(text(),'${result}')]`));
 
         if (!elements?.[0]) {
-            throw new Error("Element not found!")
+            throw new Error('Element not found!');
         }
 
         const afterClickPromise = helper.afterClick(page);
@@ -586,8 +561,7 @@ module.exports = {
         const filePath = config.has('filePath') ? config.get('filePath') : 'files/';
         await element.uploadFile(filePath + fileName);
         // Additional wait as the promise for file upload not always resolve on time when no slowMo is added.
-        await new Promise(resolve =>
-            setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
     },
 
     /**
@@ -599,14 +573,14 @@ module.exports = {
      */
     uploadToDropzone: async function (page, fileName, selector) {
         await page.waitForSelector(selector);
-            try {
-                const element = await page.$(selector);
-                const realSelector = await (await element.getProperty("id")).jsonValue();
-                const filePath = config.has('filePath') ? config.get('filePath') : 'files/';
-                const fullPath = filePath + fileName;
-                const mimeType = mime.getType(fullPath);
-                const contents = fs.readFileSync(fullPath, {encoding: 'base64'});
-                const jsCode =`
+        try {
+            const element = await page.$(selector);
+            const realSelector = await (await element.getProperty('id')).jsonValue();
+            const filePath = config.has('filePath') ? config.get('filePath') : 'files/';
+            const fullPath = filePath + fileName;
+            const mimeType = mime.getType(fullPath);
+            const contents = fs.readFileSync(fullPath, { encoding: 'base64' });
+            const jsCode = `
                     var url = "data:${mimeType};base64,${contents}"
                     var file;
                     fetch(url)
@@ -614,10 +588,10 @@ module.exports = {
                     .then(file => {
                     file.name = "${fileName}";
                     drupalSettings.dropzonejs.instances['${realSelector}'].instance.addFile(file)});`;
-                await page.evaluate(jsCode);
-            } catch (error) {
-                throw new Error(error);
-            }
+            await page.evaluate(jsCode);
+        } catch (error) {
+            throw new Error(error);
+        }
     },
 
     /**
@@ -635,12 +609,12 @@ module.exports = {
             return true;
         }
         try {
-            await page.$eval(selector, (el, name) => el.value = name, result);
-            await new Promise(function(resolve) {
-                setTimeout(resolve, 500)
+            await page.$eval(selector, (el, name) => (el.value = name), result);
+            await new Promise(function (resolve) {
+                setTimeout(resolve, 500);
             });
         } catch (error) {
-            throw new Error(error)
+            throw new Error(error);
         }
     },
 
@@ -652,18 +626,18 @@ module.exports = {
      * @param skip
      * @returns {Promise<boolean>}
      */
-    typeInField: async function (page, selector, text, skip = false ) {
+    typeInField: async function (page, selector, text, skip = false) {
         let result = await helper.getMultilingualString(text);
         const skipped = await this.customWaitForSkippableElement(page, selector, skip);
         if (skipped) {
             return true;
         }
         const el = await page.$(selector);
-        const elementType = await page.evaluate(el => el.tagName, el);
-        if (elementType.toLowerCase() === "input" || elementType.toLowerCase() === "textarea") {
+        const elementType = await page.evaluate((el) => el.tagName, el);
+        if (elementType.toLowerCase() === 'input' || elementType.toLowerCase() === 'textarea') {
             await page.$eval(selector, (input) => (input.value = ''));
             await new Promise(function (resolve) {
-                setTimeout(resolve, 150)
+                setTimeout(resolve, 150);
             });
             try {
                 await page.type(selector, result, { delay: 250 });
@@ -687,12 +661,11 @@ module.exports = {
             return true;
         }
         const element = await page.$(selector);
-        await new Promise(resolve =>
-            setTimeout(resolve, 200));
-        const checked = await (await element.getProperty("checked")).jsonValue();
-        if (!checked && action === "select" || checked && action === "deselect" ) {
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        const checked = await (await element.getProperty('checked')).jsonValue();
+        if ((!checked && action === 'select') || (checked && action === 'deselect')) {
             await element.click();
-        } else if (checked && action === "select" || !checked && action === "deselect") {
+        } else if ((checked && action === 'select') || (!checked && action === 'deselect')) {
             // Exit successfully when the requested action matches the current state
             return true;
         } else {
@@ -708,11 +681,11 @@ module.exports = {
      * @returns {Promise<*>}
      */
     writeInCkEditor5: async function (page, selector, text) {
-        const textValue = text === "noText" ? "" : text;
-        const options = {hidden:true};
+        const textValue = text === 'noText' ? '' : text;
+        const options = { hidden: true };
         await page.waitForSelector(selector, options);
         try {
-            const elementId = await page.$eval(selector, el => el.getAttribute('data-ckeditor5-id'));
+            const elementId = await page.$eval(selector, (el) => el.getAttribute('data-ckeditor5-id'));
             let jsCode = `
             (function () {
                 let textEditor = Drupal.CKEditor5Instances.get('${elementId}');
@@ -729,8 +702,7 @@ module.exports = {
             })();
             `;
             return page.evaluate(jsCode);
-        }
-        catch (error) {
+        } catch (error) {
             throw new Error(`Cannot write into CkEditor5 field due to: ${error}!`);
         }
     },
@@ -751,7 +723,7 @@ module.exports = {
         }
         const selectedValue = await page.select(selector, value);
         if (selectedValue.length === 0) {
-            throw new Error(`The option ${value} is either missing or not selected!`)
+            throw new Error(`The option ${value} is either missing or not selected!`);
         }
     },
 
@@ -765,9 +737,7 @@ module.exports = {
     selectOptionByText: async function (page, selector, text) {
         let result = await helper.getMultilingualString(text);
         await page.waitForSelector(selector);
-        const objectToSelect = await page.$(
-            'xpath/' + `//body//*[contains(text(), '${result}')]`
-        );
+        const objectToSelect = await page.$('xpath/' + `//body//*[contains(text(), '${result}')]`);
         if (objectToSelect) {
             const value = await (await objectToSelect.getProperty('value')).jsonValue();
             await page.select(selector, value);
@@ -787,17 +757,17 @@ module.exports = {
     selectOptionFirstAutocomplete: async function (page, text, selector) {
         await page.waitForSelector(selector);
         await page.type(selector, text, { delay: 150 });
-        await new Promise(function(resolve) {
-            setTimeout(resolve, 1000)
+        await new Promise(function (resolve) {
+            setTimeout(resolve, 1000);
         });
         const el = await page.$(selector);
         await el.focus();
-        await page.keyboard.press('ArrowDown',{ delay:100 });
+        await page.keyboard.press('ArrowDown', { delay: 100 });
         await helper.waitForAjax(page);
-        await new Promise(function(resolve) {
-            setTimeout(resolve, 1000)
+        await new Promise(function (resolve) {
+            setTimeout(resolve, 1000);
         });
-        await page.keyboard.press('Enter', { delay:100 });
+        await page.keyboard.press('Enter', { delay: 100 });
     },
 
     /**
@@ -809,10 +779,10 @@ module.exports = {
      */
     selectOptionFromChosen: async function (page, string, selector) {
         await page.waitForSelector(selector);
-        const options = await page.$eval(selector, select => {
-            return Array.from(select.options).map(option => ({
+        const options = await page.$eval(selector, (select) => {
+            return Array.from(select.options).map((option) => ({
                 value: option.value,
-                text: option.text
+                text: option.text,
             }));
         });
         const result = options.find(({ text }) => text === string);
@@ -822,7 +792,6 @@ module.exports = {
             jQuery('${selector}').trigger("change");
         `;
         await page.evaluate(jsCode);
-
     },
 
     /**
@@ -835,21 +804,21 @@ module.exports = {
      */
     iCheckIfDropdownOptionsAreInAlphabeticalOrder: async function (page, selector, flag) {
         await page.waitForSelector(selector);
-        const options = await page.$eval(selector, select => {
-            return Array.from(select.options).map(option => ({
+        const options = await page.$eval(selector, (select) => {
+            return Array.from(select.options).map((option) => ({
                 value: option.value,
-                text: option.text
+                text: option.text,
             }));
         });
 
         // Remove fist element if it's none (can be extended for other placeholders)
-        if (options[0].value === "_none") {
+        if (options[0].value === '_none') {
             options.shift();
         }
 
         const isArraySorted = helper.isArraySorted(options, 'text');
 
-        if ( Boolean(isArraySorted) !== flag ) {
+        if (Boolean(isArraySorted) !== flag) {
             throw new Error(`Dropdown options are not sorted as expected`);
         }
     },
@@ -862,19 +831,19 @@ module.exports = {
      * @param {boolean} flag
      * @returns {Promise<void>}
      */
-    iCheckIfCheckboxOptionsAreInAlphabeticalOrder: async function (page, selector, flag){
+    iCheckIfCheckboxOptionsAreInAlphabeticalOrder: async function (page, selector, flag) {
         await page.waitForSelector(selector);
         const elements = await page.$$(selector);
 
         const texts = await Promise.all(
-            elements.map(element =>
-                element.getProperty('textContent').then(propertyHandle => propertyHandle.jsonValue())
+            elements.map((element) =>
+                element.getProperty('textContent').then((propertyHandle) => propertyHandle.jsonValue())
             )
         );
 
         const isArraySorted = helper.isArraySorted(texts, 0);
 
-        if ( Boolean(isArraySorted) !== flag ) {
+        if (Boolean(isArraySorted) !== flag) {
             throw new Error(`The checkboxes are not sorted as expected`);
         }
     },
@@ -891,7 +860,7 @@ module.exports = {
         try {
             await page.$eval(selector, (el, date) => el._flatpickr.setDate(`${date}`, true), value);
         } catch (error) {
-            throw new Error(`Cannot set date due to ${error}!`)
+            throw new Error(`Cannot set date due to ${error}!`);
         }
     },
 
@@ -902,12 +871,11 @@ module.exports = {
      * @returns {Promise<void>}
      */
     scrollElementToTop: async function (page, cssSelector) {
-        await page.waitForSelector(cssSelector)
+        await page.waitForSelector(cssSelector);
         try {
             const el = await page.$(cssSelector);
-            await page.evaluate(el => el.scrollIntoView(true), el);
-        }
-        catch (error) {
+            await page.evaluate((el) => el.scrollIntoView(true), el);
+        } catch (error) {
             throw new Error(error);
         }
     },
@@ -921,7 +889,7 @@ module.exports = {
      */
     setValueInCodeMirrorField: async function (page, cssSelector, value) {
         let result = await helper.getMultilingualString(value);
-        await page.waitForSelector(cssSelector)
+        await page.waitForSelector(cssSelector);
         try {
             const jsCode = `
             (function () {
@@ -931,9 +899,8 @@ module.exports = {
             })();
             `;
             await page.evaluate(jsCode);
-        }
-        catch (error) {
+        } catch (error) {
             throw new Error(error);
         }
     },
-}
+};

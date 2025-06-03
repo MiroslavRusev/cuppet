@@ -1,6 +1,6 @@
 const config = require('config');
 const backStop = require('backstopjs');
-const backStopConfig = require("../backStopData/backStopConfig.json");
+const backStopConfig = require('../backStopData/backStopConfig.json');
 
 module.exports = {
     /**
@@ -10,9 +10,9 @@ module.exports = {
     backstopConfigPrepare: function () {
         let newConfig = backStopConfig;
         newConfig.id = process.env.NODE_CONFIG_ENV;
-        newConfig.viewports[0].width = Number(config.get("viewport.width"));
-        newConfig.viewports[0].height = Number(config.get("viewport.height"));
-        newConfig.engineOptions.args = config.get("args");
+        newConfig.viewports[0].width = Number(config.get('viewport.width'));
+        newConfig.viewports[0].height = Number(config.get('viewport.height'));
+        newConfig.engineOptions.args = config.get('args');
         return newConfig;
     },
 
@@ -22,13 +22,14 @@ module.exports = {
      * @param configObject
      * @returns {Promise<void>}
      */
-    runBackStop: async function(command, configObject){
-        await backStop(command, {config:configObject})
+    runBackStop: async function (command, configObject) {
+        await backStop(command, { config: configObject })
             .then(() => {
-                console.log(`${command} backstop run executed successfully!`)
+                console.log(`${command} backstop run executed successfully!`);
                 // test successful
-            }).catch((error) => {
-                throw new Error(error)
+            })
+            .catch((error) => {
+                throw new Error(error);
             });
     },
 
@@ -39,12 +40,11 @@ module.exports = {
      * @param testCommand
      * @returns {Promise<void>}
      */
-    runBackStopSingleScenario: async function(scenarioName, path, testCommand) {
+    runBackStopSingleScenario: async function (scenarioName, path, testCommand) {
         const newConfig = this.backstopConfigPrepare();
         newConfig.scenarios[0].label = scenarioName;
         newConfig.scenarios[0].url = path;
         await this.runBackStop(testCommand, newConfig);
-
     },
     /**
      *
@@ -52,10 +52,10 @@ module.exports = {
      * @param testCommand
      * @returns {Promise<void>}
      */
-    runBackstopMultiplePages: async function(pages, testCommand){
+    runBackstopMultiplePages: async function (pages, testCommand) {
         const newConfig = this.backstopConfigPrepare();
         newConfig.scenarios = [];
-        pages.forEach(page => {
+        pages.forEach((page) => {
             newConfig.scenarios.push({
                 label: page.label,
                 url: page.url,
@@ -63,5 +63,5 @@ module.exports = {
             });
         });
         await this.runBackStop(testCommand, newConfig);
-    }
-}
+    },
+};
