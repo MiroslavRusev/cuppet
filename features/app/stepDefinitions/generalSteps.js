@@ -3,10 +3,10 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const utils = require('../../src/elementInteraction');
-const main = require('../../src/mainFunctions');
+const utils = require('../../../src/elementInteraction');
+const main = require('../../../src/mainFunctions');
 const commonFields = require('../components/commonFields');
-const dataStorage = require("../../src/dataStorage");
+const dataStorage = require("../../../src/dataStorage");
 const config = require("config");
 
 Given("I go to {string}", async function (path) {

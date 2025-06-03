@@ -3,9 +3,9 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const apiSteps = require('../../src/apiFunctions');
-const main = require('../../src/mainFunctions');
-const dataStorage = require("../../src/dataStorage");
+const apiSteps = require('../../../src/apiFunctions');
+const main = require('../../../src/mainFunctions');
+const dataStorage = require("../../../src/dataStorage");
 
 Given("that I send a {string} request to {string}", async function (method, path) {
     await apiSteps.sendRequest(method,path);

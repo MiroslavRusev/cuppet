@@ -3,8 +3,8 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const utils = require('../../src/elementInteraction');
-const dataStorage = require("../../src/dataStorage");
+const utils = require('../../../src/elementInteraction');
+const dataStorage = require("../../../src/dataStorage");
 Then ("I should see {string} from json in element {string}", async function (value, cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     const result = await dataStorage.getVariable(value);

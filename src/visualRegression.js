@@ -1,6 +1,6 @@
 const config = require('config');
 const backStop = require('backstopjs');
-const backStopConfig = require("../../backStopData/backStopConfig.json");
+const backStopConfig = require("../backStopData/backStopConfig.json");
 
 module.exports = {
     /**

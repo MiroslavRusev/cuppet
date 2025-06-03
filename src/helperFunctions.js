@@ -1,5 +1,5 @@
 const config = require("config");
-const strings = require("../app/multilingualStrings/multilingualStrings");
+const strings = require("../features/app/multilingualStrings/multilingualStrings");
 module.exports = {
 
     /**
@@ -106,7 +106,7 @@ module.exports = {
                         setTimeout(resolve, 200));
                     return true;
                 }
-            } catch (error) {
+            } catch {
                 return 'Timeout';
             }
         }

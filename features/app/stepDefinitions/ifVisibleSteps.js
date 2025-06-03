@@ -3,9 +3,9 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const utils = require("../../src/elementInteraction");
+const utils = require("../../../src/elementInteraction");
 const config = require("config");
-const dataStorage = require("../../src/dataStorage");
+const dataStorage = require("../../../src/dataStorage");
 Then ("I should see {string} if visible", async function (text) {
     if (config.has("skipSteps") && config.get("skipSteps") === text) {
         return true

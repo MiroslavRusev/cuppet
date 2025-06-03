@@ -7,9 +7,9 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const lighthouseMethods  = require('../../src/lighthouse');
-const dataStorage = require("../../src/dataStorage");
-const main = require('../../src/mainFunctions');
+const lighthouseMethods  = require('../../../src/lighthouse');
+const dataStorage = require("../../../src/dataStorage");
+const main = require('../../../src/mainFunctions');
 
 Given("I generate lighthouse report for the saved page", async function () {
     const path = await dataStorage.getVariable('path')

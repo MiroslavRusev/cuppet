@@ -3,8 +3,8 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const helper = require("../../src/helperFunctions");
-const dataStorage = require("../../src/dataStorage");
+const helper = require("../../../src/helperFunctions");
+const dataStorage = require("../../../src/dataStorage");
 const config = require('config');
 
 When("I wait for {string} seconds", async function (seconds) {

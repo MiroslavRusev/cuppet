@@ -3,8 +3,8 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const utils = require('../../src/elementInteraction');
-const dataStorage = require("../../src/dataStorage");
+const utils = require('../../../src/elementInteraction');
+const dataStorage = require("../../../src/dataStorage");
 const config = require("config");
 When('I click on the text {string} from config', async function (text) {
     const textFromConfig = await config.get(text);

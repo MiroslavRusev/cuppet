@@ -3,8 +3,8 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const utils = require("../../src/elementInteraction");
-const dataStorage = require("../../src/dataStorage");
+const utils = require("../../../src/elementInteraction");
+const dataStorage = require("../../../src/dataStorage");
 
 Then ("I should see {string} in iframe {string}", async function (text, frameSelector) {
     const result = await dataStorage.checkForVariable(text);

@@ -1,7 +1,7 @@
 const config = require('config');
 const fs = require("fs");
 const helper = require("./helperFunctions");
-const commonFields = require("../app/components/commonFields");
+const commonFields = require("../features/app/components/commonFields");
 const moment = require("moment")
 const jsonFilePath = config.get('jsonFilePath').toString();
 

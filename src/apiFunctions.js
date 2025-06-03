@@ -296,7 +296,7 @@ module.exports = {
         } catch (error) {
             throw new Error(`Request failed with: ${error}`)
         }
-        const hasProperty = response.headers.hasOwnProperty(resHeaders.toLowerCase());
+        const hasProperty = Object.prototype.hasOwnProperty.call(response.headers, resHeaders.toLowerCase());
         if (hasProperty !== flag) {
             throw new Error("The response headers are different than expected!")
         }

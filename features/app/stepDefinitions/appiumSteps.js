@@ -3,7 +3,7 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const appiumTesting = require('../../src/appiumTesting');
+const appiumTesting = require('../../../src/appiumTesting');
 
 Given("I go to {string} app package and {string} activity", async function (androidPackage, activity) {
     await appiumTesting.reloadSession(this.appiumDriver, androidPackage, activity);

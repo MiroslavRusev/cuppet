@@ -7,9 +7,9 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const accessibilitySteps  = require('../../src/accessibilityTesting');
-const dataStorage = require("../../src/dataStorage");
-const main = require('../../src/mainFunctions');
+const accessibilitySteps  = require('../../../src/accessibilityTesting');
+const dataStorage = require("../../../src/dataStorage");
+const main = require('../../../src/mainFunctions');
 
 Given("I validate the saved page accessibility", async function () {
     const path = await dataStorage.getVariable('path')

@@ -17,7 +17,7 @@ module.exports = {
     customWaitForSkippableElement: async function (page, selector, skipFlag) {
         try {
             await page.waitForSelector(selector, { visible: true })
-        } catch (error) {
+        } catch {
             if (skipFlag) {
                 // Exit from the function as the step was marked for skipping
                 return true;
@@ -71,7 +71,7 @@ module.exports = {
     pressKey: async function (page, key) {
         try {
             await page.keyboard.press(key, { delay: 100 });
-        } catch (error) {
+        } catch {
             throw new Error(`Couldn't press key ${key} on the keyboard`);
         }
     },
@@ -87,7 +87,7 @@ module.exports = {
             await page.waitForSelector(
                 'xpath/' + `//script[contains(text(),'${text}')]`
             );
-        } catch (error) {
+        } catch {
             throw new Error(`Could not find: ${text} in page scripts.`);
         }
     },
@@ -104,7 +104,7 @@ module.exports = {
             await page.waitForSelector(
                 'xpath/' + `//script[contains(text(),'${text}')]`
             );
-        } catch (error) {
+        } catch {
             throw new Error(`Could not find: ${text} in schema org.`);
         }
     },
@@ -138,7 +138,7 @@ module.exports = {
         const afterClickPromise = helper.afterClick(page);
         try {
             await objectToClick.click();
-        } catch (error) {
+        } catch {
             throw new Error(`Could not click on element with text ${text}`)
         }
         // Resolve afterClick method
@@ -160,7 +160,7 @@ module.exports = {
         try {
             await objectToClick.click();
             await navigationPromise;
-        } catch (error) {
+        } catch {
             throw new Error(`Could not click on the element with text: ${text}`);
         }
     },
@@ -206,7 +206,7 @@ module.exports = {
         const popupPromise = new Promise(resolve => page.once('popup', resolve));
         try {
             await objectToClick.click();
-        } catch (error) {
+        } catch {
             throw new Error(`Could not click on element with selector ${selector}`)
         }
         // Return the popup as a new page object
@@ -246,7 +246,7 @@ module.exports = {
         };
         try {
             await page.waitForSelector(selector, options);
-        } catch (error) {
+        } catch {
             throw new Error(`There is no element with selector: ${selector}!`);
         }
     },
@@ -357,7 +357,7 @@ module.exports = {
             const frameHandle = await page.$(selector);
             return frameHandle.contentFrame();
 
-        } catch (error) {
+        } catch {
             throw new Error(`iFrame with css selector: ${selector} cannot be found!`)
         }
     },
@@ -423,7 +423,7 @@ module.exports = {
                'xpath/' + `//*[contains(@class,'${regionClass}') and .//text()[contains(.,"${result}")]]`
 
            );
-       } catch (error) {
+       } catch {
             throw new Error(`Cannot find ${result} in ${regionClass}!`)
        }
     },
@@ -541,7 +541,7 @@ module.exports = {
         for (let i = 0; i < time*4; i++) {
             try {
                 await page.waitForSelector('xpath/' + `//*[text()[contains(.,'${result}')]]`, options);
-            } catch (error) {
+            } catch {
                 console.log(`Element disappeared in ${time*4}.`);
                 break;
             }

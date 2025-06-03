@@ -3,8 +3,8 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const utils = require('../../src/elementInteraction');
-const dataStorage = require("../../src/dataStorage");
+const utils = require('../../../src/elementInteraction');
+const dataStorage = require("../../../src/dataStorage");
 
 /**
  * This is a multipurpose step for text visibility. It uses direct input or variable,

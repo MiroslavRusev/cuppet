@@ -7,9 +7,9 @@ const {
     When,
     Then
 } = require('@cucumber/cucumber');
-const imageCompare = require('../../src/visualRegression');
-const main = require('../../src/mainFunctions');
-const dataStorage = require("../../src/dataStorage");
+const imageCompare = require('../../../src/visualRegression');
+const main = require('../../../src/mainFunctions');
+const dataStorage = require("../../../src/dataStorage");
 Given("I generate reference screenshot for {string}", async function (path) {
     const storedUrl = await dataStorage.checkForVariable(path);
     const url = await main.prepareUrl(storedUrl);
