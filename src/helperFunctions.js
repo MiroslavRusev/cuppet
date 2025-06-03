@@ -1,7 +1,11 @@
-const config = require("config");
-const strings = require("../app/multilingualStrings/multilingualStrings");
+/**
+ * @module helperFunctions
+ * @typedef {import('puppeteer').Page} Page
+ * @typedef {import('puppeteer').Browser} Browser
+ */
+const config = require('config');
+const strings = require('../features/app/multilingualStrings/multilingualStrings');
 module.exports = {
-
     /**
      * Waits for a keypress event to continue the test execution.
      * Please use only for local execution as it doesn't resolve automatically.
@@ -9,11 +13,13 @@ module.exports = {
      * @returns {Promise<void>} - A promise that resolves when a keypress event occurs.
      */
     waitForKeypress: async function () {
-        process.stdin.setRawMode(true)
-        return new Promise(resolve => process.stdin.once('data', () => {
-            process.stdin.setRawMode(false)
-            resolve()
-        }))
+        process.stdin.setRawMode(true);
+        return new Promise((resolve) =>
+            process.stdin.once('data', () => {
+                process.stdin.setRawMode(false);
+                resolve();
+            })
+        );
     },
 
     /**
@@ -22,12 +28,14 @@ module.exports = {
      * @returns {string}
      */
     generateRandomString: function (length) {
-        return Math.random().toString(36).substring(2,(length + 2));
+        return Math.random()
+            .toString(36)
+            .substring(2, length + 2);
     },
 
     /**
      * Wait until AJAX request is completed
-     * @param page
+     * @param {Page} page
      * @returns {Promise<void>}
      */
     waitForAjax: async function (page) {
@@ -47,7 +55,7 @@ module.exports = {
             let string = strings.multilingualStrings(lang, text);
             result = string ?? text;
         } else {
-            result = text
+            result = text;
         }
         return result;
     },
@@ -64,7 +72,7 @@ module.exports = {
     getRegion: async function (page, region) {
         const regionMap = config.get('regionMap');
         const el = await page.waitForSelector(regionMap[region]);
-        return  await (await el.getProperty('className')).jsonValue();
+        return await (await el.getProperty('className')).jsonValue();
     },
 
     /**
@@ -78,7 +86,7 @@ module.exports = {
         let sortedArr = arr;
         sortedArr.sort((a, b) => a[propKey].localeCompare(b[propKey]));
 
-        return (JSON.stringify(arr) === JSON.stringify(sortedArr))
+        return JSON.stringify(arr) === JSON.stringify(sortedArr);
     },
 
     /**
@@ -87,26 +95,25 @@ module.exports = {
      * the next step waitForSelector is triggered before the AJAX completes, and it will never find the element
      * because it uses the old page state.
      * If it's a non-interactive(dropdown, checkbox, autocomplete option etc.) element please use the corresponding step.
-     * @param page
+     * @param {Page} page
      * @returns {Promise<void>}
      */
     afterClick: async function (page) {
         // Listen for page or ajax requests
         async function handleRequest(request) {
             try {
-                if (['xhr','fetch'].includes(request.resourceType())) {
-                        await page.waitForResponse(() => true, { timeout: 10000 });
-                        return 'AJAX';
+                if (['xhr', 'fetch'].includes(request.resourceType())) {
+                    await page.waitForResponse(() => true, { timeout: 10000 });
+                    return 'AJAX';
                 } else if (request.resourceType() === 'document') {
                     await page.waitForNavigation({ timeout: 10000 });
                     return 'Document';
                 } else {
                     // Simple wait for cases where the click was over element which changes via CSS/JS not request.
-                    await new Promise(resolve =>
-                        setTimeout(resolve, 200));
+                    await new Promise((resolve) => setTimeout(resolve, 200));
                     return true;
                 }
-            } catch (error) {
+            } catch {
                 return 'Timeout';
             }
         }
@@ -114,8 +121,7 @@ module.exports = {
             const isAjax = await handleRequest(request);
             if (isAjax === 'AJAX') {
                 // Add wait after AJAX so that there is enough time to render the response from it
-                await new Promise(resolve =>
-                    setTimeout(resolve, 200));
+                await new Promise((resolve) => setTimeout(resolve, 200));
             }
         });
     },
@@ -123,10 +129,10 @@ module.exports = {
     /**
      * Go back to original page (first tab)
      * To be used when you have more than one tabs open, and you want to go back to the first.
-     * @param browser
+     * @param {Browser} browser
      * @returns {Promise<Object>}
      */
-    openOriginalTab: async function(browser) {
+    openOriginalTab: async function (browser) {
         const pages = await browser.pages();
         // Switch to the original/initial tab - [0]
         // For complex handling of more than 2 tabs use switchToTab() method.
@@ -136,30 +142,29 @@ module.exports = {
 
     /**
      * Switching between open tabs
-     * @param browser
+     * @param {Browser} browser
      * @param {number} tabIndex - the number of the tab (first tab is 1, not 0 for better UX)
      * @returns {Promise<Object>}
      */
-    switchToTab: async function(browser, tabIndex) {
+    switchToTab: async function (browser, tabIndex) {
         let pages = await browser.pages();
         let tabNumber = Number(tabIndex);
         if (tabNumber < 1) {
-            throw new Error('Please provide a valid tab number - 1,2,3 etc.')
+            throw new Error('Please provide a valid tab number - 1,2,3 etc.');
         }
 
         let attempts = 0;
         // Pages is an array, thus tab 1 is 0, tab 2 is 1 etc.
         // We need this subtraction by 1 for both the loop and the return of the new page object.
         const num = tabNumber - 1;
-        while(pages.length <= num && attempts < 40) {
-            await new Promise(resolve =>
-                setTimeout(resolve, 100)); // wait for 100ms before checking again
+        while (pages.length <= num && attempts < 40) {
+            await new Promise((resolve) => setTimeout(resolve, 100)); // wait for 100ms before checking again
             pages = await browser.pages();
             attempts++;
         }
 
         if (tabNumber > pages.length) {
-            throw new Error(`The opened tabs are ${pages.length}, you entered ${tabNumber}`)
+            throw new Error(`The opened tabs are ${pages.length}, you entered ${tabNumber}`);
         }
 
         await pages[num].bringToFront();
@@ -175,5 +180,4 @@ module.exports = {
         let pathName = newUrl.pathname;
         return pathName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     },
-
-}
+};

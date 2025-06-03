@@ -1,6 +1,11 @@
-const config = require("config");
-module.exports = {
+/**
+ * @module mainFunctions
+ * @typedef {import('puppeteer').Page} Page
+ * @typedef {import('puppeteer').Browser} Browser
+ */
+const config = require('config');
 
+module.exports = {
     /**
      * Prepare the URL using the config to get the domain and then
      * based on the path variable to either generate a full path or replace it
@@ -8,13 +13,13 @@ module.exports = {
      * @param path
      * @returns {Promise<string>}
      */
-    prepareUrl: async function(path) {
+    prepareUrl: async function (path) {
         if (path.startsWith('http')) {
             return path;
         }
         let baseUrl = config.get('credentials.baseUrl').toString();
         if (baseUrl.endsWith('/')) {
-           baseUrl = baseUrl.slice(0,-1);
+            baseUrl = baseUrl.slice(0, -1);
         }
         if (path === '/' || path === 'homepage' || path === 'home') {
             return baseUrl;
@@ -24,95 +29,95 @@ module.exports = {
 
     /**
      * Return current page URL - absolute or relative
-     * @param page
+     * @param {Page} page
      * @param {boolean} absolute - set to true if you want to extract the full path (with domain)
      * @returns {string}
      */
-    extractPath: function(page, absolute = false) {
+    extractPath: function (page, absolute = false) {
         const url = new URL(page.url());
         const href = url.href;
         const origin = url.origin;
-        if(absolute) {
+        if (absolute) {
             return href;
         }
-        return href.replace(origin,"");
+        return href.replace(origin, '');
     },
 
     /**
      * Visit a certain URL. Can be relative or absolute.
      * The step also supports auto select of a cookie consent if configured.
-     * @param page
+     * @param {Page} page
      * @param path
      * @returns {Promise<void>}
      */
-    visitPath: async function(page, path) {
-       const url = await this.prepareUrl(path);
-       try {
-        await page.goto(url, {waitUntil: 'domcontentloaded'});
-       } catch (error) {
-           throw new Error(`The requested page cannot be opened!: ${error}`);
-       }
-       if (config.has('blockingCookie')) {
-           const selector = config.get('blockingCookie');
-           await new Promise(function(resolve) {
-               setTimeout(resolve, 1000)
-           });
-           const cookie = await page.$(selector)
-           if (cookie) {
-               await cookie.click();
-           }
-       }
+    visitPath: async function (page, path) {
+        const url = await this.prepareUrl(path);
+        try {
+            await page.goto(url, { waitUntil: 'domcontentloaded' });
+        } catch (error) {
+            throw new Error(`The requested page cannot be opened!: ${error}`);
+        }
+        if (config.has('blockingCookie')) {
+            const selector = config.get('blockingCookie');
+            await new Promise(function (resolve) {
+                setTimeout(resolve, 1000);
+            });
+            const cookie = await page.$(selector);
+            if (cookie) {
+                await cookie.click();
+            }
+        }
     },
 
     /**
      * Visit current page concatenated with another path.
      * Example localhost.com/listing -> localhost.com/listing/page-1
-     * @param page
+     * @param {Page} page
      * @param plus
      * @returns {Promise<void>}
      */
-    visitCurrentPathPlus: async function(page, plus) {
-        let path = await page.evaluate(() => {
-            return window.location.href;
-        });
-        if (path.endsWith('/')) {
-            path = path.slice(0,-1);
+    visitCurrentPathPlus: async function (page, plus) {
+        if (!plus.startsWith('/')) {
+            throw new Error('The path alias must start with a slash!');
         }
-        await page.goto(path + plus, {waitUntil: 'domcontentloaded'});
+        let path = page.url();
+        if (path.endsWith('/')) {
+            path = path.slice(0, -1);
+        }
+        await page.goto(path + plus, { waitUntil: 'domcontentloaded' });
     },
 
     /**
      * Reload the current page
-     * @param page
+     * @param {Page} page
      * @returns {Promise<void>}
      */
-    reloadPage: async function(page) {
+    reloadPage: async function (page) {
         await page.reload({ waitUntil: 'domcontentloaded' });
     },
 
     /**
      * Reload the current page and add get params
-     * @param page
+     * @param {Page} page
      * @param params
      * @returns {Promise<void>}
      */
-    reloadPageWithParams: async function(page, params) {
+    reloadPageWithParams: async function (page, params) {
         const currentUrl = this.extractPath(page);
-        if (!params.startsWith("?")) {
-            throw new Error("Invalid get param provided. Use '?' as first character.")
+        if (!params.startsWith('?')) {
+            throw new Error("Invalid get param provided. Use '?' as first character.");
         }
         const newPath = currentUrl + params;
         await this.visitPath(page, newPath);
-
     },
 
     /**
      * Validate whether the current page is the one you should be on
-     * @param page
+     * @param {Page} page
      * @param path
      * @returns {void}
      */
-    validatePath: function(page, path) {
+    validatePath: function (page, path) {
         const pathAlias = this.extractPath(page);
         if (pathAlias !== path) {
             throw new Error(`The current path ${pathAlias} does not match the expected: ${path}!`);
@@ -121,16 +126,16 @@ module.exports = {
 
     /**
      * Validate the last path in an alias
-     * @param page
+     * @param {Page} page
      * @param path
      * @returns {void}
      */
-    validatePathEnding: function(page, path) {
+    validatePathEnding: function (page, path) {
         let pathAlias = this.extractPath(page);
         if (pathAlias.endsWith('/')) {
-            pathAlias = pathAlias.slice(0,-1);
+            pathAlias = pathAlias.slice(0, -1);
         }
-        const splitAlias = pathAlias.split("/");
+        const splitAlias = pathAlias.split('/');
         let lastElement;
         if (Array.isArray(splitAlias)) {
             lastElement = splitAlias[splitAlias.length - 1];
@@ -142,15 +147,15 @@ module.exports = {
 
     /**
      * Validate http response code
-     * @param page
+     * @param {Page} page
      * @param code
      * @param path
      * @returns {Promise<void>}
      */
-    validateStatusCode: async function(page, code, path) {
+    validateStatusCode: async function (page, code, path) {
         let baseUrl = config.get('credentials.baseUrl');
         if (baseUrl.endsWith('/')) {
-            baseUrl = baseUrl.slice(0,-1);
+            baseUrl = baseUrl.slice(0, -1);
         }
         const response = await page.goto(baseUrl + path);
         const statusCode = response.status();
@@ -161,11 +166,11 @@ module.exports = {
 
     /**
      * Open new tab and switch to it (manually open tab and load a page)
-     * @param browser
+     * @param {Browser} browser
      * @param url
      * @returns {Promise<Object>}
      */
-    openNewTab: async function(browser, url) {
+    openNewTab: async function (browser, url) {
         const page = await browser.newPage();
         await this.visitPath(page, url);
         // Get all pages
@@ -176,16 +181,16 @@ module.exports = {
 
     /**
      * Validate current page response headers.
-     * @param page
+     * @param {Page} page
      * @param header
      * @param value
      * @returns {Promise<void>}
      */
-    validatePageResponseHeaders: async function(page, header, value) {
+    validatePageResponseHeaders: async function (page, header, value) {
         const refreshPage = await page.reload({ waitUntil: 'domcontentloaded' });
         const responseHeaders = refreshPage.headers();
-        if(responseHeaders[header.toLowerCase()] !== value) {
-            throw new Error("Response headers do not match the requirement!")
+        if (responseHeaders[header.toLowerCase()] !== value) {
+            throw new Error('Response headers do not match the requirement!');
         }
     },
 
@@ -215,20 +220,20 @@ module.exports = {
                         }
                 }
                 return decodeURI(dc.substring(begin + prefix.length, end));
-            })('${cookieName}');`
+            })('${cookieName}');`;
         try {
             result = await page.evaluate(jsCode);
-        } catch(error) {
-            throw new Error(`There was an error when evaluating the code. ${error}`)
+        } catch (error) {
+            throw new Error(`There was an error when evaluating the code. ${error}`);
         }
 
         if (result) {
-            if(!presence) {
-                throw new Error(`The cookie ${cookieName} is present, but it shouldn't!`)
+            if (!presence) {
+                throw new Error(`The cookie ${cookieName} is present, but it shouldn't!`);
             }
-        } else if(!result) {
-            if(presence) {
-                throw new Error(`The cookie ${cookieName} is not present, but it should!`)
+        } else if (!result) {
+            if (presence) {
+                throw new Error(`The cookie ${cookieName} is not present, but it should!`);
             }
         }
     },
@@ -239,15 +244,17 @@ module.exports = {
      * @param {string} device - The name of the device whose viewport dimensions should be applied.
      * @throws {Error} Throws an error if the specified device is not defined in the configuration.
      */
-    setViewport: async function(page, device) {
+    setViewport: async function (page, device) {
         const viewport = config.get('viewport');
 
         if (!viewport[device]) {
-            throw new Error(`Viewport for device "${device}" is not defined in config.\nAvailable devices are: ${Object.keys(viewport).join(', ')}`);
+            throw new Error(
+                `Viewport for device "${device}" is not defined in config.\nAvailable devices are: ${Object.keys(viewport).join(', ')}`
+            );
         }
         await page.setViewport({
             width: viewport[device]['width'],
-            height: viewport[device]['height']
+            height: viewport[device]['height'],
         });
-    }
-}
+    },
+};

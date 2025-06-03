@@ -1,37 +1,44 @@
 {
-  "jsonFilePath": "jsonFiles/example.json",
-  "args": [
-    "--no-sandbox",
-    "--disable-setuid-sandbox",
-    "--proxy-server='direct://'",
-    "--proxy-bypass-list=*",
-    "--headless=new"
-  ],
-  "viewport": {
-    "default": { "width": 1920, "height": 1080 },
-    "MacBook": { "width": 1440, "height": 900 },
-    "laptop": { "width": 1280, "height": 720 },
-    "tablet": { "width": 768, "height": 1024 },
-    "mobile": { "width": 320, "height": 667 }
-  },
-  "filePath": "files/",
-  "screenshotsPath": "screenshots/",
-  "language": "en",
-  "regionMap": {
-    "ExampleRegion": ".valid-css-selector",
-    "Cards": ".category-cards"
-  },
-  "basicAuth": {
-    "authUser": "user",
-    "authPass": "pass"
-  },
-  "blockingCookie":".selector-of-cookie-consent-yes-button",
-  "pa11yConfig": {
-    "hideElements": ".elementSelector",
-    "standard": "WCAG2AA",
-    "runners": [
-      "axe",
-      "htmlcs"
-    ]
-  }
+    "jsonFilePath": "jsonFiles/example.json",
+    "browserOptions": {
+        "args": [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--proxy-server='direct://'",
+            "--proxy-bypass-list=*",
+            "--headless=new"
+        ],
+        "viewport": {
+            "default": { "width": 1920, "height": 1080 },
+            "MacBook": { "width": 1440, "height": 900 },
+            "laptop": { "width": 1280, "height": 720 },
+            "tablet": { "width": 768, "height": 1024 },
+            "mobile": { "width": 320, "height": 667 }
+        }
+    },
+    "appiumCapabilities": {
+        "platformName": "Android",
+        "appium:automationName": "UiAutomator2",
+        "appium:deviceName": "Android",
+        "appium:disableIdLocatorAutocompletion": true,
+        "appium:appPackage": "com.android.settings",
+        "appium:appActivity": ".Settings"
+    },
+    "filePath": "files/",
+    "screenshotsPath": "screenshots/",
+    "language": "en",
+    "regionMap": {
+        "ExampleRegion": ".valid-css-selector",
+        "Cards": ".category-cards"
+    },
+    "basicAuth": {
+        "authUser": "user",
+        "authPass": "pass"
+    },
+    "blockingCookie": ".selector-of-cookie-consent-yes-button",
+    "pa11yConfig": {
+        "hideElements": ".elementSelector",
+        "standard": "WCAG2AA",
+        "runners": ["axe", "htmlcs"]
+    }
 }

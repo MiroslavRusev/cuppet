@@ -1,25 +1,28 @@
+/**
+ * @module dataStorage
+ * @typedef {import('puppeteer').Page} Page
+ */
 const config = require('config');
-const fs = require("fs");
-const helper = require("./helperFunctions");
-const drupalFields = require("../app/components/drupalFields");
-const moment = require("moment")
+const fs = require('fs');
+const helper = require('./helperFunctions');
+const commonFields = require('../features/app/components/commonFields');
+const moment = require('moment');
 const jsonFilePath = config.get('jsonFilePath').toString();
 
 module.exports = {
-
     /**
      * Create the JSON file in which test data will be stored
      * @returns {Promise<void>}
      */
     createFile: async function () {
         if (jsonFilePath && !fs.existsSync(jsonFilePath)) {
-            fs.writeFile(jsonFilePath, '', {flag: 'w+'}, (err) => {
+            fs.writeFile(jsonFilePath, '', { flag: 'w+' }, (err) => {
                 if (err) {
-                    console.error('File is not created, please check if the folder exists!')
+                    console.error('File is not created, please check if the folder exists!');
                 } else {
                     console.log('File Created');
                 }
-            })
+            });
         }
     },
 
@@ -29,7 +32,9 @@ module.exports = {
      */
     clearJsonFile: function () {
         if (jsonFilePath) {
-            fs.truncate(jsonFilePath, 0, () => {console.log('JSON File Cleared successfully!')});
+            fs.truncate(jsonFilePath, 0, () => {
+                console.log('JSON File Cleared successfully!');
+            });
         }
     },
 
@@ -54,7 +59,7 @@ module.exports = {
      */
     getJsonFile: function (file = '') {
         file = file || jsonFilePath;
-        const result = fs.readFileSync(file, "utf-8");
+        const result = fs.readFileSync(file, 'utf-8');
         return result ? JSON.parse(result) : {};
     },
 
@@ -66,11 +71,10 @@ module.exports = {
      * @param variable - the variable name
      * @returns {Promise<void>}
      */
-    iStoreVariableWithValueToTheJsonFile: async function (data, variable)
-    {
+    iStoreVariableWithValueToTheJsonFile: async function (data, variable) {
         const tempJson = this.getJsonFile();
         tempJson[variable] = data;
-        fs.writeFileSync(jsonFilePath, JSON.stringify(tempJson),{ flag:'w+'});
+        fs.writeFileSync(jsonFilePath, JSON.stringify(tempJson), { flag: 'w+' });
     },
 
     /**
@@ -82,10 +86,10 @@ module.exports = {
     getVariable: function (variable, stringify = false) {
         const tempJson = this.getJsonFile();
         if (!tempJson[variable]) {
-            throw new Error (`Variable with name ${variable} not found in the json file!`)
+            throw new Error(`Variable with name ${variable} not found in the json file!`);
         }
         if (stringify) {
-            return JSON.stringify(tempJson[variable])
+            return JSON.stringify(tempJson[variable]);
         }
         return tempJson[variable];
     },
@@ -137,12 +141,12 @@ module.exports = {
     lowercaseAllVariables: async function () {
         const allVariables = this.getJsonFile();
         const lowercaseJson = Object.fromEntries(
-            Object.entries(allVariables).map(
-                ([key, value]) =>
-                    [key, typeof value === 'string' ? value.toLowerCase() : value]
-            ));
-        fs.writeFileSync(jsonFilePath, JSON.stringify(lowercaseJson),{ flag:'w+'});
-
+            Object.entries(allVariables).map(([key, value]) => [
+                key,
+                typeof value === 'string' ? value.toLowerCase() : value,
+            ])
+        );
+        fs.writeFileSync(jsonFilePath, JSON.stringify(lowercaseJson), { flag: 'w+' });
     },
 
     /**
@@ -160,7 +164,7 @@ module.exports = {
         const value = this.getVariable(variable);
         let splitArr = value.split(regex);
         const result = splitArr[0].trim();
-        await this.iStoreVariableWithValueToTheJsonFile(result, variable)
+        await this.iStoreVariableWithValueToTheJsonFile(result, variable);
     },
 
     /**
@@ -169,14 +173,14 @@ module.exports = {
      * @returns {Promise<*>}
      */
     prepareCssSelector: async function (cssSelector) {
-        const drupalSelector = drupalFields[cssSelector] ?? cssSelector;
+        const drupalSelector = commonFields[cssSelector] ?? cssSelector;
         return this.checkForSavedVariable(drupalSelector);
     },
 
     /**
      * Save current page url in both relative and absolute url variants. Predefined json
      * property names are used for easier usage.
-     * @param page - current tab in puppeteer
+     * @param {Page} page - current tab in puppeteer
      * @returns {Promise<void>}
      */
     saveCurrentPath: async function (page) {
@@ -186,14 +190,14 @@ module.exports = {
         // Get the relative path
         const relativePath = url.pathname;
         // Store paths
-        await this.iStoreVariableWithValueToTheJsonFile(absolutePath, 'path')
-        await this.iStoreVariableWithValueToTheJsonFile(relativePath, 'relativePath')
+        await this.iStoreVariableWithValueToTheJsonFile(absolutePath, 'path');
+        await this.iStoreVariableWithValueToTheJsonFile(relativePath, 'relativePath');
     },
 
     /**
      * Store ID (in case of Drupal) or the sequence of numbers in url path alias.
      * Example /node/123/edit -> 123 will be extracted and saved
-     * @param page
+     * @param {Page} page
      * @param variable
      * @returns {Promise<void>}
      */
@@ -204,36 +208,36 @@ module.exports = {
         if (!matches) {
             throw new Error(`The url path doesn't contain an ID:${alias}`);
         }
-        await this.iStoreVariableWithValueToTheJsonFile(matches[0], variable)
+        await this.iStoreVariableWithValueToTheJsonFile(matches[0], variable);
     },
 
     /**
      * Saves the href from a link <a>.
      * TO DO: Can be done with more generic method to save specific attribute of element, instead of the hardcoded href.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param variable
      * @returns {Promise<void>}
      */
     storeHrefOfElement: async function (page, selector, variable) {
-         await page.waitForSelector(selector);
-         let href = await page.$eval(selector, el => el.getAttribute('href'));
-         href = encodeURI(href);
-         await this.iStoreVariableWithValueToTheJsonFile(href, variable);
+        await page.waitForSelector(selector);
+        let href = await page.$eval(selector, (el) => el.getAttribute('href'));
+        href = encodeURI(href);
+        await this.iStoreVariableWithValueToTheJsonFile(href, variable);
     },
 
     /**
      * Save the text from a page element matching specific pattern.
      * Example: "This is your code for password reset: 123456"
      * You can create a regex to find the 123456 number and extract it from that text.
-     * @param page - current puppeteer tab
+     * @param {Page} page - current puppeteer tab
      * @param pattern - regex
      * @param text - text in which this pattern needs to be searched for
      * @returns {Promise<void>}
      */
     storeTextFromPattern: async function (page, pattern, text) {
         const element = await page.$('xpath/' + `//body//*[text()[contains(.,'${text}')]]`);
-        let textValue = await (await page.evaluateHandle(el => el.textContent, element)).jsonValue();
+        let textValue = await (await page.evaluateHandle((el) => el.textContent, element)).jsonValue();
         const regex = new RegExp(pattern);
         const matches = regex.exec(textValue);
         if (!matches) {
@@ -244,7 +248,7 @@ module.exports = {
 
     /**
      * Store the value of the element (input, button, option, li etc.)
-     * @param page
+     * @param {Page} page
      * @param cssSelector
      * @param variable
      * @returns {Promise<void>}
@@ -252,7 +256,7 @@ module.exports = {
     storeValueOfElement: async function (page, cssSelector, variable) {
         const selector = await this.prepareCssSelector(cssSelector);
         await page.waitForSelector(selector);
-        const value = await page.$eval(selector, el => el.value);
+        const value = await page.$eval(selector, (el) => el.value);
         if (!value) {
             throw new Error(`Element with selector ${selector} doesn't have value!`);
         }
@@ -274,11 +278,11 @@ module.exports = {
         }
         let splitVar = email.split('@');
         if (splitVar.length === 0) {
-            throw new Error(`The provided string: ${email} is not an email!`)
+            throw new Error(`The provided string: ${email} is not an email!`);
         }
         let randomStr = helper.generateRandomString(number);
         const value = splitVar[0] + '+' + randomStr + '@' + splitVar[1];
-        await this.iStoreVariableWithValueToTheJsonFile(value, varName)
+        await this.iStoreVariableWithValueToTheJsonFile(value, varName);
     },
 
     /**
@@ -290,10 +294,9 @@ module.exports = {
      */
     generateAndSaveDateWithCustomFormat: async function (format, variable, days = 0) {
         let date = moment()
-            .add(days >= 0 ? days : -days, "days")
+            .add(days >= 0 ? days : -days, 'days')
             .format(format);
 
         await this.iStoreVariableWithValueToTheJsonFile(date, variable);
-
     },
-}
+};

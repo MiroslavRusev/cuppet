@@ -1,11 +1,11 @@
 {
-  "credentials": {
-    "baseUrl": "https://demoqa.com/"
-  },
-  "api" : {
-    "baseApiUrl": "https://www.example-dev.com/api",
-    "x-api-key": "aaa1113333"
-  },
-  "jsonFilePath": "jsonFiles/example-dev.json",
-  "tags": "@example-dev"
+    "credentials": {
+        "baseUrl": "https://demoqa.com/"
+    },
+    "api": {
+        "baseApiUrl": "https://www.example-dev.com/api",
+        "x-api-key": "aaa1113333"
+    },
+    "jsonFilePath": "jsonFiles/example-dev.json",
+    "tags": "@example-dev or @appium"
 }

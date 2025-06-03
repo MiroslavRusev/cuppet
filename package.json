@@ -1,32 +1,42 @@
 {
-  "name": "cuppet",
-  "version": "1.0.0",
-  "description": "Open source BDD framework based on Cucumber and Puppeteer.",
-  "main": "cucumber.js",
-  "scripts": {
-    "debug": "cucumber-js -f @cucumber/pretty-formatter",
-    "test": "cucumber-js"
-  },
-  "keywords": [],
-  "author": "Miroslav Rusev",
-  "license": "ISC",
-  "devDependencies": {
-    "@cucumber/cucumber": "^11.0.0",
-    "@cucumber/pretty-formatter": "^1.0.0",
-    "@cucumber/messages": "*"
-  },
-  "dependencies": {
-    "@supercharge/strings": "^2.0.0",
-    "axios": "^1.7.4",
-    "backstopjs": "^6.3.23",
-    "chai": "^4.3.7",
-    "config": "^3.3.9",
-    "lighthouse": "^12.1.0",
-    "mime": "^3.0.0",
-    "moment": "^2.30.1",
-    "pa11y": "^8.0.0",
-    "pa11y-reporter-html": "^2.0.0",
-    "puppeteer": "^24.0.1",
-    "xml2js": "^0.6.2"
-  }
+    "name": "cuppet",
+    "version": "1.0.0",
+    "description": "Open source BDD framework based on Cucumber and Puppeteer.",
+    "main": "cucumber.js",
+    "scripts": {
+        "debug": "cucumber-js -f @cucumber/pretty-formatter",
+        "test": "cucumber-js"
+    },
+    "keywords": [],
+    "author": "Miroslav Rusev",
+    "license": "ISC",
+    "devDependencies": {
+        "@cucumber/cucumber": "^11.0.0",
+        "@cucumber/messages": "*",
+        "@cucumber/pretty-formatter": "^1.0.0",
+        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/js": "^9.27.0",
+        "@types/vscode": "^1.100.0",
+        "@wdio/globals": "^9.14.0",
+        "appium": "^2.18.0",
+        "appium-uiautomator2-driver": "^4.2.3",
+        "globals": "^16.2.0",
+        "prettier": "3.5.3",
+        "webdriverio": "9.12.7"
+    },
+    "dependencies": {
+        "@supercharge/strings": "^2.0.0",
+        "axios": "^1.7.4",
+        "backstopjs": "^6.3.23",
+        "chai": "^4.3.7",
+        "config": "^3.3.9",
+        "eslint": "^9.27.0",
+        "lighthouse": "^12.1.0",
+        "mime": "^3.0.0",
+        "moment": "^2.30.1",
+        "pa11y": "^8.0.0",
+        "pa11y-reporter-html": "^2.0.0",
+        "puppeteer": "^24.0.1",
+        "xml2js": "^0.6.2"
+    }
 }
