@@ -1,4 +1,4 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given } = require('@cucumber/cucumber');
 const dataStorage = require('../../../src/dataStorage');
 const config = require('config');
 Given('I lowercase all saved variables if needed', async function () {

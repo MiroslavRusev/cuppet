@@ -1,3 +1,8 @@
+/**
+ * @module accessibilityTesting
+ * @typedef {import('puppeteer').Page} Page
+ * @typedef {import('puppeteer').Browser} Browser
+ */
 const config = require('config');
 const storage = require('./dataStorage');
 const helper = require('./helperFunctions');
@@ -9,8 +14,8 @@ module.exports = {
      * Method to validate if certain path meets the criteria from the config.
      * Please use the config json files to set options.
      * You can find more info at - https://github.com/pa11y/pa11y#configuration
-     * @param browser - puppeteer browser object
-     * @param page - puppeteer page object
+     * @param {Browser} browser - puppeteer browser object
+     * @param {Page} page - puppeteer page object
      * @param scenarioName - the current scenario name
      * @param path - the path of the page which accessibility will be tested
      * @throws Error

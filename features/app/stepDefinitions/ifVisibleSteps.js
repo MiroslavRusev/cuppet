@@ -1,4 +1,4 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { When, Then } = require('@cucumber/cucumber');
 const utils = require('../../../src/elementInteraction');
 const config = require('config');
 const dataStorage = require('../../../src/dataStorage');
@@ -8,7 +8,7 @@ Then('I should see {string} if visible', async function (text) {
     }
     await utils.seeTextByXpath(this.page, text);
 });
-Then('I type {string} in {string} if visible', async function (text, cssSelector) {
+When('I type {string} in {string} if visible', async function (text, cssSelector) {
     const selector = await dataStorage.prepareCssSelector(cssSelector);
     await utils.typeInField(this.page, selector, text, true);
 });

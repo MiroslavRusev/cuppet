@@ -1,3 +1,6 @@
+/**
+ * @module appiumTesting
+ */
 const config = require('config');
 
 module.exports = {

@@ -1,3 +1,8 @@
+/**
+ * @module helperFunctions
+ * @typedef {import('puppeteer').Page} Page
+ * @typedef {import('puppeteer').Browser} Browser
+ */
 const config = require('config');
 const strings = require('../features/app/multilingualStrings/multilingualStrings');
 module.exports = {
@@ -30,7 +35,7 @@ module.exports = {
 
     /**
      * Wait until AJAX request is completed
-     * @param page
+     * @param {Page} page
      * @returns {Promise<void>}
      */
     waitForAjax: async function (page) {
@@ -90,7 +95,7 @@ module.exports = {
      * the next step waitForSelector is triggered before the AJAX completes, and it will never find the element
      * because it uses the old page state.
      * If it's a non-interactive(dropdown, checkbox, autocomplete option etc.) element please use the corresponding step.
-     * @param page
+     * @param {Page} page
      * @returns {Promise<void>}
      */
     afterClick: async function (page) {
@@ -124,7 +129,7 @@ module.exports = {
     /**
      * Go back to original page (first tab)
      * To be used when you have more than one tabs open, and you want to go back to the first.
-     * @param browser
+     * @param {Browser} browser
      * @returns {Promise<Object>}
      */
     openOriginalTab: async function (browser) {
@@ -137,7 +142,7 @@ module.exports = {
 
     /**
      * Switching between open tabs
-     * @param browser
+     * @param {Browser} browser
      * @param {number} tabIndex - the number of the tab (first tab is 1, not 0 for better UX)
      * @returns {Promise<Object>}
      */

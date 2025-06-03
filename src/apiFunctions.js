@@ -3,7 +3,6 @@ const config = require('config');
 const storage = require('./dataStorage');
 const xml2js = require('xml2js');
 const assert = require('chai').assert;
-const expect = require('chai').expect;
 
 module.exports = {
     /** @type {object} */

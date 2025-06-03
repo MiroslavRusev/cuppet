@@ -1,4 +1,4 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { When, Then } = require('@cucumber/cucumber');
 const utils = require('../../../src/elementInteraction');
 const dataStorage = require('../../../src/dataStorage');
 

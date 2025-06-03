@@ -1,4 +1,10 @@
+/**
+ * @module mainFunctions
+ * @typedef {import('puppeteer').Page} Page
+ * @typedef {import('puppeteer').Browser} Browser
+ */
 const config = require('config');
+
 module.exports = {
     /**
      * Prepare the URL using the config to get the domain and then
@@ -23,7 +29,7 @@ module.exports = {
 
     /**
      * Return current page URL - absolute or relative
-     * @param page
+     * @param {Page} page
      * @param {boolean} absolute - set to true if you want to extract the full path (with domain)
      * @returns {string}
      */
@@ -40,7 +46,7 @@ module.exports = {
     /**
      * Visit a certain URL. Can be relative or absolute.
      * The step also supports auto select of a cookie consent if configured.
-     * @param page
+     * @param {Page} page
      * @param path
      * @returns {Promise<void>}
      */
@@ -66,14 +72,15 @@ module.exports = {
     /**
      * Visit current page concatenated with another path.
      * Example localhost.com/listing -> localhost.com/listing/page-1
-     * @param page
+     * @param {Page} page
      * @param plus
      * @returns {Promise<void>}
      */
     visitCurrentPathPlus: async function (page, plus) {
-        let path = await page.evaluate(() => {
-            return window.location.href;
-        });
+        if (!plus.startsWith('/')) {
+            throw new Error('The path alias must start with a slash!');
+        }
+        let path = page.url();
         if (path.endsWith('/')) {
             path = path.slice(0, -1);
         }
@@ -82,7 +89,7 @@ module.exports = {
 
     /**
      * Reload the current page
-     * @param page
+     * @param {Page} page
      * @returns {Promise<void>}
      */
     reloadPage: async function (page) {
@@ -91,7 +98,7 @@ module.exports = {
 
     /**
      * Reload the current page and add get params
-     * @param page
+     * @param {Page} page
      * @param params
      * @returns {Promise<void>}
      */
@@ -106,7 +113,7 @@ module.exports = {
 
     /**
      * Validate whether the current page is the one you should be on
-     * @param page
+     * @param {Page} page
      * @param path
      * @returns {void}
      */
@@ -119,7 +126,7 @@ module.exports = {
 
     /**
      * Validate the last path in an alias
-     * @param page
+     * @param {Page} page
      * @param path
      * @returns {void}
      */
@@ -140,7 +147,7 @@ module.exports = {
 
     /**
      * Validate http response code
-     * @param page
+     * @param {Page} page
      * @param code
      * @param path
      * @returns {Promise<void>}
@@ -159,7 +166,7 @@ module.exports = {
 
     /**
      * Open new tab and switch to it (manually open tab and load a page)
-     * @param browser
+     * @param {Browser} browser
      * @param url
      * @returns {Promise<Object>}
      */
@@ -174,7 +181,7 @@ module.exports = {
 
     /**
      * Validate current page response headers.
-     * @param page
+     * @param {Page} page
      * @param header
      * @param value
      * @returns {Promise<void>}

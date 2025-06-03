@@ -1,3 +1,7 @@
+/**
+ * @module dataStorage
+ * @typedef {import('puppeteer').Page} Page
+ */
 const config = require('config');
 const fs = require('fs');
 const helper = require('./helperFunctions');
@@ -176,7 +180,7 @@ module.exports = {
     /**
      * Save current page url in both relative and absolute url variants. Predefined json
      * property names are used for easier usage.
-     * @param page - current tab in puppeteer
+     * @param {Page} page - current tab in puppeteer
      * @returns {Promise<void>}
      */
     saveCurrentPath: async function (page) {
@@ -193,7 +197,7 @@ module.exports = {
     /**
      * Store ID (in case of Drupal) or the sequence of numbers in url path alias.
      * Example /node/123/edit -> 123 will be extracted and saved
-     * @param page
+     * @param {Page} page
      * @param variable
      * @returns {Promise<void>}
      */
@@ -210,7 +214,7 @@ module.exports = {
     /**
      * Saves the href from a link <a>.
      * TO DO: Can be done with more generic method to save specific attribute of element, instead of the hardcoded href.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param variable
      * @returns {Promise<void>}
@@ -226,7 +230,7 @@ module.exports = {
      * Save the text from a page element matching specific pattern.
      * Example: "This is your code for password reset: 123456"
      * You can create a regex to find the 123456 number and extract it from that text.
-     * @param page - current puppeteer tab
+     * @param {Page} page - current puppeteer tab
      * @param pattern - regex
      * @param text - text in which this pattern needs to be searched for
      * @returns {Promise<void>}
@@ -244,7 +248,7 @@ module.exports = {
 
     /**
      * Store the value of the element (input, button, option, li etc.)
-     * @param page
+     * @param {Page} page
      * @param cssSelector
      * @param variable
      * @returns {Promise<void>}

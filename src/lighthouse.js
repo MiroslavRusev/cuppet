@@ -1,10 +1,14 @@
+/**
+ * @module lighthouse
+ * @typedef {import('puppeteer').Page} Page
+ */
 const dataStorage = require('./dataStorage');
 const helper = require('./helperFunctions');
 
 module.exports = {
     /**
      *
-     * @param page
+     * @param {Page} page
      * @param path
      * @param scenarioName
      * @returns {Promise<void>}

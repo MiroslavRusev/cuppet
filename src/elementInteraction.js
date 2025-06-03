@@ -1,3 +1,8 @@
+/**
+ * @module elementInteraction
+ * @typedef {import('puppeteer').Page} Page
+ * @typedef {import('puppeteer').Browser} Browser
+ */
 const config = require('config');
 const mime = require('mime');
 const fs = require('fs');
@@ -8,7 +13,7 @@ module.exports = {
      * Special handling in cases where you want a positive result if an element is missing.
      * To be used in cases where element randomly shows/hides or the step is shared between profiles which have mixed
      * support for that field.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param skipFlag
      * @returns {Promise<boolean>}
@@ -28,7 +33,7 @@ module.exports = {
 
     /**
      * Click on an element
-     * @param page
+     * @param {Page} page
      * @param selector
      * @returns {Promise<void>}
      */
@@ -46,7 +51,7 @@ module.exports = {
 
     /**
      * Click on multiple elements 1 by 1
-     * @param page
+     * @param {Page} page
      * @param selector
      * @returns {Promise<void>}
      */
@@ -63,7 +68,7 @@ module.exports = {
 
     /**
      * Press a single key
-     * @param page
+     * @param {Page} page
      * @param key - Name of key to press, such as ArrowLeft. See KeyInput for a list of all key names.
      * @returns {Promise<void>}
      */
@@ -77,7 +82,7 @@ module.exports = {
 
     /**
      * Validate text in the page scripts
-     * @param page
+     * @param {Page} page
      * @param text
      * @returns {Promise<void>}
      */
@@ -91,7 +96,7 @@ module.exports = {
 
     /**
      * Validate that specific text can be found in the page structured data
-     * @param page
+     * @param {Page} page
      * @param text
      * @returns {Promise<void>}
      */
@@ -106,7 +111,7 @@ module.exports = {
 
     /**
      * Validate that specific text is missing in the structured data
-     * @param page
+     * @param {Page} page
      * @param text
      * @returns {Promise<void>}
      */
@@ -122,7 +127,7 @@ module.exports = {
 
     /**
      * Click on element by its text value
-     * @param page
+     * @param {Page} page
      * @param text
      * @returns {Promise<void>}
      */
@@ -140,7 +145,7 @@ module.exports = {
 
     /**
      * Follow link by its name(text value). To be used on target="_self"
-     * @param page
+     * @param {Page} page
      * @param text
      * @returns {Promise<void>}
      */
@@ -157,8 +162,8 @@ module.exports = {
 
     /**
      * Click on the text of a link and expect it to open in a new tab. target="_blank"
-     * @param browser
-     * @param page
+     * @param {Browser} browser
+     * @param {Page} page
      * @param value - either text or css selector
      * @param xpath - flag, whether to use xpath or not
      * @returns {Promise<Object>}
@@ -184,7 +189,7 @@ module.exports = {
 
     /**
      * Click on element by css selector and follow the popup window
-     * @param page
+     * @param {Page} page
      * @param selector
      * @returns {Promise<Object>}
      */
@@ -203,7 +208,7 @@ module.exports = {
 
     /**
      * Find link by text and validate it's href value
-     * @param page
+     * @param {Page} page
      * @param text
      * @param href
      * @returns {Promise<void>}
@@ -219,7 +224,7 @@ module.exports = {
     /**
      * Validate that element is rendered and visible by its css selector.
      * Mind that hidden elements will not show (DOM existence is not enough for that step)
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param {boolean} isVisible - set to false for validating dom existence only
      * @param  {int} time
@@ -239,7 +244,7 @@ module.exports = {
 
     /**
      * Validate specific link attribute value. Find the link using its href value.
-     * @param page - current puppeteer tab
+     * @param {Page} page - current puppeteer tab
      * @param href - link href value
      * @param attribute - attribute you search for
      * @param value - the expected value of that attribute
@@ -263,7 +268,7 @@ module.exports = {
 
     /**
      * Validate the value of certain attribute for a generic element by using its css selector to locate it.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param attribute
      * @param value
@@ -286,7 +291,7 @@ module.exports = {
     /**
      * Same as the method above validateElementWithSelectorHasAttributeWithValue(), but using
      * the text of the element to locate it.
-     * @param page
+     * @param {Page} page
      * @param text
      * @param attribute
      * @param value
@@ -304,7 +309,7 @@ module.exports = {
 
     /**
      * Element should not exist in the page DOM.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param time
      * @returns {Promise<void>}
@@ -317,7 +322,7 @@ module.exports = {
         let isElementInPage = false;
         try {
             isElementInPage = await page.waitForSelector(selector, options);
-        } catch (error) {
+        } catch {
             throw new Error('Element is visible!');
         }
         if (isElementInPage) {
@@ -327,7 +332,7 @@ module.exports = {
 
     /**
      * Return the iframe to be used as a page object.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @returns {Promise<Frame>}
      */
@@ -343,7 +348,7 @@ module.exports = {
 
     /**
      * Validate visibility of text by using xpath to locate it.
-     * @param page
+     * @param {Page} page
      * @param text
      * @param time
      * @returns {Promise<void>}
@@ -369,7 +374,7 @@ module.exports = {
     /**
      * Validate text existence in DOM using element textContent value.
      * (can't validate whether you can see it with your eyes or not)
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param text
      * @returns {Promise<void>}
@@ -389,7 +394,7 @@ module.exports = {
     /**
      * Validate that text is visible in specific region (another element).
      * To be used when multiple renders of the same text are shown on the page.
-     * @param page
+     * @param {Page} page
      * @param text
      * @param region
      * @returns {Promise<void>}
@@ -408,7 +413,7 @@ module.exports = {
 
     /**
      * Hover element based on text content (useful for text inside spans, paragraphs etc. like menu links)
-     * @param page
+     * @param {Page} page
      * @param text
      * @param region
      * @returns {Promise<void>}
@@ -428,7 +433,7 @@ module.exports = {
 
     /**
      * Validate that the text is not rendered on the page.
-     * @param page
+     * @param {Page} page
      * @param text
      * @returns {Promise<void>}
      */
@@ -445,7 +450,7 @@ module.exports = {
 
     /**
      * Validate text value of certain element (input, p, span etc.)
-     * @param page
+     * @param {Page} page
      * @param text
      * @param selector
      * @returns {Promise<void>}
@@ -472,7 +477,7 @@ module.exports = {
 
     /**
      * Validate that text is actually shown/hidden on closing/opening of an accordion
-     * @param page
+     * @param {Page} page
      * @param cssSelector
      * @param text
      * @param isVisible
@@ -502,7 +507,7 @@ module.exports = {
     /**
      * Validate that text disappears in certain time from the page.
      * Can be used for toasts, notifications etc.
-     * @param page
+     * @param {Page} page
      * @param text
      * @param time
      * @returns {Promise<void>}
@@ -526,7 +531,7 @@ module.exports = {
     /**
      * Click on an element by its text in a certain region.
      * To be used when there are multiple occurrences of that text.
-     * @param page
+     * @param {Page} page
      * @param text
      * @param region
      * @returns {Promise<void>}
@@ -550,7 +555,7 @@ module.exports = {
 
     /**
      * Standard file upload into normal HTML file upload field
-     * @param page
+     * @param {Page} page
      * @param fileName
      * @param selector
      * @returns {Promise<void>}
@@ -566,7 +571,7 @@ module.exports = {
 
     /**
      * Drupal and dropzone specific file upload method.
-     * @param page
+     * @param {Page} page
      * @param fileName
      * @param selector
      * @returns {Promise<void>}
@@ -596,7 +601,7 @@ module.exports = {
 
     /**
      * Put value in a field. It directly places the text like Ctrl+V(Paste) will do it.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param data
      * @param skip
@@ -620,7 +625,7 @@ module.exports = {
 
     /**
      * Simulates typing char by char in a field. Useful for fields which have some auto suggest/autocomplete logic behind it.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param text
      * @param skip
@@ -649,7 +654,7 @@ module.exports = {
 
     /**
      * Check or uncheck a checkbox. Do nothing if the direction matches the current state.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param action
      * @param skip
@@ -675,7 +680,7 @@ module.exports = {
 
     /**
      * Write into CkEditor5 using its API.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param text
      * @returns {Promise<*>}
@@ -710,7 +715,7 @@ module.exports = {
     /**
      * Selects option by its html value.
      * The method supports the skip property.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param value
      * @param skip
@@ -729,7 +734,7 @@ module.exports = {
 
     /**
      * Selects option by its text value
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param text
      * @returns {Promise<void>}
@@ -749,7 +754,7 @@ module.exports = {
     /**
      * Selects the first autocomplete option using the keyboard keys
      * from a dropdown with auto-suggest.
-     * @param page
+     * @param {Page} page
      * @param text
      * @param selector
      * @returns {Promise<void>}
@@ -772,7 +777,7 @@ module.exports = {
 
     /**
      * Selects option from a dropdown using chosen JS field.
-     * @param page
+     * @param {Page} page
      * @param string
      * @param selector
      * @returns {Promise<void>}
@@ -850,7 +855,7 @@ module.exports = {
 
     /**
      * Sets date in a https://flatpickr.js.org/ based field.
-     * @param page
+     * @param {Page} page
      * @param selector
      * @param value
      * @returns {Promise<void>}
@@ -866,7 +871,7 @@ module.exports = {
 
     /**
      * Scrolls element to the top of the page using cssSelector
-     * @param page
+     * @param {Page} page
      * @param cssSelector
      * @returns {Promise<void>}
      */
@@ -882,7 +887,7 @@ module.exports = {
 
     /**
      * Sets value into codemirror field
-     * @param page
+     * @param {Page} page
      * @param cssSelector
      * @param value
      * @returns {Promise<void>}

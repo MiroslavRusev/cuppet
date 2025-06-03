@@ -22,7 +22,7 @@ Given('I clear the json file', function () {
 Given('I store {string} in {string} variable', async function (data, variable) {
     await dataStorage.iStoreVariableWithValueToTheJsonFile(data, variable);
 });
-Given('I save path for current page', async function () {
+Given('I save the path of the current page', async function () {
     await dataStorage.saveCurrentPath(this.page);
 });
 Given('I store {string} from config to {string} in JSON', async function (param, variable) {

@@ -2,7 +2,7 @@
  * @type {string}
  * @name scenarioName - name of the scenario from the Before hook
  */
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given, When } = require('@cucumber/cucumber');
 const accessibilitySteps = require('../../../src/accessibilityTesting');
 const dataStorage = require('../../../src/dataStorage');
 const main = require('../../../src/mainFunctions');

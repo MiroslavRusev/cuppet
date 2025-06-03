@@ -2,7 +2,7 @@
  * @type {string}
  * @name scenarioName - name of the scenario from the Before hook
  */
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given, Then } = require('@cucumber/cucumber');
 const imageCompare = require('../../../src/visualRegression');
 const main = require('../../../src/mainFunctions');
 const dataStorage = require('../../../src/dataStorage');

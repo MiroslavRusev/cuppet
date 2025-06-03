@@ -1,4 +1,4 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Then } = require('@cucumber/cucumber');
 const utils = require('../../../src/elementInteraction');
 const dataStorage = require('../../../src/dataStorage');
 Then('I should see {string} from json in element {string}', async function (value, cssSelector) {
@@ -14,7 +14,7 @@ Then('I hover on text {string} in {string} region', async function (text, region
     const result = await dataStorage.checkForMultipleVariables(text);
     await utils.hoverTextInRegion(this.page, result, region);
 });
-When('I should see variable {string} in {string} region', async function (variable, region) {
+Then('I should see variable {string} in {string} region', async function (variable, region) {
     const value = dataStorage.getVariable(variable);
     await utils.seeTextInRegion(this.page, value, region);
 });
