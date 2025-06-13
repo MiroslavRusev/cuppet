@@ -5,7 +5,8 @@
     "main": "cucumber.js",
     "scripts": {
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
-        "test": "cucumber-js"
+        "test": "cucumber-js",
+        "postinstall": "./post-install.sh"
     },
     "keywords": [],
     "author": "Miroslav Rusev",

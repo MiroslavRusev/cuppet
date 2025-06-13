@@ -11,9 +11,11 @@
 ## Use this repository as a template (copy the structure to a new repo)
 
     yarn install
-    mkdir -p jsonFiles - create folder for test data storage
-    mkdir -p reports - create folder for test post-run reports
-    mkdir -p screenshots - create folder for screenshots taken on test failure
+
+The following directories will be created automatically after installation:
+- `jsonFiles` - folder for test data storage
+- `reports` - folder for test post-run reports
+- `screenshots` - folder for screenshots taken on test failure
 
 ## Folders and files which you need to configure and localize
 
@@ -47,7 +49,7 @@
     jsonFilePath - custom file name for data storage (if needed)
     tags - test tagging using the expression way:
         @fast	Scenarios tagged with @fast
-        @wip and not @slow	Scenarios tagged with @wip that aren’t also tagged with @slow
+        @wip and not @slow	Scenarios tagged with @wip that aren't also tagged with @slow
         @smoke and @fast	Scenarios tagged with both @smoke and @fast
         @gui or @database	Scenarios tagged with either @gui or @database
 
