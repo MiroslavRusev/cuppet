@@ -6,7 +6,11 @@
     "scripts": {
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
         "test": "cucumber-js",
-        "postinstall": "./post-install.sh"
+        "postinstall": "sh ./post-install.sh",
+        "lint:check": "eslint . --ext .js,.mjs",
+        "format:check": "prettier --check \"**/*.{js,mjs,json,md}\"",
+        "verify": "yarn lint:check && yarn format:check",
+        "prepare": "husky"
     },
     "keywords": [],
     "author": "Miroslav Rusev",
@@ -22,6 +26,7 @@
         "appium": "^2.18.0",
         "appium-uiautomator2-driver": "^4.2.3",
         "globals": "^16.2.0",
+        "husky": "^9.1.7",
         "prettier": "3.5.3",
         "webdriverio": "9.12.7"
     },
@@ -39,5 +44,12 @@
         "pa11y-reporter-html": "^2.0.0",
         "puppeteer": "^24.0.1",
         "xml2js": "^0.6.2"
+    },
+    "lint-staged": {
+        "*.{js,mjs}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{json,md}": "prettier --write"
     }
 }

@@ -13,6 +13,7 @@
     yarn install
 
 The following directories will be created automatically after installation:
+
 - `jsonFiles` - folder for test data storage
 - `reports` - folder for test post-run reports
 - `screenshots` - folder for screenshots taken on test failure
