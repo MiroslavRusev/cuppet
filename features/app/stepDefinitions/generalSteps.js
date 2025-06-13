@@ -88,3 +88,17 @@ Then('I verify that {string} cookie {string} present', async function (cookieNam
 Given('I set viewport size to {string}', async function (resolution) {
     await main.setViewport(this.page, resolution);
 });
+
+Then('I set datetime picker {string} to format {string} with range {string}', async function (selector, format, range) {
+    await utils.setDateTimePickerWithFormat(this.page, selector, format, range);
+});
+
+Then('I {string} the alert dialog with text {string}', async function (action, expectedText) {
+    const accept = action.toLowerCase() === 'accept' || action.toLowerCase() === 'confirm';
+    await main.handleAlert(this.page, accept, expectedText);
+});
+
+Then('I {string} the alert dialog', async function (action) {
+    const accept = action.toLowerCase() === 'accept' || action.toLowerCase() === 'confirm';
+    await utils.handleAlert(this.page, accept);
+});

@@ -908,4 +908,91 @@ module.exports = {
             throw new Error(error);
         }
     },
+
+    /**
+     * Sets value in a datetime picker field and triggers the change event
+     * @param {Page} page
+     * @param {string} selector - CSS selector for the datetime picker input
+     * @param {string} value - Datetime value in format 'YYYY/MM/DD HH:mm'
+     * @returns {Promise<void>}
+     */
+    setDateTimePickerValue: async function (page, selector, value) {
+        await page.waitForSelector(selector);
+        try {
+            const jsCode = `
+                (function () {
+                    const input = document.querySelector('${selector}');
+                    input.value = '${value}';
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                })();
+            `;
+            await page.evaluate(jsCode);
+        } catch (error) {
+            throw new Error(`Cannot set datetime picker value due to: ${error}`);
+        }
+    },
+
+    /**
+     * Helper function to format date with specified format and relative range
+     * @param {string} format - Date format (e.g. 'd-m-Y H:i', 'Y-M-d H')
+     * @param {string} range - Relative date range (e.g. '+2 days', '+5 days')
+     * @returns {string} - Formatted date string
+     * @example
+     * formatDateWithRange('d-m-Y H:i', '+2 days') // returns "15-03-2024 14:30"
+     * formatDateWithRange('Y-M-d H', '+5 days') // returns "2024-03-18 14"
+     */
+    formatDateWithRange: function(format, range) {
+        // Parse relative date
+        const match = range.match(/^\+(\d+)\s*(day|days|hour|hours|minute|minutes)$/i);
+        if (!match) {
+            throw new Error(`Invalid range format. Expected format: '+N days/hours/minutes'`);
+        }
+
+        const amount = parseInt(match[1]);
+        const unit = match[2].toLowerCase();
+        
+        const date = new Date();
+        
+        switch(unit) {
+            case 'day':
+            case 'days':
+                date.setDate(date.getDate() + amount);
+                break;
+            case 'hour':
+            case 'hours':
+                date.setHours(date.getHours() + amount);
+                break;
+            case 'minute':
+            case 'minutes':
+                date.setMinutes(date.getMinutes() + amount);
+                break;
+        }
+
+        // Format the date according to the specified format
+        const formatMap = {
+            'd': String(date.getDate()).padStart(2, '0'),
+            'm': String(date.getMonth() + 1).padStart(2, '0'),
+            'Y': date.getFullYear(),
+            'H': String(date.getHours()).padStart(2, '0'),
+            'i': String(date.getMinutes()).padStart(2, '0'),
+            'M': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.getMonth()]
+        };
+
+        return format.replace(/[dmyYHMi]/g, match => formatMap[match] || match);
+    },
+
+    /**
+     * Set value in datetime picker with specified format and relative range
+     * @param {Page} page
+     * @param {string} selector - CSS selector for the datetime picker
+     * @param {string} format - Date format (e.g. 'd-m-Y H:i', 'Y-M-d H')
+     * @param {string} range - Relative date range (e.g. '+2 days', '+5 days')
+     * @returns {Promise<void>}
+     * @example
+     * await setDateTimePickerWithFormat(page, '#start_date', 'd-m-Y H:i', '+2 days')
+     */
+    setDateTimePickerWithFormat: async function(page, selector, format, range) {
+        const formattedDate = this.formatDateWithRange(format, range);
+        await this.setDateTimePickerValue(page, selector, formattedDate);
+    },
 };
