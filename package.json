@@ -6,8 +6,8 @@
     "scripts": {
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
         "test": "cucumber-js",
-        "postinstall": "./post-install.sh",
-        "prepare": "husky install"
+        "postinstall": "sh ./post-install.sh",
+        "prepare": "husky"
     },
     "keywords": [],
     "author": "Miroslav Rusev",
@@ -23,6 +23,7 @@
         "appium": "^2.18.0",
         "appium-uiautomator2-driver": "^4.2.3",
         "globals": "^16.2.0",
+        "husky": "^9.1.7",
         "prettier": "3.5.3",
         "webdriverio": "9.12.7"
     },
@@ -46,6 +47,6 @@
             "eslint --fix",
             "prettier --write"
         ],
-        "*.{md}": "prettier --write"
+        "*.{json,md}": "prettier --write"
     }
 }
