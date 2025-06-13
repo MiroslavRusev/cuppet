@@ -7,6 +7,9 @@
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
         "test": "cucumber-js",
         "postinstall": "sh ./post-install.sh",
+        "lint:check": "eslint . --ext .js,.mjs",
+        "format:check": "prettier --check \"**/*.{js,mjs,json,md}\"",
+        "verify": "yarn lint:check && yarn format:check",
         "prepare": "husky"
     },
     "keywords": [],
