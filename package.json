@@ -6,7 +6,8 @@
     "scripts": {
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
         "test": "cucumber-js",
-        "postinstall": "./post-install.sh"
+        "postinstall": "./post-install.sh",
+        "prepare": "husky install"
     },
     "keywords": [],
     "author": "Miroslav Rusev",
@@ -39,5 +40,12 @@
         "pa11y-reporter-html": "^2.0.0",
         "puppeteer": "^24.0.1",
         "xml2js": "^0.6.2"
+    },
+    "lint-staged": {
+        "*.{js,mjs}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{md}": "prettier --write"
     }
 }
