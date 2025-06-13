@@ -257,4 +257,32 @@ module.exports = {
             height: viewport[device]['height'],
         });
     },
+    /**
+     * Handle browser alert dialog and validate its text
+     * @param {Page} page
+     * @param {boolean} accept - true to accept/confirm, false to dismiss/cancel
+     * @param {string} expectedText - the expected text in the dialog
+     * @returns {Promise<void>}
+     */
+    handleAlert: async function (page, accept, expectedText = null) {
+        try {
+            page.on('dialog', async (dialog) => {
+                if (expectedText !== null) {
+                    const actualText = dialog.message();
+                    if (actualText !== expectedText) {
+                        throw new Error(
+                            `Alert dialog text mismatch. Expected: "${expectedText}", Got: "${actualText}"`
+                        );
+                    }
+                }
+                if (accept) {
+                    await dialog.accept();
+                } else {
+                    await dialog.dismiss();
+                }
+            });
+        } catch (error) {
+            throw new Error(`Could not handle alert dialog: ${error}`);
+        }
+    },
 };

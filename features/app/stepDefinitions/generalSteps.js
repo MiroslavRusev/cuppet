@@ -88,3 +88,12 @@ Then('I verify that {string} cookie {string} present', async function (cookieNam
 Given('I set viewport size to {string}', async function (resolution) {
     await main.setViewport(this.page, resolution);
 });
+Then('I {string} the alert dialog with text {string}', async function (action, expectedText) {
+    const accept = action.toLowerCase() === 'accept' ? true : false;
+    await main.handleAlert(this.page, accept, expectedText);
+});
+
+Then('I {string} the alert dialog', async function (action) {
+    const accept = action.toLowerCase() === 'accept' ? true : false;
+    await main.handleAlert(this.page, accept);
+});
