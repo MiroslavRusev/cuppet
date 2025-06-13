@@ -264,13 +264,15 @@ module.exports = {
      * @param {string} expectedText - the expected text in the dialog
      * @returns {Promise<void>}
      */
-    handleAlert: async function(page, accept = true, expectedText = null) {
+    handleAlert: async function (page, accept, expectedText = null) {
         try {
-            page.on('dialog', async dialog => {
+            page.on('dialog', async (dialog) => {
                 if (expectedText !== null) {
                     const actualText = dialog.message();
                     if (actualText !== expectedText) {
-                        throw new Error(`Alert dialog text mismatch. Expected: "${expectedText}", Got: "${actualText}"`);
+                        throw new Error(
+                            `Alert dialog text mismatch. Expected: "${expectedText}", Got: "${actualText}"`
+                        );
                     }
                 }
                 if (accept) {

@@ -199,3 +199,10 @@ When('I click on the element {string} and follow the popup window', async functi
 When('I press key {string}', async function (key) {
     await utils.pressKey(this.page, key);
 });
+Then(
+    'I set datetime picker {string} to format {string} with range {string}',
+    async function (cssSelector, format, range) {
+        const selector = await dataStorage.prepareCssSelector(cssSelector);
+        await utils.setDateTimePickerWithFormat(this.page, selector, format, range);
+    }
+);

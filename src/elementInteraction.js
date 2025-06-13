@@ -941,7 +941,7 @@ module.exports = {
      * formatDateWithRange('d-m-Y H:i', '+2 days') // returns "15-03-2024 14:30"
      * formatDateWithRange('Y-M-d H', '+5 days') // returns "2024-03-18 14"
      */
-    formatDateWithRange: function(format, range) {
+    formatDateWithRange: function (format, range) {
         // Parse relative date
         const match = range.match(/^\+(\d+)\s*(day|days|hour|hours|minute|minutes)$/i);
         if (!match) {
@@ -950,10 +950,10 @@ module.exports = {
 
         const amount = parseInt(match[1]);
         const unit = match[2].toLowerCase();
-        
+
         const date = new Date();
-        
-        switch(unit) {
+
+        switch (unit) {
             case 'day':
             case 'days':
                 date.setDate(date.getDate() + amount);
@@ -970,15 +970,15 @@ module.exports = {
 
         // Format the date according to the specified format
         const formatMap = {
-            'd': String(date.getDate()).padStart(2, '0'),
-            'm': String(date.getMonth() + 1).padStart(2, '0'),
-            'Y': date.getFullYear(),
-            'H': String(date.getHours()).padStart(2, '0'),
-            'i': String(date.getMinutes()).padStart(2, '0'),
-            'M': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.getMonth()]
+            d: String(date.getDate()).padStart(2, '0'),
+            m: String(date.getMonth() + 1).padStart(2, '0'),
+            Y: date.getFullYear(),
+            H: String(date.getHours()).padStart(2, '0'),
+            i: String(date.getMinutes()).padStart(2, '0'),
+            M: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.getMonth()],
         };
 
-        return format.replace(/[dmyYHMi]/g, match => formatMap[match] || match);
+        return format.replace(/[dmyYHMi]/g, (match) => formatMap[match] || match);
     },
 
     /**
@@ -991,7 +991,7 @@ module.exports = {
      * @example
      * await setDateTimePickerWithFormat(page, '#start_date', 'd-m-Y H:i', '+2 days')
      */
-    setDateTimePickerWithFormat: async function(page, selector, format, range) {
+    setDateTimePickerWithFormat: async function (page, selector, format, range) {
         const formattedDate = this.formatDateWithRange(format, range);
         await this.setDateTimePickerValue(page, selector, formattedDate);
     },
