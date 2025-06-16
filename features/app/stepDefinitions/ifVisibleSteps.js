@@ -9,15 +9,15 @@ Then('I should see {string} if visible', async function (text) {
     await utils.seeTextByXpath(this.page, text);
 });
 When('I type {string} in {string} if visible', async function (text, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.typeInField(this.page, selector, text, true);
 });
 Then('I select {string} from {string} if visible', async function (value, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.selectOptionByValue(this.page, selector, value, true);
 });
 Then('I fill in {string} with {string} if visible', async function (cssSelector, text) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.fillField(this.page, selector, text, true);
 });
 Then(
@@ -49,6 +49,6 @@ Then(
     }
 );
 Then('I {string} the checkbox {string} if visible', async function (action, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.useCheckbox(this.page, selector, action, true);
 });

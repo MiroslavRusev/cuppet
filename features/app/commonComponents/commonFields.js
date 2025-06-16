@@ -12,6 +12,7 @@ const commonFields = {
     Finish: '#edit-return',
     Name: '#edit-name',
     Pass: '#edit-pass',
+    TextBox: '.show #item-0',
 };
 
 module.exports = commonFields;

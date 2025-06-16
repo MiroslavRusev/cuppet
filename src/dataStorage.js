@@ -5,7 +5,6 @@
 const config = require('config');
 const fs = require('fs');
 const helper = require('./helperFunctions');
-const commonFields = require('../features/app/components/commonFields');
 const moment = require('moment');
 const jsonFilePath = config.get('jsonFilePath').toString();
 
@@ -168,16 +167,6 @@ module.exports = {
     },
 
     /**
-     * Check for stored css selectors with the inputted name
-     * @param cssSelector
-     * @returns {Promise<*>}
-     */
-    prepareCssSelector: async function (cssSelector) {
-        const drupalSelector = commonFields[cssSelector] ?? cssSelector;
-        return this.checkForSavedVariable(drupalSelector);
-    },
-
-    /**
      * Save current page url in both relative and absolute url variants. Predefined json
      * property names are used for easier usage.
      * @param {Page} page - current tab in puppeteer
@@ -254,11 +243,10 @@ module.exports = {
      * @returns {Promise<void>}
      */
     storeValueOfElement: async function (page, cssSelector, variable) {
-        const selector = await this.prepareCssSelector(cssSelector);
-        await page.waitForSelector(selector);
-        const value = await page.$eval(selector, (el) => el.value);
+        await page.waitForSelector(cssSelector);
+        const value = await page.$eval(cssSelector, (el) => el.value);
         if (!value) {
-            throw new Error(`Element with selector ${selector} doesn't have value!`);
+            throw new Error(`Element with selector ${cssSelector} doesn't have value!`);
         }
         await this.iStoreVariableWithValueToTheJsonFile(value, variable);
     },

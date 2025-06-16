@@ -72,9 +72,9 @@ The following directories will be created automatically after installation:
 
 ### When you test locally and in headed mode open hooks.js and uncomment the slowMo
 
-    yarn test {profile} {env} - all tests
-    yarn test {profile} {env} features/tests/<test> - specific test
+    yarn test {profile} {env} features/tests - all features (based on tagging if implemented)
+    yarn test {profile} {env} features/tests/<test> - specific feature
 
 ### Example - will run all tests using the exampleProfile from the dev folder
 
-    yarn test exampleProfile dev
+    yarn test exampleAll dev features/tests
