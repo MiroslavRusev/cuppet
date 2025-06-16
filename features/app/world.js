@@ -1,4 +1,5 @@
 const { setWorldConstructor, setDefaultTimeout } = require('@cucumber/cucumber');
+const commonFields = require('./commonComponents/commonFields');
 
 setDefaultTimeout(120 * 1000);
 
@@ -6,6 +7,7 @@ setDefaultTimeout(120 * 1000);
 class World {
     constructor({ attach }) {
         this.attach = attach;
+        this.commonFields = commonFields;
     }
 
     fixSonar() {

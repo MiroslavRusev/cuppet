@@ -40,7 +40,7 @@ When(
     'I click on the element {string} in iframe with selector {string} and follow the new tab',
     async function (cssSelector, frameSelector) {
         let frame = await utils.getFrameBySelector(this.page, frameSelector);
-        const selector = await dataStorage.prepareCssSelector(cssSelector);
+        const selector = this.commonFields[cssSelector] ?? cssSelector;
         this.page = await utils.clickLinkOpenNewTab(this.browser, frame, selector, false);
     }
 );
@@ -55,7 +55,7 @@ Then(
     'I {string} the checkbox {string} in iframe with selector {string}',
     async function (action, cssSelector, frameSelector) {
         let frame = await utils.getFrameBySelector(this.page, frameSelector);
-        const selector = await dataStorage.prepareCssSelector(cssSelector);
+        const selector = this.commonFields[cssSelector] ?? cssSelector;
         await utils.useCheckbox(frame, selector, action);
     }
 );

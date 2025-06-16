@@ -6,7 +6,7 @@
      And I should see "Elements" in "Cards" region
      Then I click on the text "Elements" in the "Cards" region
      And I wait for the text "Please select an item from left" to appear within "5" seconds
-     Then I click on the element ".show #item-0"
+     Then I click on the element "TextBox"
      And I wait for "0.5" seconds
      And I fill in "#userName" with "Example Name"
      And I fill in "#userEmail" with "example@example.com"

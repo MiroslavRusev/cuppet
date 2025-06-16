@@ -6,6 +6,6 @@
         "baseApiUrl": "https://www.example-dev.com/api",
         "x-api-key": "aaa1113333"
     },
-    "jsonFilePath": "jsonFiles/example-dev.json",
+    "jsonFilePath": "jsonFiles/example-dev-all.json",
     "tags": "@example-dev or @appium"
 }

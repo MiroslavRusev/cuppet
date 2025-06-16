@@ -11,7 +11,7 @@ Then('I should see {string}', async function (text) {
     await utils.seeTextByXpath(this.page, result);
 });
 When('I click on the element {string}', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.click(this.page, selector);
 });
 When('I click on the element with xpath {string}', async function (xPath) {
@@ -19,7 +19,7 @@ When('I click on the element with xpath {string}', async function (xPath) {
     await utils.click(this.page, selector);
 });
 When('I click on all the elements with selector {string}', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.clickAllElements(this.page, selector);
 });
 When('I click on the text {string}', async function (text) {
@@ -30,7 +30,7 @@ When('I click on the text {string} in the {string} region', async function (text
 });
 
 Then('I should see {string} in {string}', async function (value, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.validateTextInField(this.page, value, selector);
 });
 
@@ -39,23 +39,23 @@ Then('I should see {string} in {string} region', async function (text, region) {
 });
 
 Then('I should see the element with selector {string}', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.seeElement(this.page, selector);
 });
 Then('I should see the element with selector {string} in the DOM', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.seeElement(this.page, selector, false);
 });
 Then('I should not see the element with selector {string}', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.notSeeElement(this.page, selector);
 });
 Then('I wait for element {string} to disappear within {string} seconds', async function (cssSelector, time) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.notSeeElement(this.page, selector, time * 1000);
 });
 Then('I wait for element with {string} selector to appear within {string} seconds', async function (cssSelector, time) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.seeElement(this.page, selector, true, time * 1000);
 });
 Then('I should not see {string}', async function (text) {
@@ -68,35 +68,35 @@ Then('I wait for the text {string} to disappear within {string} seconds', async 
     await utils.disappearText(this.page, text, time * 1000);
 });
 Then('I upload the {string} in {string} field', async function (fileName, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.uploadFile(this.page, fileName, selector);
 });
 Then('I fill in {string} with {string}', async function (cssSelector, text) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.fillField(this.page, selector, text);
 });
 Then('I fill in CodeMirror field {string} with {string}', async function (cssSelector, value) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.setValueInCodeMirrorField(this.page, selector, value);
 });
 Then('I type {string} in {string}', async function (text, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.typeInField(this.page, selector, text);
 });
 Then('I {string} the checkbox {string}', async function (action, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.useCheckbox(this.page, selector, action);
 });
 Then('I write {string} into {string} ckeditor5 wysiwyg', async function (text, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.writeInCkEditor5(this.page, selector, text);
 });
 Then('I select {string} from {string}', async function (value, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.selectOptionByValue(this.page, selector, value);
 });
 Then('I select text {string} from {string}', async function (value, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.selectOptionByText(this.page, selector, value);
 });
 
@@ -122,7 +122,7 @@ Then(
     }
 );
 Then('I upload {string} file to dropzone {string} field', async function (file, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.uploadToDropzone(this.page, file, selector);
 });
 Then('I should see {string} in the schema markup of the page', async function (text) {
@@ -135,34 +135,34 @@ Then('I should see {string} in page scripts', async function (text) {
     await utils.validateTextInScript(this.page, text);
 });
 Then('I should {string} see {string} in the {string} accordion', async function (isVisible, text, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     if (isVisible === 'not') {
         isVisible = false;
     }
     await utils.textVisibilityInAccordion(this.page, selector, text, Boolean(isVisible));
 });
 Then('I select the first autocomplete option for {string} on the {string} field', async function (text, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.selectOptionFirstAutocomplete(this.page, text, selector);
 });
 Then('I select {string} from chosen {string}', async function (text, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.selectOptionFromChosen(this.page, text, selector);
 });
 
 Then('I set date {string} in flatpickr with selector {string}', async function (date, cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.setDateFlatpickr(this.page, selector, date);
 });
 Then(
     'I get the href of element with selector {string} and store it to {string}',
     async function (cssSelector, variable) {
-        const selector = await dataStorage.prepareCssSelector(cssSelector);
+        const selector = this.commonFields[cssSelector] ?? cssSelector;
         await dataStorage.storeHrefOfElement(this.page, selector, variable);
     }
 );
 Given('I scroll element with {string} to the top', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.scrollElementToTop(this.page, selector);
 });
 Given('I scroll element with xpath {string} to the top', async function (xpath) {
@@ -170,30 +170,30 @@ Given('I scroll element with xpath {string} to the top', async function (xpath) 
     await utils.scrollElementToTop(this.page, selector);
 });
 Given('I check if options from dropdown {string} are in alphabetical order', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.iCheckIfDropdownOptionsAreInAlphabeticalOrder(this.page, selector, true);
 });
 Given('I check if options from dropdown {string} are not in alphabetical order', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.iCheckIfDropdownOptionsAreInAlphabeticalOrder(this.page, selector, false);
 });
 Given('I check if checkbox options with locator {string} are in alphabetical order', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.iCheckIfCheckboxOptionsAreInAlphabeticalOrder(this.page, selector, true);
 });
 Given('I check if checkbox options with locator {string} are not in alphabetical order', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.iCheckIfCheckboxOptionsAreInAlphabeticalOrder(this.page, selector, false);
 });
 When('I click on the text {string} and follow the new tab', async function (text) {
     this.page = await utils.clickLinkOpenNewTab(this.browser, this.page, text, true);
 });
 When('I click on the element {string} and follow the new tab', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     this.page = await utils.clickLinkOpenNewTab(this.browser, this.page, selector, true);
 });
 When('I click on the element {string} and follow the popup window', async function (cssSelector) {
-    const selector = await dataStorage.prepareCssSelector(cssSelector);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
     this.page = await utils.clickElementOpenPopup(this.page, selector);
 });
 When('I press key {string}', async function (key) {
@@ -202,7 +202,7 @@ When('I press key {string}', async function (key) {
 Then(
     'I set datetime picker {string} to format {string} with range {string}',
     async function (cssSelector, format, range) {
-        const selector = await dataStorage.prepareCssSelector(cssSelector);
+        const selector = this.commonFields[cssSelector] ?? cssSelector;
         await utils.setDateTimePickerWithFormat(this.page, selector, format, range);
     }
 );

@@ -33,7 +33,8 @@ Given('I store the entity id with variable name {string} to the json file', asyn
     await dataStorage.iStoreEntityId(this.page, variable);
 });
 Given('I store the value from the element with {string} selector in {string}', async function (cssSelector, variable) {
-    await dataStorage.storeValueOfElement(this.page, cssSelector, variable);
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
+    await dataStorage.storeValueOfElement(this.page, selector, variable);
 });
 Then(
     'I generate extension with {int} chars for the email {string} variable from config and store it in {string}',
