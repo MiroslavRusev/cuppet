@@ -35,9 +35,14 @@ module.exports = {
      * Click on an element
      * @param {Page} page
      * @param selector
+     * @param skip - flag to skip the element if it is not present in the DOM
      * @returns {Promise<void>}
      */
-    click: async function (page, selector) {
+    click: async function (page, selector, skip = false) {
+        const skipped = await this.customWaitForSkippableElement(page, selector, skip);
+        if (skipped) {
+            return true;
+        }
         const objectToCLick = await page.waitForSelector(selector, { visible: true });
         const afterClickPromise = helper.afterClick(page);
         try {
