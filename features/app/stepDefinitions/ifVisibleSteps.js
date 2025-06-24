@@ -12,6 +12,10 @@ When('I type {string} in {string} if visible', async function (text, cssSelector
     const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.typeInField(this.page, selector, text, true);
 });
+When('I click on the element {string} if visible', async function (cssSelector) {
+    const selector = this.commonFields[cssSelector] ?? cssSelector;
+    await utils.click(this.page, selector, true);
+});
 Then('I select {string} from {string} if visible', async function (value, cssSelector) {
     const selector = this.commonFields[cssSelector] ?? cssSelector;
     await utils.selectOptionByValue(this.page, selector, value, true);
