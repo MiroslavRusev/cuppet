@@ -319,10 +319,10 @@
   resolved "https://registry.yarnpkg.com/@cucumber/tag-expressions/-/tag-expressions-6.1.2.tgz#7d566bda8e8c5b782e10d5ca24f30218cec47e09"
   integrity sha512-xa3pER+ntZhGCxRXSguDTKEHTZpUUsp+RzTRNnit+vi5cqnk6abLdSLg5i3HZXU3c74nQ8afQC6IT507EN74oQ==
 
-"@cuppet/core@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@cuppet/core/-/core-1.0.8.tgz#a7bcf34673a0d58aefcb298bcbf08296d089f3f9"
-  integrity sha512-QqT/7YgnaoPlMLALmTa+vG6/AdtQeUcX2TINTIRCIodI8O6R5zqDOwzZPyqRTRLRwzscsQbIpYxq2zcKnZhCQQ==
+"@cuppet/core@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@cuppet/core/-/core-1.0.9.tgz#cc26148fb14ecdda1a59dc596337191f6236dfac"
+  integrity sha512-Z0nkY+qr2kzZM+bI1GAItsf8e6/tsan2JBbg3oCRC6zB2KW95f2rJ3VwBRk4cexgNvTqlx3BzXmgAb67ICW3nw==
   dependencies:
     "@supercharge/strings" "^2.0.0"
     "@wdio/globals" "^9.14.0"

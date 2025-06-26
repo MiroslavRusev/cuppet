@@ -16,7 +16,7 @@
     "author": "Your Name",
     "license": "ISC",
     "dependencies": {
-        "@cuppet/core": "^1.0.8",
+        "@cuppet/core": "^1.0.9",
         "@cucumber/cucumber": "^11.0.0",
         "config": "^3.3.9"
     },
