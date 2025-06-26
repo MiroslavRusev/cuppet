@@ -23,6 +23,7 @@
     "devDependencies": {
         "@cucumber/messages": "*",
         "@cucumber/pretty-formatter": "^1.0.0",
+        "eslint": "^9.29.0",
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.27.0",
         "@types/vscode": "^1.100.0",
