@@ -1,5 +1,5 @@
 @example-dev
- Feature: Open DEMO QA (as base site) run visual tests
+ Feature: Open DEMO QA and run visual tests
 
   Scenario: Backstop visual test 
     And I generate reference screenshot for "https://demoqa.com/elements"
