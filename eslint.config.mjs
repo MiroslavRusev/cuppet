@@ -3,7 +3,7 @@ import globals from 'globals';
 import js from '@eslint/js';
 
 export default defineConfig([
-    globalIgnores(['**yarn.lock', '**/node_modules/', '.git/']),
+    globalIgnores(['**yarn.lock', '**/node_modules/', '.git/', 'backStopData/']),
     {
         files: ['**/*.js'],
         plugins: {

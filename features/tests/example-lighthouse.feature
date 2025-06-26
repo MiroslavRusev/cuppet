@@ -1,5 +1,5 @@
 @example-dev
- Feature: Open DEMO QA (as base site) run performance tests
+ Feature: Open DEMO QA (as base site) and run performance tests
   
   Scenario: Light house performance test
     Given I go to "/"
