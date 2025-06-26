@@ -13,6 +13,7 @@ const commonFields = {
     Name: '#edit-name',
     Pass: '#edit-pass',
     TextBox: '.show #item-0',
+    LoginButton: '[data-testid="login-button"]',
 };
 
 module.exports = commonFields;

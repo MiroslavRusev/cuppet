@@ -17,6 +17,13 @@ const { DEFAULT_THEME } = require('@cucumber/pretty-formatter');
 
 module.exports = {
     default: {
+        requireModule: ['@cuppet/core'],
+        require: [
+            'node_modules/@cuppet/core/features/app/stepDefinitions/*.js',
+            'features/app/stepDefinitions/*.js', // Your project's step definitions
+            'node_modules/@cuppet/core/features/app/hooks.js', // Loading the hooks from the core package
+            'features/app/world.js', // Use the custom world so that params from the current scope are available
+        ],
         format: [`html:reports/${nodeEnv}/${nodeEnv}-report.html`],
         formatOptions: {
             theme: {
