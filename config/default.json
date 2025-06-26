@@ -13,7 +13,8 @@
             "MacBook": { "width": 1440, "height": 900 },
             "laptop": { "width": 1280, "height": 720 },
             "tablet": { "width": 768, "height": 1024 },
-            "mobile": { "width": 320, "height": 667 }
+            "mobile": { "width": 320, "height": 667 },
+            "backstop": { "width": 1600, "height": 900 }
         }
     },
     "appiumCapabilities": {
