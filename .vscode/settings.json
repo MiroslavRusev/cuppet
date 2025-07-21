@@ -5,5 +5,9 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "files.autoSave": "onFocusChange",
-  "vs-code-prettier-eslint.prettierLast": false // set as "true" to run 'prettier' last not first
+  "vs-code-prettier-eslint.prettierLast": false, // set as "true" to run 'prettier' last not first
+  "files.eol": "\n",
+  "git.autocrlf": false,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
 }
