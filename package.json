@@ -1,7 +1,7 @@
 {
     "name": "cuppet-project",
     "version": "1.0.0",
-    "description": "Your project using Cuppet testing framework",
+    "description": "A comprehensive end-to-end testing tool using the Cuppet framework based on Cucumber.js,Puppeteer and Appium, supporting web and mobile automation.",
     "main": "cucumber.js",
     "scripts": {
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
@@ -14,9 +14,19 @@
         "prepare": "husky",
         "lint-staged": "lint-staged"
     },
-    "keywords": [],
-    "author": "Your Name",
-    "license": "ISC",
+    "keywords": [
+        "testing",
+        "automation",
+        "cucumber",
+        "cuppet",
+        "e2e",
+        "bdd",
+        "appium",
+        "selenium",
+        "gherkin"
+    ],
+    "author": "mrusev",
+    "license": "Apache-2.0",
     "dependencies": {
         "@cuppet/core": "^1.0.12",
         "@cucumber/cucumber": "^11.0.0",
