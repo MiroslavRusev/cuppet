@@ -3,6 +3,8 @@
   "editor.formatOnType": false,
   "editor.formatOnPaste": true, 
   "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
   "editor.formatOnSaveMode": "file",
   "files.autoSave": "onFocusChange",
   "vs-code-prettier-eslint.prettierLast": false, // set as "true" to run 'prettier' last not first
