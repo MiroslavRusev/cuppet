@@ -8,7 +8,7 @@
 
 # Installation
 
-## Use this repository as a template (copy the structure to a new repo)
+## Use this repository as a template (fork or use it as template)
 
     yarn install
 
@@ -20,7 +20,7 @@ The following directories will be created automatically after installation:
 
 ## Minimum node and yarn versions needed
 
-    Node - v18 (Recommended v20)
+    Node - v20 LTS
     Yarn - v1.22
 
 # Project structure
