@@ -6,17 +6,19 @@
     "scripts": {
         "debug": "cucumber-js -f @cucumber/pretty-formatter",
         "test": "cucumber-js",
-        "postinstall": "sh ./post-install.sh",
-        "lint:check": "eslint . --ext .js,.mjs",
-        "format:check": "prettier --check \"**/*.{js,mjs,json,md}\"",
+        "postinstall": "node ./post-install.js",
+        "lint:check": "eslint .",
+        "format:check": "prettier --check .",
+        "format": "eslint . --fix && prettier --write .",
         "verify": "yarn lint:check && yarn format:check",
-        "prepare": "husky"
+        "prepare": "husky",
+        "lint-staged": "lint-staged"
     },
     "keywords": [],
     "author": "Your Name",
     "license": "ISC",
     "dependencies": {
-        "@cuppet/core": "^1.0.9",
+        "@cuppet/core": "^1.0.12",
         "@cucumber/cucumber": "^11.0.0",
         "config": "^3.3.9"
     },
@@ -28,6 +30,7 @@
         "@eslint/js": "^9.27.0",
         "@types/vscode": "^1.100.0",
         "husky": "^9.1.7",
+        "lint-staged": "^15.2.0",
         "prettier": "3.5.3"
     },
     "lint-staged": {
