@@ -45,6 +45,16 @@ The following directories will be created automatically after installation:
 - The World is extended in `features/app/world.js` if you need to add project-specific logic or data.
 - Hooks are loaded from `@cuppet/core` by default. If you need custom hooks, add your own `features/app/hooks.js` (not present by default).
 
+# Configuration
+
+- `/config` - your configuration folder, you can create as many profiles for as many envs as needed
+- `multilingualStrings.js` - string translations
+- `commonComponents` - most common fields and paths
+
+## Comprehensive configurations and usage guide
+
+For a detailed configuration and step definitions guide, see [GUIDE.MD](./GUIDE.MD).
+
 # Customization points
 
 - **Step Definitions:**
@@ -63,12 +73,6 @@ The following directories will be created automatically after installation:
 
 - **Hooks:**
     - By default, hooks are loaded from `@cuppet/core`. To override, create `features/app/hooks.js`.
-
-# Configuration
-
-- `/config` - your configuration folder, you can create as many profiles for as many envs as needed
-- `multilingualStrings.js` - string translations
-- `commonComponents` - most common fields and paths
 
 ## Important properties in the config files
 
