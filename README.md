@@ -45,6 +45,10 @@ The following directories will be created automatically after installation:
 - The World is extended in `features/app/world.js` if you need to add project-specific logic or data.
 - Hooks are loaded from `@cuppet/core` by default. If you need custom hooks, add your own `features/app/hooks.js` (not present by default).
 
+# Dig deeper into Cuppet core
+
+For comprehensive documentation, see the [Cuppet Core Documentation](https://miroslavrusev.github.io/cuppet-core/index.html).
+
 # Configuration
 
 - `/config` - your configuration folder, you can create as many profiles for as many envs as needed
