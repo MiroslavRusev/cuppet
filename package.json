@@ -28,13 +28,13 @@
     "author": "mrusev",
     "license": "Apache-2.0",
     "dependencies": {
-        "@cuppet/core": "^1.0.12",
-        "@cucumber/cucumber": "^11.0.0",
-        "config": "^3.3.9"
+        "@cuppet/core": "^1.1.5",
+        "@cucumber/cucumber": "^12.0.0",
+        "config": "^4.1.0"
     },
     "devDependencies": {
         "@cucumber/messages": "*",
-        "@cucumber/pretty-formatter": "^1.0.0",
+        "@cucumber/pretty-formatter": "^2.1.0",
         "eslint": "^9.29.0",
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.27.0",
