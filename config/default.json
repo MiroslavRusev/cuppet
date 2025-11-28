@@ -41,5 +41,14 @@
         "hideElements": ".elementSelector",
         "standard": "WCAG2AA",
         "runners": ["axe", "htmlcs"]
+    },
+    "mqtt": {
+        "brokerUrl": "mqtt://localhost:1883",
+        "username": "",
+        "password": "",
+        "clientId": "",
+        "cleanSession": true,
+        "connectTimeout": 5000,
+        "keepalive": 60
     }
 }
