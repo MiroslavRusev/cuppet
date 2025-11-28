@@ -335,10 +335,10 @@
   resolved "https://registry.yarnpkg.com/@cucumber/tag-expressions/-/tag-expressions-6.2.0.tgz#9cd13c242b01b98a08142ed4987860b0b7e1d893"
   integrity sha512-KIF0eLcafHbWOuSDWFw0lMmgJOLdDRWjEL1kfXEWrqHmx2119HxVAr35WuEd9z542d3Yyg+XNqSr+81rIKqEdg==
 
-"@cuppet/core@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@cuppet/core/-/core-1.2.0.tgz#e7eac3f10cb2700e4f70b6af3ccd6a2d046ae20f"
-  integrity sha512-LisnrFN7TF5MwOZtrcPRtCVxpyKvtCk3LJePIMqnIFgrsIK/bTUm4kh14pR5WvRdY3+aLKLaMwbPhB7kfEXz+Q==
+"@cuppet/core@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@cuppet/core/-/core-2.0.2.tgz#0d07f1461f44d30790c0d8c07c1fc63d7c04266f"
+  integrity sha512-QiXll2ZW+NXlcauPqaXsewYtEh3SD1XVj4loeePa/G1n75Qge+YzZgKCjsblOLfobBndj7HDt3czAKuqaIwszg==
   dependencies:
     "@supercharge/strings" "^2.0.0"
     "@wdio/globals" "9.17.0"
@@ -347,6 +347,7 @@
     axios "^1.11.0"
     backstopjs "^6.3.25"
     chai "6.0.1"
+    kafkajs "^2.2.4"
     lighthouse "^12.8.0"
     mime "^3.0.0"
     mime-types "^3.0.1"
@@ -355,6 +356,7 @@
     pa11y "^9.0.0"
     pa11y-reporter-html "^2.0.0"
     puppeteer "^24.0.1"
+    uuid "^13.0.0"
     webdriverio "9.12.7"
     xml2js "^0.6.2"
 
@@ -3906,6 +3908,11 @@ junit-report-builder@^3.1.0:
     make-dir "^3.1.0"
     xmlbuilder "^15.1.1"
 
+kafkajs@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/kafkajs/-/kafkajs-2.2.4.tgz#59e6e16459d87fdf8b64be73970ed5aa42370a5b"
+  integrity sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==
+
 keyv@^4.5.4:
   version "4.5.4"
   resolved "https://registry.yarnpkg.com/keyv/-/keyv-4.5.4.tgz#a879a99e29452f942439f2a405e3af8b31d4de93"
@@ -6306,6 +6313,11 @@ uuid@11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.1.0.tgz#9549028be1753bb934fc96e2bca09bb4105ae912"
   integrity sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==
+
+uuid@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-13.0.0.tgz#263dc341b19b4d755eb8fe36b78d95a6b65707e8"
+  integrity sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==
 
 uuid@~9.0.0:
   version "9.0.1"
