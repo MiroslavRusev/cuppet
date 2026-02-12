@@ -28,20 +28,20 @@
     "author": "mrusev",
     "license": "Apache-2.0",
     "dependencies": {
-        "@cuppet/core": "^2.0.2",
-        "@cucumber/cucumber": "^12.0.0",
-        "config": "^4.1.0"
+        "@cuppet/core": "^2.0.4",
+        "@cucumber/cucumber": "^12.6.0",
+        "config": "^4.2.1"
     },
     "devDependencies": {
         "@cucumber/messages": "*",
-        "@cucumber/pretty-formatter": "^2.1.0",
-        "eslint": "^9.29.0",
-        "@eslint/eslintrc": "^3.3.1",
-        "@eslint/js": "^9.27.0",
-        "@types/vscode": "^1.100.0",
+        "@cucumber/pretty-formatter": "^3.0.0",
+        "eslint": "^10.0.0",
+        "@eslint/eslintrc": "^3.3.3",
+        "@eslint/js": "^10.0.1",
+        "@types/vscode": "^1.109.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.2.0",
-        "prettier": "3.5.3"
+        "prettier": "3.8.1"
     },
     "lint-staged": {
         "*.{js,mjs}": [
