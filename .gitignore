@@ -4,9 +4,6 @@ screenshots/*
 jsonFiles/*
 .idea
 /reports/
-# Ignore all backstop artifacts except the config
-backStopData/*
-!backStopData/backStopConfig.json
 ### Node template
 # Logs
 logs
@@ -21,10 +18,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Dependency directories
 node_modules/
-
-
-
-
-
-
-
