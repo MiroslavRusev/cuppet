@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.1.0...cuppet-project-v1.1.1) (2026-03-31)
+
+
+### Refactoring
+
+* Updating cupper-core due to removed depedency. ([985c738](https://github.com/MiroslavRusev/cuppet/commit/985c7385d23e01bf6fc3e25cba19585b8abe75cc))
+* Updating cupper-core due to removed depedency. ([8ad1f50](https://github.com/MiroslavRusev/cuppet/commit/8ad1f5046c57464c9eb4c6aec8501798afcf94aa))
+
 ## [1.1.0](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.0.0...cuppet-project-v1.1.0) (2026-03-18)
 
 
