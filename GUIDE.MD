@@ -50,7 +50,7 @@ The Cuppet Core framework uses the [config](https://www.npmjs.com/package/config
 ##### `browserOptions.args` (array)
 
 - **Purpose**: Command-line arguments passed to the browser
-- **Used by**: Browser initialization, visual regression testing
+- **Used by**: Browser initialization
 - **Example**:
 
 ```json
@@ -68,14 +68,13 @@ The Cuppet Core framework uses the [config](https://www.npmjs.com/package/config
 ##### `browserOptions.viewport` (object)
 
 - **Purpose**: Viewport configurations for different screen sizes
-- **Used by**: Browser setup, visual regression testing
+- **Used by**: Browser setup
 - **Properties**:
     - `default`: Default viewport size (used in browser initialization)
     - `MacBook`: MacBook screen dimensions
     - `laptop`: Laptop screen dimensions
     - `tablet`: Tablet screen dimensions
     - `mobile`: Mobile screen dimensions
-    - `backstop`: BackstopJS visual regression testing viewport
 
 **Example**:
 
@@ -86,8 +85,7 @@ The Cuppet Core framework uses the [config](https://www.npmjs.com/package/config
         "MacBook": { "width": 1440, "height": 900 },
         "laptop": { "width": 1280, "height": 720 },
         "tablet": { "width": 768, "height": 1024 },
-        "mobile": { "width": 320, "height": 667 },
-        "backstop": { "width": 1600, "height": 900 }
+        "mobile": { "width": 320, "height": 667 }
     }
 }
 ```
@@ -349,16 +347,7 @@ The Cuppet Core framework provides comprehensive step definitions organized into
     - Specific page performance testing (`I generate lighthouse report for "/path" page`)
     - Automated performance report generation
 
-### 11. Visual Regression Steps (`visualRegressionSteps.js`)
-
-- **Purpose**: Visual regression testing with BackstopJS
-- **Key Features**:
-    - Reference screenshot generation (`I generate reference screenshot for "/path"`)
-    - Visual comparison testing (`I compare "/path" to reference screenshot`)
-    - Multiple page testing (`I generate reference screenshot for multiple pages`)
-    - Batch visual testing (`I compare multiple pages to their references`)
-
-### 12. Iframe Steps (`iframeSteps.js`)
+### 11. Iframe Steps (`iframeSteps.js`)
 
 - **Purpose**: Iframe-specific testing operations
 - **Key Features**:
@@ -450,8 +439,7 @@ Environment-specific files will merge with and override the default configuratio
     "browserOptions": {
         "args": ["--no-sandbox"],
         "viewport": {
-            "default": { "width": 1920, "height": 1080 },
-            "backstop": { "width": 1600, "height": 900 }
+            "default": { "width": 1920, "height": 1080 }
         }
     },
     "pa11yConfig": {
@@ -479,8 +467,7 @@ Environment-specific files will merge with and override the default configuratio
         "args": ["--no-sandbox", "--disable-setuid-sandbox", "--headless=new"],
         "viewport": {
             "default": { "width": 1920, "height": 1080 },
-            "mobile": { "width": 375, "height": 667 },
-            "backstop": { "width": 1600, "height": 900 }
+            "mobile": { "width": 375, "height": 667 }
         }
     },
     "api": {
@@ -512,4 +499,4 @@ Environment-specific files will merge with and override the default configuratio
 }
 ```
 
-This configuration system provides maximum flexibility for different testing environments and scenarios while maintaining clean separation of test logic and configuration data. The comprehensive step definitions enable testing across web, mobile, API, accessibility, performance, and visual regression scenarios all within a single framework.
+This configuration system provides maximum flexibility for different testing environments and scenarios while maintaining clean separation of test logic and configuration data. The comprehensive step definitions enable testing across web, mobile, API, accessibility and performance scenarios all within a single framework.
