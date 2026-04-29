@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.1.1...cuppet-project-v1.1.2) (2026-04-29)
+
+
+### Bug Fixes
+
+* Bumping cuppet-core version. ([67a59b7](https://github.com/MiroslavRusev/cuppet/commit/67a59b766e75f3bf3f242344cc9b2f9fbfc44ca7))
+
 ## [1.1.1](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.1.0...cuppet-project-v1.1.1) (2026-03-31)
 
 
