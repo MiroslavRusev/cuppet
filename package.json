@@ -28,7 +28,7 @@
     "author": "mrusev",
     "license": "Apache-2.0",
     "dependencies": {
-        "@cuppet/core": "^3.0.0",
+        "@cuppet/core": "^3.0.1",
         "@cucumber/cucumber": "^12.6.0",
         "config": "^4.2.1"
     },
