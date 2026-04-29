@@ -1,6 +1,6 @@
 {
     "name": "cuppet-project",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "A comprehensive end-to-end testing tool using the Cuppet framework based on Cucumber.js,Puppeteer and Appium, supporting web and mobile automation.",
     "main": "cucumber.js",
     "scripts": {
