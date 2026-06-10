@@ -12,7 +12,7 @@ const commonFields = {
     Finish: '#edit-return',
     Name: '#edit-name',
     Pass: '#edit-pass',
-    TextBox: '.show #item-0',
+    TextBox: '.show #item-0 > a',
     LoginButton: '[data-testid="login-button"]',
 };
 

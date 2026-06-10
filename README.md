@@ -64,7 +64,6 @@ For a detailed configuration and step definitions guide, see [GUIDE.MD](./GUIDE.
 - **Step Definitions:**
     - Add your own step definitions in `features/app/stepDefinitions/`. These will be loaded in addition to the core ones.
 - **World:**
-
     - Extend the core World in `features/app/world.js` to add custom properties or methods. Example:
 
         class CustomWorld extends CoreWorld {
