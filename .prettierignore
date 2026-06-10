@@ -8,3 +8,4 @@ reports
 **/.vscode
 **/.github
 **/node_modules
+**/*.md

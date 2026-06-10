@@ -4,7 +4,7 @@
     "description": "A comprehensive end-to-end testing tool using the Cuppet framework based on Cucumber.js,Puppeteer and Appium, supporting web and mobile automation.",
     "main": "cucumber.js",
     "scripts": {
-        "verbose": "cucumber-js -f @cucumber/pretty-formatter",
+        "verbose": "cross-env FORCE_COLOR=1 cucumber-js -f pretty",
         "test": "cucumber-js",
         "postinstall": "node ./post-install.js",
         "lint:check": "eslint .",
@@ -28,17 +28,18 @@
     "author": "mrusev",
     "license": "Apache-2.0",
     "dependencies": {
-        "@cuppet/core": "^3.0.1",
-        "@cucumber/cucumber": "^12.6.0",
+        "@cucumber/cucumber": "^13.0.0",
+        "@cuppet/core": "^3.0.16",
         "config": "^4.2.1"
     },
     "devDependencies": {
         "@cucumber/messages": "*",
-        "@cucumber/pretty-formatter": "^3.0.0",
-        "eslint": "^10.0.0",
+        "@cucumber/pretty-formatter": "^3.3.1",
         "@eslint/eslintrc": "^3.3.3",
         "@eslint/js": "^10.0.1",
-        "@types/vscode": "^1.109.0",
+        "@types/vscode": "^1.120.0",
+        "eslint": "^10.4.1",
+        "cross-env": "^10.1.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.2.0",
         "prettier": "3.8.1"
