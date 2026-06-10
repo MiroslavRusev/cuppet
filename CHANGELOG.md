@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.1.1...cuppet-project-v1.2.0) (2026-06-10)
+
+
+### Features
+
+* Updating cucumber and cuppet-core. ([c939c0c](https://github.com/MiroslavRusev/cuppet/commit/c939c0c2a6a7c0323620848d19fdea2938a1c747))
+* Updating cucumber and cuppet-core. ([cee6256](https://github.com/MiroslavRusev/cuppet/commit/cee62567f94d460edc891afa48b9d6f09ae0ed39))
+
+
+### Bug Fixes
+
+* Bumping cuppet-core version. ([67a59b7](https://github.com/MiroslavRusev/cuppet/commit/67a59b766e75f3bf3f242344cc9b2f9fbfc44ca7))
+
 ## [1.1.1](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.1.0...cuppet-project-v1.1.1) (2026-03-31)
 
 
