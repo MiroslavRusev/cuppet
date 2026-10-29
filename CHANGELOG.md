@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.2.0...cuppet-project-v1.2.1) (2026-10-29)
+
+
+### Bug Fixes
+
+* bumping package versions. ([c73eed7](https://github.com/MiroslavRusev/cuppet/commit/c73eed7988acd722a5d1620657b31a983c92290a))
+* bumping package versions. ([e308801](https://github.com/MiroslavRusev/cuppet/commit/e3088015e28159d5597bec38221b5efd91f7fed2))
+
 ## [1.2.0](https://github.com/MiroslavRusev/cuppet/compare/cuppet-project-v1.1.1...cuppet-project-v1.2.0) (2026-06-10)
 
 
